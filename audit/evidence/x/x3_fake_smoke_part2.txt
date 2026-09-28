@@ -1,0 +1,32 @@
+## (rerun of the tail of X3 with model_version_id=1; the first attempt's list parsing was a bug in the audit script)
+{"model_versions":[{"id":1,"name":"fake-ocr-v1","base_model_ref":"FakeRecognizer","base_commit_sha":"none","adapter_sha256":null,"weights_uri":"none://fake","weights_sha256":"0000000000000000000000000000000000000000000000000000000000000000","preprocess_cfg":{"crop":{"format":"jpeg","quality":95,"cha
+## eval-manifest source=machine
+HTTP/1.1 200 OK
+content-disposition: attachment; filename="eval-manifest-mv1-machine.jsonl"
+5
+{'page_id': '026/page_4', 'book_id': '026', 'hyp': 'một trời Quốc rằng và Nam ấy những tiếng…', 'model_version': 'fake-ocr-v1', 'text_policy': 'body-v1'}
+{'page_id': '026/page_5', 'book_id': '026', 'hyp': 'chữ người hóa đất văn chữ của.\nsách * đó…', 'model_version': 'fake-ocr-v1', 'text_policy': 'body-v1'}
+{'page_id': '026/page_6', 'book_id': '026', 'hyp': 'hóa Nội Quốc rằng chữ Việt Quốc ngữ sách…', 'model_version': 'fake-ocr-v1', 'text_policy': 'body-v1'}
+{'page_id': '026/page_7', 'book_id': '026', 'hyp': 'quyển chương sử trời Gòn quyển ở Việt nư…', 'model_version': 'fake-ocr-v1', 'text_policy': 'body-v1'}
+{'page_id': '026/page_8', 'book_id': '026', 'hyp': 'Nội một trời Nội lịch trời một của một đ…', 'model_version': 'fake-ocr-v1', 'text_policy': 'body-v1'}
+## eval-manifest source=human
+HTTP/1.1 200 OK
+content-disposition: attachment; filename="eval-manifest-mv1-human-usability.jsonl"
+{'page_id': '026/page_4', 'book_id': '026', 'hyp': 'một trời Quốc rằng và Nam ấy n…', 'ref': 'một trời Quốc rằng và Nam ấy n…', 'ref_rev_no': 1, 'ref_author': 'P01', 'purpose': 'usability', 'model_version': 'fake-ocr-v1', 'text_policy': 'body-v1'}
+## join dev refs + viet-ocr-eval score
+5 pages -> /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/x3/m_machine_ref.jsonl
+score exit=0
+|---|---|---|---|---|
+| vi | 5 | 81.27 | 4.41 | 68.52 |
+
+keys ['run_name', 'manifest', 'protocol_version', 'normalization', 'cap_runaway', 'overall', 'strata', 'pages']
+protocol 1.1
+health.markup_chars None
+## join_reference on the source=human manifest
+the manifest already has references (source=human?); score it directly
+exit=1
+## viet-ocr-eval score directly on the source=human manifest (does the scorer itself refuse purpose=usability?)
+exit=0
+- empty outputs: 0 (0.00%)
+- pages with markup in the hypothesis: 0 (0 markup characters)
+

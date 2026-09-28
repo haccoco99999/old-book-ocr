@@ -1,0 +1,27 @@
+## decision.md commits (mlops)
+bf495a1 2026-09-25 09:22:52 +0700 decision.md: markup rule (option A); evaluate_test reads a per-version limit
+9d1ffb4 2026-09-25 08:31:39 +0700 decision.md: target 2 reading is "largest", judged on test at >= 95% of resamples
+7a8cd16 2026-09-25 07:21:48 +0700 Step 0+1 under plan H: decision.md, promote/register_base/serve.sh, weight and parity gates
+## training repo: commits touching finals/
+8172abf 2026-09-23 20:20:09 +0700 Add training harness, results and viet-ocr-eval skills
+## finals dir mtimes (names only)
+training/finals:
+total 28
+drwxr-xr-x  5 huy huy 4096 2026-09-20 03:02:06.744909716 +0700 .
+drwxr-xr-x 17 huy huy 4096 2026-09-22 07:31:56.766660486 +0700 ..
+drwxr-xr-x  3 huy huy 4096 2026-09-20 03:02:06.744909716 +0700 comparisons
+-rw-r--r--  1 huy huy 4454 2026-09-20 22:39:04.927345214 +0700 ledger.jsonl
+drwxr-xr-x  2 huy huy 4096 2026-09-20 00:06:15.967886157 +0700 test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4
+drwxr-xr-x  2 huy huy 4096 2026-09-20 03:02:06.684909709 +0700 test__base_7dea718d
+
+training/finals/comparisons:
+total 12
+drwxr-xr-x 3 huy huy 4096 2026-09-20 03:02:06.744909716 +0700 .
+drwxr-xr-x 5 huy huy 4096 2026-09-20 03:02:06.744909716 +0700 ..
+drwxr-xr-x 3 huy huy 4096 2026-09-20 22:39:04.923345214 +0700 test__base_7dea718d__vs__test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4
+## test_access.log / rehearsal.log line counts + git log
+   4 mlops/test_access.log
+   6 mlops/rehearsal.log
+  10 total
+9bb15a6 2026-09-25 09:22:52 +0700 test_access.log: backfill the four accesses of 17-24/09; freezes decision.md
+8b8094f 2026-09-25 09:15:29 +0700 rehearsal.log: base and final pass both views on the fixed 50-page dev subset (code tree of 3a26c00)

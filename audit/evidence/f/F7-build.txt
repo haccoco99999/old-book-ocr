@@ -1,0 +1,73 @@
+# F7 build: scratch copy @ d44a9d0 (only .env/playwright port changed); run inside a fresh network namespace (unshare -rn, loopback only: nothing listens on :8000, no internet); 2026-09-25T11:31:53+07:00
+$ unshare -rn sh -c "ip link set lo up; curl 127.0.0.1:8000/healthz; npm run build"
+backend probe from inside namespace: curl exit 7 (7 = connection refused)
+
+> master-2-frontend@0.1.0 build
+> max build
+
+info  - [你知道吗？] 全局布局用 layout ，多层布局用 wrappers ，从文档了解更多路由的控制方法，详见 https://umijs.org/docs/guides/routes
+Using openapi Plugin
+info  - Memory Usage: 161.58 MB (RSS: 1150.57 MB)
+
+  utoo pack v1.5.20 built in 2340ms
+
+  ➜  Output:  dist
+  ➜  Assets:  65 files
+
+info  - File sizes after gzip:
+
+  324.6 kB   dist/_0z0ul1-pslfs0.7267b228.async.js
+  290.45 kB  dist/node_modules_04ifbt-rm5m97.6a815614.async.js
+  100.08 kB  dist/src_mocks_browser_ts_0p-csxis44fdv.948cb3f9.async.js
+  55.7 kB    dist/node_modules_0av3j9e5xkpya.8bdbe144.async.js
+  47.61 kB   dist/_0oypk2o_7pt5g.4d8b5506.async.js
+  31.86 kB   dist/_09p8u48ixq5sh.b0eb3ad4.async.js
+  25.93 kB   dist/node_modules__ant-design_0z9oejphjs20x.0b3344df.async.js
+  20.53 kB   dist/src_pages_Review_index_tsx_04np6hou9fwd9.71cffc0e.async.js
+  16.69 kB   dist/node_modules_129bhvbly1w5c.12a60a3f.async.js
+  15.82 kB   dist/src_pages_Upload_index_tsx_1skwx1hwl6chc.8ea52986.async.js
+  10.82 kB   dist/_1o3-z6keajohe.a31101aa.async.js
+  5.91 kB    dist/_0hge6q3srtulr.599788e9.async.js
+  5.67 kB    dist/_1dc5kxq9jfi1l.bf1a6a19.async.js
+  4.52 kB    dist/_193s19bxallzw.eda68ef8.async.js
+  4.52 kB    dist/_0mwc08j09fi9n.a2f82a2d.async.js
+  4.41 kB    dist/_1eawzzme-b8f4.648a0b2d.async.js
+  4.31 kB    dist/umi.f8ee6d92.js
+  3.23 kB    dist/mockServiceWorker.js
+  2.93 kB    dist/_1mtbl0ty9f6iq.e8c2deb0.async.js
+  2.84 kB    dist/node_modules_antd_es_alert_index_0vm6ucah29_y4.2f423ff7.async.js
+  1.31 kB    dist/node_modules__fontsource_1zwp5u4gwc589.b285548d.css
+  1.09 kB    dist/src_pages_Review_review_1suakozztytkm.ccda7e35.css
+  227 B      dist/src__umi-production_core_EmptyRoute_tsx_1_e1wmd5wrawv.d1885e91.async.js
+
+event - Build index.html
+17.67user 2.48system 0:04.41elapsed 456%CPU (0avgtext+0avgdata 1188908maxresident)k
+472inputs+8outputs (4major+403129minor)pagefaults 0swaps
+build exit=0
+
+$ ls dist | wc -l; du -sh dist; ls dist/*.html
+26
+4.0M	dist
+dist/index.html
+
+$ grep -l "mockServiceWorker\|setupWorker" dist/*.js | head (is MSW in the non-mock bundle?)
+dist/src_mocks_browser_ts_0p-csxis44fdv.948cb3f9.async.js
+
+$ npm run check:deps
+
+> master-2-frontend@0.1.0 check:deps
+> node scripts/check-deps.mjs
+
+ok   no @ant-design/v5-patch-for-react-19 in package-lock.json
+ok   antd resolves to 6.6.5
+ok   @ant-design/icons resolves to 6.3.4
+ok   @ant-design/pro-components resolves to 3.1.14-7
+ok   antd: one version in the whole tree (6.6.5)
+ok   @ant-design/icons: one version in the whole tree (6.3.4)
+ok   @ant-design/pro-components: one version in the whole tree (3.1.14-7)
+ok   axios: one version in the whole tree (1.20.0)
+ok   react resolves to 19.2.8
+ok   npm ls finds no v5 patch
+ok   dist contains antd 6.6.5
+ok   dist has no antd 4/5 version strings (4.7.20, 6.6.5)
+exit=0

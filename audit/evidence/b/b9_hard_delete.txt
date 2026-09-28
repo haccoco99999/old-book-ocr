@@ -1,0 +1,57 @@
+# B9: hard delete of document 4 (synthetic; has machine revs, a human rev, timings, a failed job, review events). scratch stack, 2026-09-25T16:25:23+07:00
+## post 3 review events for page 12 (revision_id of rev 1)
+{'accepted': 3, 'duplicates': 0}
+## rows before
+ documents | pages | revisions | timings | review_events | jobs | outbox 
+-----------+-------+-----------+---------+---------------+------+--------
+         1 |     8 |         4 |       3 |             3 |    1 |      1
+(1 row)
+
+## storage dir before
+0001.jpg
+0002.jpg
+0003.jpg
+8
+## DELETE /documents/4 (no flags)
+{"detail":{"message":"the document has usability events that deletion destroys: export them (GET /exports/usability.csv?document_id=4&kind=events) and pass events_exported=true","review_events":3}} HTTP 409
+## export events first
+id,participant_code,session_id,document_id,page_id,page_no,external_page_id,revision_id,event,client_ts,server_ts,client
+1,P09,45052f1d-51de-4f5d-b9bd-6374c0604906,4,12,1,synB8/page_1,,open,2026-09-25T09:25:23.918981+00:00,2026-09-25T09:25:2
+2,P09,45052f1d-51de-4f5d-b9bd-6374c0604906,4,12,1,synB8/page_1,,first_edit,2026-09-25T09:25:24.918981+00:00,2026-09-25T0
+3,P09,45052f1d-51de-4f5d-b9bd-6374c0604906,4,12,1,synB8/page_1,16,save,2026-09-25T09:25:25.918981+00:00,2026-09-25T09:25
+## DELETE /documents/4?events_exported=true
+{"deleted":4,"removed":{"pages":8,"revisions":4,"timings":3,"review_events":3,"jobs":1},"files_removed":true} HTTP 200
+## rows after
+ documents | pages | revisions | timings | review_events | jobs | outbox 
+-----------+-------+-----------+---------+---------------+------+--------
+         0 |     0 |         0 |       0 |             0 |    0 |      0
+(1 row)
+
+## storage dir after
+ls: cannot access '/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/storage/4': No such file or directory
+## audit_log rows for document 4 (all columns)
+ id | entity_type | entity_id | action |   actor   |              at               
+----+-------------+-----------+--------+-----------+-------------------------------
+ 14 | document    |         4 | create | api-token | 2026-09-25 09:23:09.444362+00
+ 16 | document    |         4 | export | api-token | 2026-09-25 09:23:25.651531+00
+ 18 | document    |         4 | export | api-token | 2026-09-25 09:23:25.66795+00
+ 20 | document    |         4 | export | api-token | 2026-09-25 09:23:25.680972+00
+ 23 | document    |         4 | export | api-token | 2026-09-25 09:23:25.695521+00
+ 30 | document    |         4 | export | api-token | 2026-09-25 09:24:54.835962+00
+ 31 | document    |         4 | export | api-token | 2026-09-25 09:25:08.901068+00
+ 32 | document    |         4 | delete | api-token | 2026-09-25 09:25:24.132233+00
+(8 rows)
+
+## audit_log columns
+ column_name |        data_type         
+-------------+--------------------------
+ id          | bigint
+ entity_type | text
+ entity_id   | bigint
+ action      | text
+ actor       | text
+ at          | timestamp with time zone
+(6 rows)
+
+## api log lines about the delete (content check)
+{"ts": "2026-09-25T09:25:24.142Z", "level": "INFO", "service": "api", "logger": "ocr_api.documents", "msg": "document deleted", "job_id": null, "model_version_id": null, "document_id": 4, "pages": 8, "revisions": 4, "timings": 3, "review_events": 3, "jobs": 1, "active_jobs": 0}

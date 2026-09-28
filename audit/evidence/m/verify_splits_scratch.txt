@@ -1,0 +1,15 @@
+# verify_splits.py run in scratch copy (/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/mlops), MASTER_DIR=/home/huy/master, skill = /home/huy/master/skills/viet-ocr-eval working tree; Fri Sep 25 04:35:52 UTC 2026
+WARNING training/data-lines/books-all/gold.jsonl: the file is the paragraph build's gold (afa9a84a1bfe), but data_manifest.json still records the pre-copy hash e2366b2eab04
+14 runs, 2 final evaluations, 6 leakage checks; 0 errors, 1 warnings -> verify_splits.json
+exit=0
+errors []
+warnings ["training/data-lines/books-all/gold.jsonl: the file is the paragraph build's gold (afa9a84a1bfe), but data_manifest.json still records the pre-copy hash e2366b2eab04"]
+ref split sha {'train': 'bbf932d80facf6b5965e4070778d5c45e9b1df59f3ab4d2f970bf8bfa95b8d4e', 'dev': '2ee42f32ae54c7ff03dd0b33450e86c06e72b72c7d1ee0f2754302a675604a8a', 'test': 'af63dee017dc26b82d3b6cecc452fd741f4951b16b16fb75dc364aeb6e9a9582', 'gold': 'afa9a84a1bfe697dd0c9a43f427476607271fec650a1961914b26914507b9b44'}
+protocol 1.1
+finals {'test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4': True, 'test__base_7dea718d': True}
+training/data/books-all/train.jsonl test True ['test refs empty: 0', '  -> VieBookRead contains occasional non-Vietnamese pages. Filter them or make them their own stratum; do not let them sit unlabelled in the main test number.', '', 'OK — no leakage detected.']
+training/data/books-all/train.jsonl dev True ['test refs Latin-script but probably not Vietnamese: 0', 'test refs empty: 0', '', 'OK — no leakage detected.']
+training/data-lines/books-all/train.jsonl test True ['test refs empty: 0', '  -> VieBookRead contains occasional non-Vietnamese pages. Filter them or make them their own stratum; do not let them sit unlabelled in the main test number.', '', 'OK — no leakage detected.']
+training/data-lines/books-all/train.jsonl dev True ['test refs Latin-script but probably not Vietnamese: 0', 'test refs empty: 0', '', 'OK — no leakage detected.']
+training/data-mixed/books-all/train.jsonl test True ['test refs empty: 0', '  -> VieBookRead contains occasional non-Vietnamese pages. Filter them or make them their own stratum; do not let them sit unlabelled in the main test number.', '', 'OK — no leakage detected.']
+training/data-mixed/books-all/train.jsonl dev True ['test refs Latin-script but probably not Vietnamese: 0', 'test refs empty: 0', '', 'OK — no leakage detected.']

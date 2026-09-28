@@ -1,0 +1,5 @@
+name, memory.used [MiB], memory.total [MiB], utilization.gpu [%], compute_cap
+NVIDIA GeForce RTX 5090, 13768 MiB, 32607 MiB, 0 %, 12.0
+pid, process_name, used_gpu_memory [MiB]
+162396, [Not Found], [N/A]
+Fri Sep 25 04:26:43 UTC 2026

@@ -1,0 +1,35 @@
+# F7 extra: NON-mock production build (rebuilt in scratch inside unshare -rn; build exit 0) served by 'max preview' (with the /api proxy to localhost:8000) inside unshare -rn, so the backend is unreachable. Scratch-only probe spec: audit-probe/probe.spec.ts; 2026-09-25T11:35:19+07:00
+
+Running 6 tests using 1 worker
+
+[WebServer] [HPM] Error occurred while proxying request 127.0.0.1:18090/model-versions to http://localhost:8000/ [ECONNREFUSED] (https://nodejs.org/api/errors.html#errors_common_system_errors)
+[WebServer] [HPM] Error occurred while proxying request 127.0.0.1:18090/documents?limit=10&offset=0 to http://localhost:8000/ [ECONNREFUSED] (https://nodejs.org/api/errors.html#errors_common_system_errors)
+/upload :: OCR sách Việt Tải lên Hàng đợi Hiệu đính Xuất văn bản Giám sát Bản dựng 0.1.0 (d44a9d0+dirty) Tải lên Máy chủ chưa có mô hình nào đang hoạt động, nên chưa thể nhận dạng. Người quản trị cần bật một mô hình trước. Kéo tệp vào đây, hoặc bấm để chọn tệp Mỗi tệp PDF là một tài liệu. Ảnh trang (JPEG, PNG, TIFF) được ghép thành một tài liệu, xếp theo tên tệp. Tối đa 500 MB cho một tài liệu. Tài liệu đã t
+/upload :: pageerrors=[]
+/upload :: monitoring links=1
+  ✓  1 [chromium] › probe.spec.ts:5:7 › renders /upload with the backend down (2.7s)
+[WebServer] [HPM] Error occurred while proxying request 127.0.0.1:18090/jobs?limit=20&offset=0 to http://localhost:8000/ [ECONNREFUSED] (https://nodejs.org/api/errors.html#errors_common_system_errors)
+/queue :: OCR sách Việt Tải lên Hàng đợi Hiệu đính Xuất văn bản Giám sát Bản dựng 0.1.0 (d44a9d0+dirty) Hàng đợi Chưa làm mới được hàng đợi. Máy chủ trả lỗi 504: Request failed with status code 504 Mã tài liệu Trạng thái Tất cả Làm lại Tìm kiếm Công việc nhận dạng Công việc Tài liệu Trạng thái Tiến độ Chờ trong hàng Thời gian xử lý Lý do lỗi Thao tác Công việc Tài liệu Trạng thái Tiến độ Chờ trong hàng Thời
+/queue :: pageerrors=[]
+/queue :: monitoring links=1
+  ✓  2 [chromium] › probe.spec.ts:5:7 › renders /queue with the backend down (2.7s)
+/review :: Mã người tham gia Nhập mã được phát cho bạn, ví dụ P03. Không nhập họ tên. Rời khu hiệu đính Bắt đầu
+/review :: pageerrors=[]
+/review :: monitoring links=1
+  ✓  3 [chromium] › probe.spec.ts:5:7 › renders /review with the backend down (2.8s)
+[WebServer] [HPM] Error occurred while proxying request 127.0.0.1:18090/documents?limit=10&offset=0 to http://localhost:8000/ [ECONNREFUSED] (https://nodejs.org/api/errors.html#errors_common_system_errors)
+/export :: OCR sách Việt Tải lên Hàng đợi Hiệu đính Xuất văn bản Giám sát Bản dựng 0.1.0 (d44a9d0+dirty) Xuất văn bản Cách xuất Định dạng Văn bản (.txt) Markdown (.md) JSON (.json) Văn bản thuần UTF-8; các trang cách nhau bằng ký tự sang trang (form feed), như pdftotext. Văn bản của mỗi trang Bản mới nhất: bản đã hiệu đính nếu có, nếu chưa thì bản máy Bản máy nhận dạng, bỏ qua mọi hiệu đính Với trang lấy từ 
+/export :: pageerrors=[]
+/export :: monitoring links=1
+  ✓  4 [chromium] › probe.spec.ts:5:7 › renders /export with the backend down (2.7s)
+/review/1 :: Mã người tham gia Nhập mã được phát cho bạn, ví dụ P03. Không nhập họ tên. Rời khu hiệu đính Bắt đầu
+/review/1 :: pageerrors=[]
+/review/1 :: monitoring links=1
+  ✓  5 [chromium] › probe.spec.ts:5:7 › renders /review/1 with the backend down (2.7s)
+/fonts :: OCR sách Việt Tải lên Hàng đợi Hiệu đính Xuất văn bản Giám sát Bản dựng 0.1.0 (d44a9d0+dirty) Kiểm tra phông chữ Mỗi ô phải hiện một chữ trọn vẹn: dấu nằm gọn trên hoặc dưới chữ, không có ô vuông trống, không có dấu tách rời. Nếu có ô sai, chụp màn hình trang này gửi người quản trị. Be Vietnam Pro 400 Giao diện Đã tải phông 134 chữ cái tiếng Việt dựng sẵn à á ã ả ạ ă ằ ắ ẵ ẳ ặ â ầ ấ ẫ ẩ ậ è é ẽ ẻ 
+/fonts :: pageerrors=[]
+/fonts :: monitoring links=1
+  ✓  6 [chromium] › probe.spec.ts:5:7 › renders /fonts with the backend down (2.7s)
+
+  6 passed (18.7s)
+exit=0

@@ -1,0 +1,25 @@
+$ grep -rnE "fetch\(|request\(|sendBeacon|axios|XMLHttpRequest|API_BASE" src --include=*.ts --include=*.tsx | grep -v "^src/services/ocr/" | grep -v "^src/.umi"
+src/app.tsx:9:import { API_BASE, MOCK_MODE } from './lib/config';
+src/app.tsx:14:  baseURL: API_BASE,
+src/lib/httpError.ts:3:/** A readable one-line reason from an axios error carrying a FastAPI error body. */
+src/lib/instrumentation/eventQueue.ts:5:// - when the tab is hidden or closed they go with navigator.sendBeacon, which outlives the page;
+src/lib/instrumentation/eventQueue.ts:9:import { API_BASE, EVENT_FLUSH_MS } from '@/lib/config';
+src/lib/instrumentation/eventQueue.ts:37:      return navigator.sendBeacon?.(`${API_BASE}/review-events`, body) ?? false;
+src/lib/config.ts:5:export const API_BASE = '/api';
+src/pages/Review/Workspace.tsx:6:import { API_BASE } from '@/lib/config';
+src/pages/Review/Workspace.tsx:306:              src={`${API_BASE}${current.image_url}`}
+
+$ grep -rn "from .@/services/ocr" src (which generated operations are used)
+src/lib/download.ts:1:from '@/services/ocr/exports'
+src/lib/instrumentation/eventQueue.ts:12:from '@/services/ocr/usability'
+src/lib/uploads.ts:5:from '@/services/ocr/documents'
+src/lib/uploads.ts:6:from '@/services/ocr/jobs'
+src/pages/Export/index.tsx:10:from '@/services/ocr/documents'
+src/pages/Queue/index.tsx:11:from '@/services/ocr/jobs'
+src/pages/Review/ReviewHome.tsx:9:from '@/services/ocr/documents'
+src/pages/Review/Workspace.tsx:11:from '@/services/ocr/review'
+src/pages/Review/components/HistoryDrawer.tsx:6:from '@/services/ocr/review'
+src/pages/Review/useReviewPage.ts:3:from '@/services/ocr/documents'
+src/pages/Review/useReviewPage.ts:4:from '@/services/ocr/review'
+src/pages/Upload/components/DocumentsTable.tsx:9:from '@/services/ocr/documents'
+src/pages/Upload/index.tsx:11:from '@/services/ocr/jobs'

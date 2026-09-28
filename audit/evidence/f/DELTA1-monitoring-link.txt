@@ -1,0 +1,13 @@
+# Monitoring link probe: production build via max preview inside unshare -rn (Grafana unreachable there, so only the new-tab + URL are checked); 2026-09-25T11:36:23+07:00
+
+Running 1 test using 1 worker
+
+[WebServer] [HPM] Error occurred while proxying request 127.0.0.1:18090/model-versions to http://localhost:8000/ [ECONNREFUSED] (https://nodejs.org/api/errors.html#errors_common_system_errors)
+[WebServer] [HPM] Error occurred while proxying request 127.0.0.1:18090/documents?limit=10&offset=0 to http://localhost:8000/ [ECONNREFUSED] (https://nodejs.org/api/errors.html#errors_common_system_errors)
+href= http://localhost:3000 target= _blank rel= noopener noreferrer text= Giám sát
+new tab opened for: chrome-error://chromewebdata/
+original tab still at: http://127.0.0.1:18090/upload
+  ✓  1 [chromium] › monitor.spec.ts:2:5 › Monitoring menu item (613ms)
+
+  1 passed (2.9s)
+exit=0

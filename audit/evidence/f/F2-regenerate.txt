@@ -1,0 +1,61 @@
+# scratch copy @ d44a9d0; 2026-09-25T11:27:34+07:00
+$ node scripts/openapi-snapshot.mjs --file /home/huy/master/audit/evidence/f/F2-backend-head-openapi.json
+wrote /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/fe/openapi/openapi.json: OpenAPI 3.1.0, API 0.3.0, 17 paths, 1 file field(s) annotated format: binary
+exit=0
+
+$ git diff --stat -- openapi/openapi.json  (scratch copy vs committed snapshot)
+$ git diff -- openapi/openapi.json
+(end of schema diff)
+
+$ npx max openapi
+info  - [你知道吗？] 遇到难解的配置问题，试试从 Umi FAQ 中寻找答案，详见 https://umijs.org/docs/introduce/faq
+Using openapi Plugin
+[openAPI]: ✅ 成功生成 service 文件
+info  - [plugin: @umijs/max-plugin-openapi] [openAPI]: execution complete
+exit=0
+
+$ git status --short (scratch)
+$ git diff --stat -- src/services/ocr
+$ git diff -- src/services/ocr
+(end of client diff)
+# mtimes after regeneration (scratch) vs repo
+openapi/:
+total 76
+drwxr-xr-x  2 huy huy    60 2026-09-24 14:12:52.435476130 +0700 .
+drwxr-xr-x 12 huy huy   580 2026-09-24 20:10:47.866704293 +0700 ..
+-rw-r--r--  1 huy huy 76949 2026-09-25 11:27:34.233724227 +0700 openapi.json
+
+src/services/ocr/:
+total 44
+drwxr-xr-x 2 huy huy   200 2026-09-25 11:27:35.573816488 +0700 .
+drwxr-xr-x 3 huy huy    60 2026-09-24 14:33:14.266381508 +0700 ..
+-rw-r--r-- 1 huy huy  3326 2026-09-25 11:27:35.545814558 +0700 documents.ts
+-rw-r--r-- 1 huy huy  1111 2026-09-25 11:27:35.565815935 +0700 exports.ts
+-rw-r--r-- 1 huy huy   741 2026-09-25 11:27:35.517812630 +0700 health.ts
+-rw-r--r-- 1 huy huy   392 2026-09-25 11:27:35.573816488 +0700 index.ts
+-rw-r--r-- 1 huy huy  2920 2026-09-25 11:27:35.553815111 +0700 jobs.ts
+-rw-r--r-- 1 huy huy  1610 2026-09-25 11:27:35.557815384 +0700 review.ts
+-rw-r--r-- 1 huy huy 15012 2026-09-25 11:27:35.505811804 +0700 typings.d.ts
+-rw-r--r-- 1 huy huy  1114 2026-09-25 11:27:35.569816211 +0700 usability.ts
+--- repo:
+total 52
+drwxr-xr-x 2 huy huy  4096 2026-09-24 14:33:14.482390633 +0700 .
+drwxr-xr-x 3 huy huy  4096 2026-09-24 14:33:14.266381508 +0700 ..
+-rw-r--r-- 1 huy huy  3326 2026-09-24 14:33:14.450389280 +0700 documents.ts
+-rw-r--r-- 1 huy huy  1111 2026-09-24 14:33:14.474390295 +0700 exports.ts
+-rw-r--r-- 1 huy huy   741 2026-09-24 14:33:14.430388436 +0700 health.ts
+-rw-r--r-- 1 huy huy   392 2026-09-24 14:33:14.482390633 +0700 index.ts
+-rw-r--r-- 1 huy huy  2920 2026-09-24 14:33:14.458389618 +0700 jobs.ts
+-rw-r--r-- 1 huy huy  1610 2026-09-24 14:33:14.470390124 +0700 review.ts
+-rw-r--r-- 1 huy huy 15012 2026-09-24 14:33:14.414387759 +0700 typings.d.ts
+-rw-r--r-- 1 huy huy  1114 2026-09-24 14:33:14.482390633 +0700 usability.ts
+--- sha256 scratch vs repo
+identical sha256 for all 8 files
+84be72e0eab8c819158dd093528c13122c3bb8f61396a9d325c7911b42d0c880  documents.ts
+1cb71c4bdc32f434be798a4b283ed7c6c00f05a448c7f2f6dd469058b7d16f18  exports.ts
+1827d7cb3911095dca1425969b6b965ae15816deb86f109ccaff387d1fd56a13  health.ts
+20f58cd0b2fc6be157e1d3b3d93d9da1ed3f9e049e055499b140cb3d0937c0cf  index.ts
+d35c544f3d56fae59ab7eb43505b06fdf86ee72d20815b592e03a4dd5515cda8  jobs.ts
+60a3cd141743b40b074bf88501e33f664d04e7a8125f0f1084a87ade160c58a7  review.ts
+3d95756d1441256fca90bd7cea3c7ac571355a8aaeaf7532706d9bc5a28710b7  typings.d.ts
+c8362643ad9d31c25caf62778a871fcaf3674a70c09f4cfa818e4c614ad30ce2  usability.ts

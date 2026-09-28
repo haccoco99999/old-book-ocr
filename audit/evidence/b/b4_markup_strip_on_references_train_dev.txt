@@ -1,0 +1,2 @@
+dev: rows=1520 ref_chars=1995827 rows_where_stripping_would_change_ref=0 chars_it_would_remove=0 by_kind={} first_ids=[]
+train: rows=19780 ref_chars=23863536 rows_where_stripping_would_change_ref=59 chars_it_would_remove=183 by_kind={'heading': 147, 'bold': 36} first_ids=[('006/page_369', {'heading': 2}), ('006/page_383', {'heading': 2}), ('008/page_141', {'heading': 2}), ('013/page_89', {'bold': 12})]

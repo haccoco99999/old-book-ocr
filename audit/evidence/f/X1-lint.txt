@@ -1,0 +1,16 @@
+# cwd: scratch copy @ d44a9d0; 2026-09-25T11:26:33+07:00
+
+$ npx biome lint
+Checked 82 files in 23ms. No fixes applied.
+exit=0
+
+$ npx tsc --noEmit
+exit=0
+
+$ npx antd lint ./src
+Scanned 56 files. No issues found.
+exit=0
+
+$ npx biome check
+Checked 82 files in 29ms. No fixes applied.
+exit=0

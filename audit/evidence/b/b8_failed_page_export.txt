@@ -1,0 +1,37 @@
+# B8: failed job pages vs source=machine eval-manifest (scratch stack audit-x, FakeRecognizer FAKE_FAILURE_RATE=0.1, MAX_ATTEMPTS=1), 2026-09-25T16:23:09+07:00
+## upload 8 synthetic pages (no dataset images), book synB8
+{"id":4,"filename":"syn_page_1.jpg (+7 more)","content_hash":"bacabf7681c384021c13bc7c9b9d2960d29de04b71625780a2772643021b1ca8","mime_type":"image/jpeg","status":"ready","page_count":8,"external_book_id":"synB8","model_version_id":null,"created_at":"2026-09-25T09:23:09.444362+00:00","pages":[{"id":12,"page_no":1,"width":600,"height":800,"image_sha256":"4ba1e1a89d0c852388fcb498f0dbc23cf519797018b67f2f3517d43d9c278707","external_page_id":"synB8/page_1","ingest":{"method":"upload","source_format":"jpeg"},"latest_rev_no":null,"image_url":"/pages/12/image"},{"id":13,"page_no":2,"width":600,"height":800,"image_sha256":"40acef1d4351e7b9f9ce40505ebc2ac9e7d5e4f3a077c360177953bb53723b5e","external_page_id":"synB8/page_2","ingest":{"method":"upload","source_format":"jpeg"},"latest_rev_no":null,"image_url":"/pages/13/image"},{"id":14,"page_no":3,"width":600,"height":800,"image_sha256":"ebc872f30b5d5733c86409d31869dc1f70b8b138a472395f3f82ae5871ddfc36","external_page_id":"synB8/page_3","ingest":{"method":"upload","source_format":"jpeg"},"latest_rev_no":null,"image_url":"/pages/14/image"},{"id":15,"page_no":4,"width":600,"height":800,"image_sha256":"8073cf0b703c8b38a98e0e98faf2d971889e857b5d6a82f7443d5ac5ca5d7ab3","external_page_id":"synB8/page_4","ingest":{"method":"upload","source_format":"jpeg"},"latest_rev_no":null,"image_url":"/pages/15/image"},{"id":16,"page_no":5,"width":600,"height":800,"image_sha256":"933fd3f2d4509d0fc68134d69946f5aa289a2739eac263957b12a4cfe7c67e64","external_page_id":"synB8/page_5","ingest":{"method":"upload","source_format":"jpeg"},"latest_rev_no":null,"image_url":"/pages/16/image"},{"id":17,"page_no":6,"width":600,"height":800,"image_sha256":"7d339ef28f3308d6725cf3b4f906ac9bacb4c794aff3d4dd6eb8b45a95488167","external_page_id":"synB8/page_6","ingest":{"method":"upload","source_format":"jpeg"},"latest_rev_no":null,"image_url":"/pages/17/image"},{"id":18,"page_no":7,"width":600,"height":800,"image_sha256":"54256b51088c701291fde73ba24c6807d420e5150c3cc86e6a075c9c8a3b7d29","external_page_id":"synB8/page_7","ingest":{"method":"upload","source_format":"jpeg"},"latest_rev_no":null,"image_url":"/pages/18/image"},{"id":19,"page_no":8,"width":600,"height":800,"image_sha256":"4492920060d7824a54852840e749ff8a294f3183a710e25b31a04ea8225d10b7","external_page_id":"synB8/page_8","ingest":{"method":"upload","source_format":"jpeg"},"latest_rev_no":null,"image_url":"/pages/19/image"}]}
+## submit job for fake-ocr-v1 on document 4
+{"id":5,"document_id":4,"model_version_id":1,"idempotency_key":"audit-b8-1","status":"queued","attempts":0,"text_policy":"body-v1","bench_run_id":null,"first_page":null,"last_page":null,"enqueued_at":"2026-09-25T09:23:14.977822+00:00","started_at":null,"finished_at":null,"queue_wait_s":0.005,"service_s":null,"as_of":"2026-09-25T09:23:14.982548+00:00","error":null,"retry_of":null}
+## job after completion
+{"id":5,"document_id":4,"model_version_id":1,"idempotency_key":"audit-b8-1","status":"failed","attempts":1,"text_policy":"body-v1","bench_run_id":null,"first_page":null,"last_page":null,"enqueued_at":"2026-09-25T09:23:14.977822+00:00","started_at":"2026-09-25T09:23:15.125598+00:00","finished_at":"2026-09-25T09:23:15.911217+00:00","queue_wait_s":0.148,"service_s":0.786,"as_of":"2026-09-25T09:23:16.034928+00:00","error":{"class":"RecognizerError","attempt":1,"message":"fake recognizer: injected failure","page_no":4,"retryable":true},"retry_of":null,"progress":{"pages_total":8,"pages_done":3}}
+## DB: rev 0 per page of document 4
+ page_no | external_page_id | rev0 | timings 
+---------+------------------+------+---------
+       1 | synB8/page_1     |    1 |       1
+       2 | synB8/page_2     |    1 |       1
+       3 | synB8/page_3     |    1 |       1
+       4 | synB8/page_4     |    0 |       0
+       5 | synB8/page_5     |    0 |       0
+       6 | synB8/page_6     |    0 |       0
+       7 | synB8/page_7     |    0 |       0
+       8 | synB8/page_8     |    0 |       0
+(8 rows)
+
+## GET /exports/eval-manifest?model_version_id=1&source=machine&document_ids=4
+HTTP/1.1 409 Conflict
+date: Fri, 25 Sep 2026 09:23:24 GMT
+server: uvicorn
+content-length: 91
+content-type: application/json
+
+{"detail":"5 page(s) have no machine output yet, e.g. ['4/4', '4/5', '4/6', '4/7', '4/8']"}
+## GET ...&document_ids=1,4 (one complete document + the failed one)
+HTTP 409
+{"detail":"5 page(s) have no machine output yet, e.g. ['4/4', '4/5', '4/6', '4/7', '4/8']"}
+## GET ... (default: every document of model version 1)
+{"detail":"6 page(s) have no machine output yet, e.g. ['3/1', '4/4', '4/5', '4/6', '4/7', '4/8']"}
+## GET ...&document_ids=1 (complete document only) -> rows
+HTTP/1.1 200 OK
+content-disposition: attachment; filename="eval-manifest-mv1-machine.jsonl"
+x-pages: 5

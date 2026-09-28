@@ -1,0 +1,40 @@
+backend/src/ocr_api/usability.py:4:viet-ocr-eval: `GET /exports/eval-manifest?source=human` pairs machine rev 0 (hyp) with the latest
+backend/src/ocr_api/usability.py:5:human revision (ref), and `viet-ocr-eval score` counts the edits.
+backend/src/ocr_worker/telemetry.py:22:    "drift proxy. NOT the evaluation runaway rate, which viet-ocr-eval measures against the reference.")
+training/train.py:8:Fails fast before the first step: config validation, split verification (viet-ocr-eval verify),
+training/train.py:57:        cmd = [sys.executable, str(Path(cfg["paths"]["skill_dir"]) / "scripts" / "evaluate.py"), "verify", str(data / a), str(data / b)]
+training/train.py:61:            problems.append(f"viet-ocr-eval verify {a} {b} failed:\n{res.stdout}")
+mlops/mlops/splits.py:9:- `viet-ocr-eval verify` finding leakage between train and test or train and dev, in any build.
+mlops/mlops/splits.py:104:                    errors.append(f"viet-ocr-eval verify: leakage between {rel(b)}/train.jsonl and {other}")
+training/ocrdata/__init__.py:4:from the `viet-ocr-eval` CLI.
+backend/src/ocr_api/eval_manifest.py:1:"""Evaluation manifest export: JSONL in the format `viet-ocr-eval score` reads.
+backend/src/ocr_api/eval_manifest.py:13:  `viet-ocr-eval score` counts the edits the participant made (edits per page for RQ3). Every row,
+mlops/mlops/evalcli.py:1:"""The only route to a text-quality number in this layer: `viet-ocr-eval` as a subprocess, parsed from its JSON.
+mlops/mlops/evalcli.py:20:    cmd = [sys.executable, str(paths.SKILL / "scripts/evaluate.py"), *args]
+mlops/mlops/evalcli.py:27:        raise RuntimeError(f"viet-ocr-eval score failed:\n{r.stdout[-2000:]}\n{r.stderr[-2000:]}")
+mlops/mlops/evalcli.py:35:        raise RuntimeError(f"viet-ocr-eval compare failed:\n{r.stdout[-2000:]}\n{r.stderr[-2000:]}")
+mlops/mlops/evalcli.py:51:    for line in (paths.SKILL / "scripts/evaluate.py").read_text(encoding="utf-8").splitlines():
+mlops/mlops/evalcli.py:54:    raise RuntimeError("protocol_version not found in viet-ocr-eval")
+backend/tools/join_reference.py:1:"""Join ground-truth references into a machine eval manifest, by page_id, for `viet-ocr-eval score`.
+mlops/log_eval.py:1:"""Log a viet-ocr-eval report.json or compare.json to MLflow (experiment "evaluations").
+mlops/mlops/parity.py:8:Both sides are scored by `viet-ocr-eval score` and compared by `viet-ocr-eval compare`. The gate fails if
+backend/tools/d4_eval.py:1:"""D4: the locked test set through the deployed pipeline, once per model, scored by viet-ocr-eval.
+backend/tools/d4_eval.py:15:   and score it with `viet-ocr-eval score`.
+backend/tools/d4_eval.py:16:Then `viet-ocr-eval compare base adapted` gives the paired result.
+backend/tools/d4_eval.py:50:SKILL = Path(os.environ.get("VIET_OCR_EVAL", BACKEND.parent / "skills/viet-ocr-eval")) / "scripts/evaluate.py"
+backend/tools/d4_eval.py:181:    log(f"{model}: scoring {len(joined)} pages with viet-ocr-eval")
+backend/tools/d4_eval.py:186:        raise SystemExit(f"{model}: viet-ocr-eval score failed; see score_{model}.log")
+training/eval_dev.py:10:decode.json seed, and pages are scored by viet-ocr-eval. The record, including the full report, is
+training/eval_dev.py:12:Region outputs, the manifest and viet-ocr-eval's own files stay outside the contract, in work/<run_id>/eval/step-NNNNNN/.
+training/prepare_data.py:15:  9. write train/dev/test/gold.jsonl (viet-ocr-eval manifest format), rejections.jsonl, data_manifest.json
+training/prepare_data.py:16: 10. `viet-ocr-eval verify` on the splits; exit non-zero if it fails
+training/prepare_data.py:243:    """anchor_cost = viet-ocr-eval CER of the Azure text (hyp) against the label (ref), as calibrated in EDA A2/A3."""
+training/prepare_data.py:316:    cmd = [sys.executable, str(Path(skill_dir) / "scripts" / "evaluate.py"), "verify", str(a), str(b)]
+training/prepare_data.py:354:                f'<div class="k"><code>final</code> region matching this box (within 10 px)</div>{final}<div class="k">Azure OCR vs label, CER from viet-ocr-eval (step 2 drops &gt; 0.15)</div>{cost}</td></tr>')
+training/prepare_data.py:468:    print(f"[{time.time() - t0:6.0f}s] scoring {len(units):,} train {grouping} units with viet-ocr-eval", file=sys.stderr, flush=True)
+mlops/evaluate_test.py:11:After all versions, `viet-ocr-eval compare` runs base against every other version of this run, per view and set.
+mlops/mlops/repro.py:100:             "files in `evaluation/`, which viet-ocr-eval wrote. Nothing here is recomputed. Base = untrained "
+mlops/mlops/repro.py:241:    pkg.copy_glob(paths.SKILL, "**/*", "evaluation/viet-ocr-eval", exclude=("__pycache__", ".pyc"))
+mlops/mlops/repro.py:242:    pkg.write("evaluation/viet-ocr-eval/VERSION.json", json.dumps(
+mlops/mlops/repro.py:244:         "tree_sha256": {k: v for k, v in hashing.tree(paths.SKILL, "viet-ocr-eval").items() if "__pycache__" not in k}}, indent=1) + "\n")
+training/ocrtrain/rundir.py:13:    └── dev_step-NNNNNN.json  viet-ocr-eval reports

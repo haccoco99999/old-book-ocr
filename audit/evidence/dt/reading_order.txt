@@ -1,0 +1,24 @@
+### definitions/imports of order_regions / ORDER_VERSION / xycut across training (+ where backend imports it, names only)
+training/prepare_data.py:44:from ocrdata.reading_order import ORDER_VERSION, bbox
+training/prepare_data.py:397:    cfg["reading_order"] = ORDER_VERSION
+training/prepare_data.py:554:        "grouping": grouping, "train_unit": grouping, "eval_unit": "paragraph", "reading_order": ORDER_VERSION,
+training/ocrdata/reading_order.py:24:ORDER_VERSION = "xycut-v1"
+training/ocrdata/reading_order.py:60:def order_regions(polygons: Sequence[Sequence[float]]) -> list[int]:
+training/ocrdata/page.py:6:by `reading_order.order_regions`, the same function evaluation uses.
+training/ocrdata/page.py:19:from .reading_order import bbox, order_regions
+training/ocrdata/page.py:135:    # polygon, so anchor and GT reach order_regions with identical boxes.
+training/ocrdata/page.py:143:    perm = order_regions([order_poly(p) for p, _ in raw_blocks])
+training/ocrdata/page.py:146:    gperm = order_regions([r["polygon"] for r in regions])
+
+backend/tests/test_no_metric_code.py
+backend/src/ocr_api/exports.py
+backend/tests/test_plaintext.py
+backend/src/ocr_core/reading_order.py
+backend/src/ocr_core/plaintext.py
+backend/src/ocr_worker/pipeline.py
+
+### any other sort of regions in training eval paths
+(end)
+
+### reading_order recorded in data manifest
+"reading_order": "xycut-v1"

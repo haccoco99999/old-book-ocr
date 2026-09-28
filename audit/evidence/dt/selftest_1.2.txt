@@ -1,0 +1,6 @@
+=== .venv-train/bin/python Python 3.12.14
+selftest OK — metric definitions behave as documented
+exit=0
+=== .venv/bin/python Python 3.14.4
+selftest OK — metric definitions behave as documented
+exit=0

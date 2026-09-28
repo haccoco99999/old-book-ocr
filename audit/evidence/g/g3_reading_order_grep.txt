@@ -1,0 +1,37 @@
+## training reading_order.py defs
+24:ORDER_VERSION = "xycut-v1"
+27:def bbox(polygon: Sequence[float]) -> Box:
+32:def _groups(idx: list[int], boxes: Sequence[Box], lo: int, hi: int) -> tuple[list[list[int]], float]:
+49:def _xycut(idx: list[int], boxes: Sequence[Box]) -> list[int]:
+60:def order_regions(polygons: Sequence[Sequence[float]]) -> list[int]:
+## training importers
+training/evaluate_final.py:13:stopped. They are joined into pages in stored reading order and scored by viet-ocr-eval. The gold subset is part of
+training/gold_review.py:14:region texts joined by newlines in stored reading order, the same way the pseudo reference is built from `final`
+training/prepare_data.py:5:  1. parse Azure `json_raw` -> lines and paragraphs, in reading order
+training/prepare_data.py:44:from ocrdata.reading_order import ORDER_VERSION, bbox
+training/prepare_data.py:397:    cfg["reading_order"] = ORDER_VERSION
+training/prepare_data.py:554:        "grouping": grouping, "train_unit": grouping, "eval_unit": "paragraph", "reading_order": ORDER_VERSION,
+training/ocrtrain/deveval.py:41:    """viet-ocr-eval manifest: one page per line; the hypothesis joins region outputs in the stored reading order."""
+training/ocrdata/page.py:5:replaced by ebook text, in their own list order. Both are put in reading order
+training/ocrdata/page.py:6:by `reading_order.order_regions`, the same function evaluation uses.
+training/ocrdata/page.py:19:from .reading_order import bbox, order_regions
+training/ocrdata/page.py:33:    idx: int  # position in page reading order
+training/ocrdata/page.py:42:    idx: int  # position in page reading order
+training/ocrdata/page.py:135:    # polygon, so anchor and GT reach order_regions with identical boxes.
+training/ocrdata/page.py:143:    perm = order_regions([order_poly(p) for p, _ in raw_blocks])
+training/ocrdata/page.py:146:    gperm = order_regions([r["polygon"] for r in regions])
+## backend
+backend/src/ocr_core/reading_order.py:24:ORDER_VERSION = "xycut-v1"
+backend/src/ocr_core/reading_order.py:49:def _xycut(idx: list[int], boxes: Sequence[Box]) -> list[int]:
+backend/src/ocr_core/reading_order.py:57:    return [i for part in parts for i in _xycut(part, boxes)]
+backend/src/ocr_core/reading_order.py:60:def order_regions(polygons: Sequence[Sequence[float]]) -> list[int]:
+backend/src/ocr_core/reading_order.py:63:    return _xycut(list(range(len(boxes))), boxes)
+backend/src/ocr_api/exports.py:34:from ocr_core.reading_order import order_regions
+backend/src/ocr_api/exports.py:54:    for i in order_regions([b["bbox"] for b in blocks]) if blocks else []:
+backend/src/ocr_core/plaintext.py:23:from ocr_core.reading_order import ORDER_VERSION, order_regions
+backend/src/ocr_core/plaintext.py:115:    1. Order all blocks with `order_regions`, the reading-order function that training data
+backend/src/ocr_core/plaintext.py:131:    for i in order_regions([b["bbox"] for b in blocks]) if blocks else []:
+backend/src/ocr_worker/pipeline.py:28:from ocr_core.reading_order import order_regions
+backend/src/ocr_worker/pipeline.py:228:    for rank, i in enumerate(order_regions([b["bbox"] for b in blocks]) if blocks else []):
+backend/src/ocr_worker/pipeline.py:229:        blocks[i]["reading_order"] = rank                # for display; to_plaintext() computes its own
+## mlops

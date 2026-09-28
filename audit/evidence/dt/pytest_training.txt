@@ -1,0 +1,26 @@
+FAIL test_no_metric_code::test_no_edit_distance_or_error_rate_code (0.5s)
+Traceback (most recent call last):
+  File "/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/run_tests.py", line 13, in <module>
+    getattr(m, name)(); passed.append(f'{mod}::{name}'); print(f'PASS {mod}::{name} ({time.time()-t0:.1f}s)')
+    ^^^^^^^^^^^^^^^^^^
+  File "/home/huy/master/training/tests/test_no_metric_code.py", line 24, in test_no_edit_distance_or_error_rate_code
+    assert not hits, "metric code outside viet-ocr-eval:\n" + "\n".join(hits)
+           ^^^^^^^^
+AssertionError: metric code outside viet-ocr-eval:
+work/analysis/runaway.py:21: import metrics as M  # noqa: E402
+
+PASS test_harness::test_capture_env_reads_metadata_without_importing_training_packages (0.3s)
+PASS test_harness::test_checkpoint_policy_immutability_last_swap_best_k_and_contract (0.0s)
+PASS test_harness::test_contract_rejects_optimizer_state_in_step_dirs_and_stray_entries (0.0s)
+PASS test_harness::test_dev_subset_is_seeded_sorted_and_shared (0.2s)
+PASS test_harness::test_layering_merges_dicts_replaces_lists_and_detects_cycles (0.0s)
+PASS test_harness::test_metrics_one_line_per_step_merges_same_step_events (0.0s)
+PASS test_harness::test_real_configs_validate_and_hash_is_stable_and_ignores_name (0.0s)
+PASS test_harness::test_run_id_format (0.0s)
+PASS test_harness::test_source_hash_tracks_code_only (0.0s)
+PASS test_harness::test_step_counts_must_line_up_with_dev_evaluation (0.0s)
+PASS test_harness::test_sweep_file_validation_and_duplicate_configs (0.0s)
+PASS test_harness::test_validation_lists_every_problem (0.0s)
+
+12 passed, 1 failed
+  failed: test_no_metric_code::test_no_edit_distance_or_error_rate_code

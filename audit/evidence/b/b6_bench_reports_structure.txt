@@ -1,0 +1,48 @@
+== reports/bench_20260924T034919Z.json
+top keys: ['schema', 'bench_run_id', 'created_at', 'definitions', 'targets', 'config', 'results', 'environment', 'jobs', 'raw_page_timings']
+schema ocr-bench/1 bench_run_id 1
+config keys: ['adapter_sha256', 'arrival', 'books', 'crop', 'decode', 'encode_workers_per_server', 'generation_batch_size', 'git', 'gpu_cap_mb_per_server', 'layout', 'max_pixels', 'min_pixels', 'model', 'model_version', 'model_version_id', 'page_ids_sha256', 'pages', 'recognition_servers', 'region_concurrency', 'seed', 'text_policy', 'warmup_pages', 'weights_sha256', 'worker_consumers', 'worker_env']
+model paddleocr-vl-1.6-vbr-lr2e4-s3000 pages 12 policy page-v1 servers 1 consumers 1 git {'sha': '0202e1b062770f84e71fe3a09934472d6cec69c6', 'dirty_files': 19} decode {'seed': 13, 'unit': 'paragraph region crop', 'top_p': 1.0, 'source': 'protocol.md section 4; max_new_tokens 1024 for paragraph crops per EDA C1 (region tokens p99 341, max 1207; 28 regions above the cap are excluded from train)', 'do_sample': False, 'num_beams': 1, 'temperature': 0.0, 'max_new_tokens': 1024, 'repetition_penalty': 1.0}
+results keys: ['cold_start_s', 'end_to_end_s', 'failure_rate', 'generated_tokens', 'memory', 'pages', 'queue_wait_s', 'regions', 'service_time_s', 'stage_breakdown_ms', 'throughput_pages_per_hour', 'window_s']
+pages {'expected': 12, 'completed': 12, 'warm': 12, 'cold': 0}
+cold_start {'to_first_completed_page': 25.87, 'server_ready_s': {'layout': 5.01, 'recognizer-8090': 6.01}}
+warm service {'n': 12, 'mean': 11.7465, 'min': 6.5175, 'p50': 10.0876, 'p95': 18.3236, 'p99': 18.3236, 'max': 18.3236}
+tput 303.9 window 142.15
+memory keys ['ram_mib', 'samples', 'vram_mib']
+vram {'device_idle': 2391.6, 'device_peak_measured': 8491.9, 'device_peak_whole_run': 8491.9, 'peak_minus_idle_measured': 6100.4, 'per_server_paddle_max_reserved': {'recognizer-8090': 3987.8}}
+samples {'load': 15, 'warmup': 99, 'measured': 285}
+failure {'jobs': {'failed': 0, 'total': 8, 'rate': 0.0}, 'pages': {'missing': 0, 'total': 12, 'rate': 0.0}}
+raw row keys ['attempt', 'cold_reason', 'document_id', 'enqueued_at', 'external_page_id', 'finished_at', 'gen_tokens', 'job_id', 'layout_ms', 'n_regions', 'page_no', 'persist_ms', 'recognition_ms', 'started_at', 'warm'] n 12
+targets {'p95_warm_service_time_s': (18.3236, False), 'throughput_pages_per_hour': (303.9, False), 'job_failure_rate': (0.0, True)}
+== reports/bench_20260924T035616Z.json
+top keys: ['schema', 'bench_run_id', 'created_at', 'definitions', 'targets', 'config', 'results', 'environment', 'jobs', 'raw_page_timings']
+schema ocr-bench/1 bench_run_id 2
+config keys: ['adapter_sha256', 'arrival', 'books', 'crop', 'decode', 'dispatch', 'encode_workers_per_server', 'generation_batch_size', 'git', 'gpu_cap_mb_per_server', 'layout', 'max_pixels', 'min_pixels', 'model', 'model_version', 'model_version_id', 'page_ids_sha256', 'pages', 'recognition_servers', 'region_concurrency', 'seed', 'text_policy', 'warmup_pages', 'weights_sha256', 'worker_consumers', 'worker_env']
+model paddleocr-vl-1.6-vbr-lr2e4-s3000 pages 300 policy page-v1 servers 2 consumers 1 git {'sha': '6d4fb6c5181f080467f1ce44b4aacd8f17d2b726', 'dirty_files': 1} decode {'seed': 13, 'unit': 'paragraph region crop', 'top_p': 1.0, 'source': 'protocol.md section 4; max_new_tokens 1024 for paragraph crops per EDA C1 (region tokens p99 341, max 1207; 28 regions above the cap are excluded from train)', 'do_sample': False, 'num_beams': 1, 'temperature': 0.0, 'max_new_tokens': 1024, 'repetition_penalty': 1.0}
+results keys: ['cold_start_s', 'end_to_end_s', 'failure_rate', 'generated_tokens', 'memory', 'pages', 'queue_wait_s', 'regions', 'service_time_s', 'stage_breakdown_ms', 'throughput_pages_per_hour', 'window_s']
+pages {'expected': 300, 'completed': 300, 'warm': 300, 'cold': 0}
+cold_start {'to_first_completed_page': 47.28, 'server_ready_s': {'layout': 4.01, 'recognizer-8090': 6.01, 'recognizer-8092': 6.01}}
+warm service {'n': 300, 'mean': 7.8102, 'min': 0.3292, 'p50': 7.5201, 'p95': 12.756, 'p99': 17.1039, 'max': 20.4092}
+tput 458.1 window 2357.67
+memory keys ['ram_mib', 'samples', 'vram_mib']
+vram {'device_idle': 2395.5, 'device_peak_measured': 15640.9, 'device_peak_whole_run': 15640.9, 'peak_minus_idle_measured': 13245.5, 'per_server_paddle_max_reserved': {'recognizer-8090': 4996.4, 'recognizer-8092': 5253.5}}
+samples {'load': 65, 'warmup': 99, 'measured': 4641}
+failure {'jobs': {'failed': 0, 'total': 23, 'rate': 0.0}, 'pages': {'missing': 0, 'total': 300, 'rate': 0.0}}
+raw row keys ['attempt', 'cold_reason', 'document_id', 'enqueued_at', 'external_page_id', 'finished_at', 'gen_tokens', 'job_id', 'layout_ms', 'n_regions', 'page_no', 'persist_ms', 'recognition_ms', 'started_at', 'warm'] n 300
+targets {'p95_warm_service_time_s': (12.756, False), 'throughput_pages_per_hour': (458.1, False), 'job_failure_rate': (0.0, True)}
+== reports/bench_20260924T052050Z.json
+top keys: ['schema', 'bench_run_id', 'created_at', 'definitions', 'targets', 'config', 'results', 'environment', 'jobs', 'raw_page_timings']
+schema ocr-bench/1 bench_run_id 3
+config keys: ['adapter_sha256', 'arrival', 'books', 'crop', 'decode', 'dispatch', 'encode_workers_per_server', 'generation_batch_size', 'git', 'gpu_cap_mb_per_server', 'layout', 'max_pixels', 'min_pixels', 'model', 'model_version', 'model_version_id', 'page_ids_sha256', 'pages', 'pages_from', 'recognition_servers', 'region_concurrency', 'seed', 'text_policy', 'warmup_pages', 'weights_sha256', 'worker_consumers', 'worker_env']
+model paddleocr-vl-1.6-vbr-lr2e4-s3000 pages 300 policy page-v1 servers 3 consumers 2 git {'sha': '893a8b0e5ddfb13522698bb3534c4af3ab8a8481', 'dirty_files': 4} decode {'seed': 13, 'unit': 'paragraph region crop', 'top_p': 1.0, 'source': 'protocol.md section 4; max_new_tokens 1024 for paragraph crops per EDA C1 (region tokens p99 341, max 1207; 28 regions above the cap are excluded from train)', 'do_sample': False, 'num_beams': 1, 'temperature': 0.0, 'max_new_tokens': 1024, 'repetition_penalty': 1.0}
+results keys: ['cold_start_s', 'end_to_end_s', 'failure_rate', 'generated_tokens', 'memory', 'pages', 'queue_wait_s', 'regions', 'service_time_s', 'stage_breakdown_ms', 'throughput_pages_per_hour', 'window_s']
+pages {'expected': 300, 'completed': 300, 'warm': 300, 'cold': 0}
+cold_start {'to_first_completed_page': 52.77, 'server_ready_s': {'layout': 6.02, 'recognizer-8090': 8.01, 'recognizer-8092': 6.01, 'recognizer-8094': 6.0}}
+warm service {'n': 300, 'mean': 12.7763, 'min': 0.314, 'p50': 12.6025, 'p95': 19.5331, 'p99': 21.9534, 'max': 22.4873}
+tput 555.5 window 1944.04
+memory keys ['ram_mib', 'samples', 'vram_mib']
+vram {'device_idle': 2281.8, 'device_peak_measured': 21884.7, 'device_peak_whole_run': 21884.7, 'peak_minus_idle_measured': 19602.9, 'per_server_paddle_max_reserved': {'recognizer-8090': 4990.1, 'recognizer-8092': 5244.4, 'recognizer-8094': 5497.9}}
+samples {'load': 67, 'warmup': 130, 'measured': 3821}
+failure {'jobs': {'failed': 0, 'total': 23, 'rate': 0.0}, 'pages': {'missing': 0, 'total': 300, 'rate': 0.0}}
+raw row keys ['attempt', 'cold_reason', 'document_id', 'enqueued_at', 'external_page_id', 'finished_at', 'gen_tokens', 'job_id', 'layout_ms', 'n_regions', 'page_no', 'persist_ms', 'recognition_ms', 'started_at', 'warm'] n 300
+targets {'p95_warm_service_time_s': (19.5331, False), 'throughput_pages_per_hour': (555.5, True), 'job_failure_rate': (0.0, True)}

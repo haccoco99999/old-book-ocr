@@ -1,0 +1,11 @@
+# F7 run with backend down: the whole Playwright suite (dev:mock server + Chromium) inside a fresh network namespace (unshare -rn, loopback only) where nothing listens on :8000; scratch copy, port 18080; 2026-09-25T11:32:19+07:00
+backend probe inside namespace: curl exit 7 (7 = connection refused)
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/review-flow.spec.ts:25:5 › participant code, upload, queue, review with an edit and save, export: events reach the backend in order (13.9s)
+  ✓  2 [chromium] › e2e/review-flow.spec.ts:85:5 › Telex composition and a decomposed paste in a real browser are saved as NFC (1.8s)
+  ✓  3 [chromium] › e2e/review-flow.spec.ts:128:5 › the bundled fonts load and show all 134 Vietnamese letters (1.3s)
+
+  3 passed (19.3s)
+exit=0

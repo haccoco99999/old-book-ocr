@@ -1,0 +1,35 @@
+keys: ['cer_micro', 'der', 'ter', 'wer_micro', 'wser', 'reduction_shares', 'markup_chars']
+{
+ "total_reduction": 4217,
+ "reduction": {
+  "tone_sub": 2019,
+  "letter_sub": 920,
+  "base_sub": 431,
+  "base_ins": 466,
+  "base_del": 52,
+  "ws_errors": 329,
+  "runaway": 0,
+  "diacritic": 2939
+ },
+ "share": {
+  "tone_sub": 0.4787763813137301,
+  "letter_sub": 0.21816457197059522,
+  "base_sub": 0.10220535926013753,
+  "base_ins": 0.11050509841119278,
+  "base_del": 0.012331041024424947,
+  "ws_errors": 0.07801754801991938,
+  "runaway": 0.0,
+  "diacritic": 0.6969409532843254
+ },
+ "n_paired_pages": 150,
+ "diacritic_share_ci95": [
+  0.5934548649242258,
+  0.7801518133258364
+ ],
+ "p_diacritic_largest": 1.0,
+ "n_valid_resamples": 1000
+}
+report_base_dev150.json protocol_version= 1.1 health= {"runaway_pages": 0, "runaway_rate": 0.0, "empty_pages": 0, "empty_rate": 0.0, "markup_pages": 3, "markup_chars": 14}
+report_lr2e4_s3000_dev150.json protocol_version= 1.1 health= {"runaway_pages": 0, "runaway_rate": 0.0, "empty_pages": 0, "empty_rate": 0.0, "markup_pages": 0, "markup_chars": 0}
+reduction_shares identical to protocol_1.1/dev150/compare.json: True
+cer_micro identical: True | markup identical: True

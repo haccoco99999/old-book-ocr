@@ -1,0 +1,15 @@
+# cwd: scratch copy @ d44a9d0; ONLY change vs HEAD: dev-server port 8080->18080 in .env and playwright.config.ts (to avoid colliding with other auditors); webServer = npm run dev:mock (MSW, no proxy); 2026-09-25T11:30:31+07:00
+$ LD_LIBRARY_PATH=$HOME/.local/share/chromium-libs/usr/lib/x86_64-linux-gnu npx playwright test --reporter=list
+
+Running 3 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/review-flow.spec.ts:25:5 › participant code, upload, queue, review with an edit and save, export: events reach the backend in order (16.4s)
+  ✓  2 [chromium] › e2e/review-flow.spec.ts:85:5 › Telex composition and a decomposed paste in a real browser are saved as NFC (1.8s)
+  ✓  3 [chromium] › e2e/review-flow.spec.ts:128:5 › the bundled fonts load and show all 134 Vietnamese letters (1.3s)
+
+  3 passed (23.2s)
+
+real	0m23.827s
+user	0m6.997s
+sys	0m2.984s
+exit=0

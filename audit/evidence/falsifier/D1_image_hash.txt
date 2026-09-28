@@ -1,0 +1,9 @@
+images hashed: 25585; books in page_input: 123; books not in any split: []
+identical-image groups within one split: 18; across splits: 1
+  CROSS d14aa16a7469 ['train:028/page_117.jpg', 'train:028/page_125.jpg', 'train:028/page_137.jpg', 'train:028/page_31.jpg', 'train:028/page_41.jpg', 'train:028/page_69.jpg', 'train:028/page_79.jpg', 'train:028/page_87.jpg', 'train:028/page_9.jpg', 'test:089/page_124.jpg', 'test:089/page_164.jpg', 'test:089/page_20.jpg', 'test:089/page_34.jpg', 'test:089/page_42.jpg', 'test:089/page_44.jpg', 'test:089/page_58.jpg', 'test:089/page_8.jpg', 'test:089/page_86.jpg', 'test:089/page_98.jpg']
+cross-split identical image group: test pages in test.jsonl: [] in gold: []
+  train pages in train.jsonl: []
+   089/page_124 final regions: 0
+   089/page_164 final regions: 0
+   028/page_117 final regions: 0
+   028/page_125 final regions: 0

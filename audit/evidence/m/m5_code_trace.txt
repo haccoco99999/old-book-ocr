@@ -1,0 +1,302 @@
+# M5 code trace, mlops @ cd10b01, Fri Sep 25 04:42:10 UTC 2026
+## mlops/testeval.py:353-417 (run_version: guards, started line, reads, closing line)
+   353	def run_version(version: dict, dec: dict, run_id: str, rehearsal: bool, rerun_reason: str | None,
+   354	                views: dict | None = None) -> dict:
+   355	    views = views or {"fixed-crop": fixed_crop, "end-to-end": end_to_end}
+   356	    name = version["name"]
+   357	    logfile = REHEARSAL_LOG if rehearsal else TEST_LOG
+   358	    state = code_state()
+   359	    check_preregistration(dec)
+   360	    check_clean(state, strict=not rehearsal)
+   361	    entries = read_log(TEST_LOG)
+   362	    blob = check_frozen_decision(entries) if not rehearsal else decision.blob_sha()
+   363	    before = []
+   364	    if not rehearsal:
+   365	        before = check_access_allowed(version, entries, rerun_reason)
+   366	        check_rehearsed(name, state)
+   367	    if version.get("serve") and promotion.latest_record(name) is None:
+   368	        raise AccessRefused(f"{name} has no promotion record; run promote.py / register_base.py first")
+   369	    row = backend.model_version(name) if version.get("serve") else None
+   370	    split, pages, gold = ("dev", REHEARSAL_PAGES, False) if rehearsal else ("test", None, True)
+   371	    manifest = json.loads((DATA / "data_manifest.json").read_text(encoding="utf-8"))   # recorded hashes, not the files
+   372	    out = EVAL_WORK / run_id / name
+   373	    base_entry = {"eval_run_id": run_id, "version": name, "mode": "rehearsal" if rehearsal else "test",
+   374	                  "views": list(VIEWS), "sets": [split] + (["gold"] if gold else []),
+   375	                  "split_sha256": manifest["splits"][split]["sha256"], "rehearsal_pages": pages,
+   376	                  "gold_sha256": manifest["gold"]["sha256"] if gold else None,
+   377	                  "decision_md_blob_sha": blob, "served_model_name": name,
+   378	                  "weights_sha256": row["weights_sha256"] if row else None, "adapter_sha256": version.get("adapter_sha256"),
+   379	                  "operator": os.environ.get("USER", "unknown"), **{k: state[k] for k in ("mlops_commit", "code_tree")},
+   380	                  "rerun_reason": rerun_reason, "previous_accesses": len(before)}
+   381	    append_log(logfile, {"event": "started", **base_entry})           # before the first split file is read below
+   382	    if not rehearsal:
+   383	        commit_log(logfile, f"test access started: {name} ({run_id})")
+   384	    log(f"{name}: {'rehearsal' if rehearsal else 'TEST ACCESS'} {run_id} started ({split})")
+   385	    results, limit = {}, markup_limit(dec, name)
+   386	    try:
+   387	        if hashing.sha256_file(DATA / f"{split}.jsonl") != base_entry["split_sha256"]:
+   388	            raise RuntimeError(f"{split}.jsonl no longer matches data_manifest.json")
+   389	        rows = load_rows(split, pages)
+   390	        expected = {split: {r["page_id"] for r in rows}}
+   391	        if gold:
+   392	            expected["gold"] = {json.loads(line)["page_id"] for line in open(DATA / "gold.jsonl", encoding="utf-8") if line.strip()}
+   393	        fc = views["fixed-crop"](version, split, pages, gold, out / "fixed-crop")
+   394	        if set(fc) != set(expected):
+   395	            raise RuntimeError(f"fixed-crop produced sets {sorted(fc)}, expected {sorted(expected)}")
+   396	        for s, p in fc.items():
+   397	            results[f"fixed-crop/{s}"] = check_report(p, expected[s], limit)
+   398	        log(f"{name}: fixed-crop done {[(k, v['cer_micro']) for k, v in results.items()]}")
+   399	        e2e = views["end-to-end"](name, rows, run_id, out / "end-to-end", gold_refs_from(fc))
+   400	        if set(e2e) != set(expected):
+   401	            raise RuntimeError(f"end-to-end produced sets {sorted(e2e)}, expected {sorted(expected)}")
+   402	        for s, p in e2e.items():
+   403	            results[f"end-to-end/{s}"] = check_report(p, expected[s], limit)
+   404	        log(f"{name}: end-to-end done {[(k, v['cer_micro']) for k, v in results.items() if k.startswith('end')]}")
+   405	    except BaseException as exc:
+   406	        append_log(logfile, {"event": "aborted", "eval_run_id": run_id, "version": name, "reason": f"{type(exc).__name__}: {exc}"[:2000],
+   407	                             "reports": results, "code_tree": state["code_tree"]})
+   408	        if not rehearsal:
+   409	            commit_log(logfile, f"test access aborted: {name} ({run_id})")
+   410	        raise
+   411	    entry = append_log(logfile, {"event": "completed", "eval_run_id": run_id, "version": name, "passed": True,
+   412	                                 "views": list(VIEWS), "pages": len(rows), "reports": results, "code_tree": state["code_tree"],
+   413	                                 "report_paths": {k: str(v) for k, v in {**{f"fixed-crop/{a}": b for a, b in fc.items()},
+   414	                                                                         **{f"end-to-end/{a}": b for a, b in e2e.items()}}.items()}})
+   415	    if not rehearsal:
+   416	        commit_log(logfile, f"test access completed: {name} ({run_id})")
+   417	    return entry
+
+## mlops/testeval.py:64-151 (append/commit/accesses/guards)
+    64	def append_log(path: Path, entry: dict) -> dict:
+    65	    """Append-only. Each line carries the sha256 of the line before it (a hash chain; git history is the
+    66	    tamper evidence that matters)."""
+    67	    lines = path.read_text(encoding="utf-8").splitlines() if path.exists() else []
+    68	    prev = hashlib.sha256(lines[-1].encode()).hexdigest() if lines else None
+    69	    entry = {"at": now(), **entry, "prev_line_sha256": prev}
+    70	    with open(path, "a", encoding="utf-8") as fh:
+    71	        fh.write(json.dumps(entry, ensure_ascii=False, sort_keys=False) + "\n")
+    72	        fh.flush()
+    73	        os.fsync(fh.fileno())
+    74	    return entry
+    75	
+    76	
+    77	def commit_log(path: Path, message: str) -> str:
+    78	    def git(*a):
+    79	        return subprocess.run(["git", "-C", str(path.parent), *a], capture_output=True, text=True)
+    80	    git("add", path.name)
+    81	    r = git("commit", "-q", "-m", message, "--", path.name)
+    82	    if r.returncode != 0:
+    83	        raise RuntimeError(f"could not commit {path.name}: {r.stdout}{r.stderr}")
+    84	    return git("rev-parse", "HEAD").stdout.strip()
+    85	
+    86	
+    87	def accesses(entries: list[dict], version: str) -> list[dict]:
+    88	    return [e for e in entries if e.get("version") == version and e.get("event") in ("started", "backfilled")]
+    89	
+    90	
+    91	# --- guards -----------------------------------------------------------------------------------------------
+    92	
+    93	def _git(path: Path, *a: str) -> str:
+    94	    return subprocess.run(["git", "-C", str(path), *a], capture_output=True, text=True).stdout.strip()
+    95	
+    96	
+    97	def code_state() -> dict:
+    98	    """What produced the numbers. code_tree hashes the committed evaluation code only, so committing a log line
+    99	    does not invalidate a rehearsal."""
+   100	    tree = _git(paths.MLOPS, "ls-tree", "-r", "HEAD", "--", "mlops", "evaluate_test.py")
+   101	    dirty = {name: len(_git(p, "status", "--porcelain", "--untracked-files=no", "--", *spec).splitlines())
+   102	             for name, p, spec in (("mlops", paths.MLOPS, ()), ("training", paths.MASTER, ("training", "skills")),
+   103	                                   ("backend", paths.BACKEND, ()))}
+   104	    return {"mlops_commit": _git(paths.MLOPS, "rev-parse", "HEAD"), "code_tree": hashlib.sha256(tree.encode()).hexdigest(),
+   105	            "training_commit": _git(paths.MASTER, "rev-parse", "HEAD"), "backend_commit": _git(paths.BACKEND, "rev-parse", "HEAD"),
+   106	            "dirty_tracked_files": dirty}
+   107	
+   108	
+   109	def check_preregistration(dec: dict) -> None:
+   110	    pe = dec.get("primary_endpoint")
+   111	    if not pe or any(k not in pe for k in PRIMARY_KEYS):
+   112	        raise AccessRefused(f"decision.md has no complete primary_endpoint block (needs {PRIMARY_KEYS})")
+   113	    open_items = decision.unresolved(dec)
+   114	    if open_items:
+   115	        raise AccessRefused(f"decision.md is not final: {open_items} still say TO_CONFIRM")
+   116	
+   117	
+   118	def check_clean(state: dict, strict: bool) -> None:
+   119	    dirty = {k: v for k, v in state["dirty_tracked_files"].items() if v and (strict or k == "mlops")}
+   120	    if dirty:
+   121	        raise AccessRefused(f"tracked files are modified in {dirty}; commit them first")
+   122	
+   123	
+   124	def check_frozen_decision(entries: list[dict]) -> str:
+   125	    sha = decision.blob_sha()
+   126	    if sha is None:
+   127	        raise AccessRefused("decision.md is not committed")
+   128	    first = next((e for e in entries if e.get("decision_md_blob_sha")), None)
+   129	    if first and first["decision_md_blob_sha"] != sha:
+   130	        raise AccessRefused(f"decision.md changed since the first access ({first['decision_md_blob_sha'][:10]} -> {sha[:10]}); "
+   131	                            "it is frozen from then on")
+   132	    return sha
+   133	
+   134	
+   135	def check_rehearsed(version: str, state: dict) -> dict:
+   136	    ok = [e for e in read_log(REHEARSAL_LOG) if e.get("version") == version and e.get("event") == "completed"
+   137	          and e.get("passed") and e.get("code_tree") == state["code_tree"] and set(e.get("views", [])) == set(VIEWS)]
+   138	    if not ok:
+   139	        raise AccessRefused(f"{version} has no passing rehearsal of the current evaluation code (code tree "
+   140	                            f"{state['code_tree'][:12]}); run evaluate_test.py --rehearsal first")
+   141	    return ok[-1]
+   142	
+   143	
+   144	def check_access_allowed(version: dict, entries: list[dict], rerun_reason: str | None) -> list[dict]:
+   145	    if not version.get("test"):
+   146	        raise AccessRefused(f"{version['name']} is declared with test: false ({version.get('role')}); it never runs on test")
+   147	    before = accesses(entries, version["name"])
+   148	    if before and not rerun_reason:
+   149	        raise AccessRefused(f"{version['name']} already has {len(before)} test access(es) "
+   150	                            f"({', '.join(e.get('started', e['at']) for e in before)}); a rerun needs --rerun-reason")
+   151	    return before
+
+## mlops/testeval.py:172-211 (check_report, fixed_crop identity)
+   172	def check_report(report_path: Path, expected_pages: set[str], limit: int | None) -> dict:
+   173	    r = json.loads(Path(report_path).read_text(encoding="utf-8"))
+   174	    got = [p["page_id"] for p in r["pages"]]
+   175	    if len(got) != len(set(got)) or set(got) != expected_pages:
+   176	        raise RuntimeError(f"{report_path.name}: scored pages differ from the split "
+   177	                           f"({len(set(got) - expected_pages)} extra, {len(expected_pages - set(got))} missing, "
+   178	                           f"{len(got) - len(set(got))} duplicated)")
+   179	    markup = r["overall"]["health"].get("markup_chars", 0)
+   180	    if limit is not None and markup > limit:
+   181	        raise RuntimeError(f"{report_path.name}: {markup} markup characters reach the scorer (limit {limit}); "
+   182	                           "the plain-text path is broken or the model emits markup")
+   183	    return {"pages": len(got), "markup_chars": markup, "markup_limit": limit, "protocol_version": r.get("protocol_version"),
+   184	            "cer_micro": r["overall"].get("cer_micro"), "sha256": hashing.sha256_file(report_path)}
+   185	
+   186	
+   187	# --- view 1: fixed-crop -----------------------------------------------------------------------------------
+   188	
+   189	def fixed_crop(version: dict, split: str, pages: int | None, gold: bool, out: Path) -> dict[str, Path]:
+   190	    # The harness's preflight wants the GPU to itself (24 GB free), as when the locked finals were generated:
+   191	    # one engine on the GPU at a time. run() restores the recognizers that were serving before.
+   192	    for s in servers.recognizers():
+   193	        servers.stop(s["port"])
+   194	        log(f"stopped :{s['port']} ({s['serves']}) for the fixed-crop view")
+   195	    spec = "base" if version["model_spec"] == "base" else str(paths.resolve(version["run_dir"]))
+   196	    cmd = [str(paths.TRAIN_PYTHON), str(paths.MLOPS / "mlops/fixed_crop.py"), "--model", spec, "--split", split,
+   197	           "--out", str(out)] + (["--pages", str(pages)] if pages else []) + (["--gold"] if gold else [])
+   198	    out.mkdir(parents=True, exist_ok=True)
+   199	    env = {**os.environ, "LD_LIBRARY_PATH": f"{paths.LIBGOMP_DIR}:{os.environ.get('LD_LIBRARY_PATH', '')}"}
+   200	    with open(out / "harness.log", "w", encoding="utf-8") as fh:
+   201	        r = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=fh, text=True, env=env)
+   202	    (out / "harness.stdout").write_text(r.stdout, encoding="utf-8")
+   203	    if r.returncode != 0:
+   204	        raise RuntimeError(f"fixed-crop harness failed (exit {r.returncode}); see {out / 'harness.log'}")
+   205	    res = json.loads(r.stdout.strip().splitlines()[-1])
+   206	    meta = json.loads((Path(res["final_dir"]) / "final.json").read_text(encoding="utf-8"))
+   207	    want = version.get("adapter_sha256")
+   208	    got = meta["identity"]["adapter_sha256"]
+   209	    got = (got or {}).get("lora_model_state.pdparams") if isinstance(got, dict) else got
+   210	    if got != want:
+   211	        raise RuntimeError(f"the harness evaluated adapter {got}, decision.md declares {want}")
+
+## mlops/testeval.py:254-324 (serve_on/end_to_end: name checks, idempotency keys, failed pages as empty)
+   254	def serve_on(name: str, ports: list[int]) -> None:
+   255	    """One model at a time on every worker port, after the artefact re-check of serve.sh."""
+   256	    version, _, row = serving.preflight(name)
+   257	    for s in servers.recognizers():
+   258	        if s["serves"] != name or s["port"] not in ports:
+   259	            servers.stop(s["port"])
+   260	            log(f"stopped :{s['port']} ({s['serves']})")
+   261	    running = {s["port"] for s in servers.recognizers()}
+   262	    spec = "base" if version["model_spec"] == "base" else str(paths.resolve(version["run_dir"]))
+   263	    for port in ports:
+   264	        if port not in running:
+   265	            servers.start_recognizer(spec, name, port)
+   266	            log(f"started {name} on :{port}")
+   267	        url = f"http://127.0.0.1:{port}"
+   268	        servers.check_name(url, name)
+   269	        diffs = serving.health_matches_row(url, row)
+   270	        if diffs:
+   271	            raise RuntimeError(f":{port} serves a record that differs from model_versions row {row['id']}: {diffs}")
+   272	
+   273	
+   274	def end_to_end(name: str, rows: list[dict], run_id: str, out: Path, gold_refs: dict[str, str] | None,
+   275	               job_timeout_s: float = 60.0) -> dict[str, Path]:
+   276	    out.mkdir(parents=True, exist_ok=True)
+   277	    api = Api()
+   278	    ports = worker_ports()
+   279	    serve_on(name, ports)
+   280	    if not api.queue_empty():
+   281	        raise RuntimeError("the job queue is not empty; each version starts with an empty queue")
+   282	    row = backend.model_version(name)
+   283	    layout = servers.get("http://127.0.0.1:8091", "/health")["config"]
+   284	    by_book = defaultdict(list)
+   285	    for r in rows:
+   286	        by_book[r["book_id"]].append(r["page_id"])
+   287	    state = {"run_id": run_id, "version": name, "model_version_id": row["id"], "docs": {}, "jobs": {}}
+   288	    for book, pages in sorted(by_book.items()):
+   289	        for i in range(0, len(pages), CHUNK):
+   290	            state["docs"][f"{book}#{i // CHUNK}"] = api.upload(pages[i:i + CHUNK], book)
+   291	    log(f"{name}: uploaded {len(rows)} pages as {len(state['docs'])} documents")
+   292	    for rnd in range(3):                                  # first try plus at most two resubmissions
+   293	        todo = [k for k in state["docs"] if state["jobs"].get(k, {}).get("status") != "succeeded"]
+   294	        if not todo:
+   295	            break
+   296	        for k in todo:                                    # the key carries the run id and version: never an old job's output
+   297	            job = api.submit(state["docs"][k], name, f"eval-{run_id}-{name}-{k}-r{rnd}")
+   298	            state["jobs"][k] = {"id": job, "status": "queued", "round": rnd}
+   299	        deadline = time.monotonic() + job_timeout_s * sum(len(p) for p in by_book.values()) + 600
+   300	        while True:
+   301	            for k in todo:
+   302	                state["jobs"][k]["status"] = api.call("GET", f"/jobs/{state['jobs'][k]['id']}")["status"]
+   303	            if all(state["jobs"][k]["status"] in ("succeeded", "failed") for k in todo) or time.monotonic() > deadline:
+   304	                break
+   305	            time.sleep(10)
+   306	    (out / "state.json").write_text(json.dumps(state, indent=1), encoding="utf-8")
+   307	    for p in ports:
+   308	        servers.check_name(f"http://127.0.0.1:{p}", name)   # the same model is still served after the run
+   309	
+   310	    ok_docs = [state["docs"][k] for k, j in state["jobs"].items() if j["status"] == "succeeded"]
+   311	    hyps: dict[str, dict] = {}
+   312	    if ok_docs:
+   313	        text = api.call("GET", "/exports/eval-manifest", params={"model_version_id": row["id"], "source": "machine",
+   314	                                                                  "document_ids": ",".join(map(str, ok_docs))})["_text"]
+   315	        for line in text.splitlines():
+   316	            if line.strip():
+   317	                m = json.loads(line)
+   318	                hyps[m["page_id"]] = m
+   319	    failed = [r["page_id"] for r in rows if r["page_id"] not in hyps]
+   320	    wrong_book = [p for p, m in hyps.items() if any(r["page_id"] == p and r["book_id"] != m.get("book_id") for r in rows)]
+   321	    if wrong_book:
+   322	        raise RuntimeError(f"exported pages with a different book id: {wrong_book[:5]}")
+   323	    manifest = [{"page_id": r["page_id"], "book_id": r["book_id"], "ref": r["ref"], "strata": r["strata"],
+   324	                 "hyp": hyps[r["page_id"]]["hyp"] if r["page_id"] in hyps else ""} for r in rows]   # failed page = empty
+## evaluate_test.py:79-107
+    79	def main() -> None:
+    80	    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    81	    ap.add_argument("--versions", help="comma-separated declared versions, run one after another")
+    82	    ap.add_argument("--rehearsal", action="store_true", help="the same code path on a fixed 50-page dev subset")
+    83	    ap.add_argument("--rerun-reason", help="required for a version that already has a test access; logged")
+    84	    ap.add_argument("--backfill", action="store_true")
+    85	    a = ap.parse_args()
+    86	    dec = decision.load()
+    87	    if a.backfill:
+    88	        return backfill(dec)
+    89	    if not a.versions:
+    90	        ap.error("--versions is required")
+    91	    versions = [decision.declared(dec, n) for n in a.versions.split(",")]
+    92	    run_id = testeval.new_run_id()
+    93	    before = servers.recognizers()
+    94	    done = {}
+    95	    try:
+    96	        for v in versions:
+    97	            done[v["name"]] = testeval.run_version(v, dec, run_id, a.rehearsal, a.rerun_reason)
+    98	    finally:
+    99	        testeval.restore(before)
+   100	    for name, entry in done.items():                  # every report into MLflow (experiment "evaluations")
+   101	        for key, path in entry["report_paths"].items():
+   102	            view, set_ = key.split("/")
+   103	            evallog.log(path, {"version": name, "view": view, "set": set_, "eval_run_id": run_id,
+   104	                               "mode": "rehearsal" if a.rehearsal else "test"})
+   105	    compare_all(dec, run_id, done, "rehearsal" if a.rehearsal else "test")
+   106	    print(json.dumps({n: {k: {kk: e["reports"][k][kk] for kk in ("pages", "markup_chars", "cer_micro")} for k in e["reports"]}
+   107	                      for n, e in done.items()}, indent=1))

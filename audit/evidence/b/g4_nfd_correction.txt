@@ -1,0 +1,28 @@
+# G4: NFC at the backend write. Page 12 (synthetic doc 4, FakeRecognizer rev 0). scratch stack, 2026-09-25T16:24:54+07:00
+rev0 is NFC: True | NFD(rev0) == rev0: False | len rev0/nfd: 391 512
+POST NFC(rev0) text, parent 0 -> 200 {'unchanged': True, 'rev_no': 0}
+POST NFD(rev0) text (visually identical), parent 0 -> 201 {'rev_no': 1, 'source': 'human', 'author': 'P09', 'parent_rev_no': 0, 'chars': 512}
+stored rev1 == submitted NFD bytes: True | stored rev1 is NFC: False
+Traceback (most recent call last):
+  File "<stdin>", line 14, in <module>
+KeyError: 'page_id'
+## viet-ocr-eval score on that human manifest (does the scorer see any edit?)
+exit=1
+## (re-run of the last step; the traceback above was the audit script not handling a 409)
+GET eval-manifest source=human document_ids=4 -> 409 {"detail":"5 page(s) have no machine output yet, e.g. ['4/4', '4/5', '4/6', '4/7', '4/8']"}
+constructed 1-row manifest the human export would produce for page 12 (hyp = rev0, ref = stored NFD rev1)
+score exit=0
+protocol 1.1 · normalization {'collapse_whitespace': True, 'canonical_tone': True, 'lowercase': False} · runaway capped: True · n = 1 pages
+| CER (micro) | 0.00 [0.00–0.00] | 397 chars |
+| base letter (substitution) | 0 | 0.0% |
+| tone mark | 0 | 0.0% |
+| insertion | 0 | 0.0% |
+| deletion | 0 | 0.0% |
+## usability summary for doc 4 page 12 (latest_rev_no counts the NFD-only save as a correction)
+participant_code,document_id,page_id,page_no,external_page_id,sessions,first_open,last_save,wall_s,idle_s,away_s,active_s,first_edit_s,saves,idle_intervals,latest_rev_no,latest_rev_author
+ page_id | rev_no | source  | author | chars | bytes 
+---------+--------+---------+--------+-------+-------
+      12 |      0 | machine | worker |   391 |   527
+      12 |      1 | human   | P09    |   512 |   644
+(2 rows)
+

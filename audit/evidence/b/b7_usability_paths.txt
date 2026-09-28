@@ -1,0 +1,33 @@
+# B7: can human-corrected (usability) text reach an evaluation manifest? scratch stack audit-x, 2026-09-25T16:24:15+07:00
+## DB: human revisions
+ page_id | document_id | external_page_id | rev_no | source | author | parent_rev_no | length 
+---------+-------------+------------------+--------+--------+--------+---------------+--------
+       6 |           2 | 026/page_4       |      1 | human  | P02    |             0 |   1020
+       1 |           1 | 026/page_4       |      1 | human  | P01    |             0 |    365
+(2 rows)
+
+## 1. GET /exports/eval-manifest?model_version_id=1&source=human
+HTTP/1.1 200 OK
+content-disposition: attachment; filename="eval-manifest-mv1-human-usability.jsonl"
+x-pages: 1
+{'page_id': '026/page_4', 'book_id': '026', 'hyp': '<359 chars>', 'ref': '<365 chars>', 'ref_rev_no': 1, 'ref_author': 'P01', 'purpose': 'usability', 'model_version': 'fake-ocr-v1', 'text_policy': 'body-v1'}
+## 2. source=machine after the human edit on page 1 (026/page_4): does hyp come from rev 0 or rev 1?
+machine row keys: ['book_id', 'hyp', 'model_version', 'page_id', 'text_policy']
+hyp == rev0 text: True | hyp == rev1 (human) text: False | rev0 == rev1: False
+human row: hyp == rev0: True | ref == rev1: True
+## 3. /documents/1/export (revision=latest default) carries the human text with no purpose tag
+HTTP/1.1 200 OK
+content-disposition: attachment; filename="document-1.txt"
+txt pages: 5 | page 1 == human rev1: True | contains "purpose": False
+json top keys: ['document', 'pages', 'policy', 'revision'] | page keys: ['external_page_id', 'image_sha256', 'latest', 'machine', 'page_id', 'page_no', 'text'] | latest.source: human | any purpose key: False
+## 4. downstream: tools/join_reference.py on the human manifest
+the manifest already has references (source=human?); score it directly
+exit=1
+## 5. viet-ocr-eval score on the human manifest (purpose=usability) as exported
+exit=0 (stdout lines: 34); grep for purpose/usability in scorer output:
+3
+## 6. grep for a purpose=usability refusal in scorer / backend tools / mlops
+## scorer output lines mentioning purpose/usability (all are the run name?):
+2:[written] /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/b7_usability_report.json
+3:[written] /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/b7_usability_report.md
+4:# viet-ocr-eval — audit_b7_usability

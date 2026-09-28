@@ -1,0 +1,101 @@
+### finals/ (names, sizes, mtimes)
+2026-09-18 04:03        2836  finals/test__base_7dea718d/resolved_config.yaml
+2026-09-18 13:58    10526940  finals/test__base_7dea718d/regions.jsonl
+2026-09-18 13:58    14263206  finals/test__base_7dea718d/manifest_test.jsonl
+2026-09-18 17:08        1657  finals/test__base_7dea718d/report_test.md
+2026-09-18 17:08     2423471  finals/test__base_7dea718d/report_test.json
+2026-09-18 18:08        2859  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/resolved_config.yaml
+2026-09-19 20:02    10407862  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/regions.jsonl
+2026-09-19 20:02    14143975  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/manifest_test.jsonl
+2026-09-19 22:53        1677  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/report_test.md
+2026-09-19 22:53     2418548  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/report_test.json
+2026-09-19 23:44      864338  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/manifest_gold.jsonl
+2026-09-19 23:55        1613  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/report_gold.md
+2026-09-19 23:55      161973  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/report_gold.json
+2026-09-19 23:55      864029  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/manifest_gold_pseudo.jsonl
+2026-09-20 00:06        1621  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/report_gold_pseudo.md
+2026-09-20 00:06       10041  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/final.json
+2026-09-20 00:06      162005  finals/test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/report_gold_pseudo.json
+2026-09-20 02:39      872598  finals/test__base_7dea718d/manifest_gold.jsonl
+2026-09-20 02:50        1591  finals/test__base_7dea718d/report_gold.md
+2026-09-20 02:50      162297  finals/test__base_7dea718d/report_gold.json
+2026-09-20 02:50      872289  finals/test__base_7dea718d/manifest_gold_pseudo.jsonl
+2026-09-20 03:02         529  finals/comparisons/test__base_7dea718d__vs__test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/test.md
+2026-09-20 03:02        1391  finals/comparisons/test__base_7dea718d__vs__test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/test.json
+2026-09-20 03:02        1599  finals/test__base_7dea718d/report_gold_pseudo.md
+2026-09-20 03:02        7241  finals/test__base_7dea718d/final.json
+2026-09-20 03:02      162295  finals/test__base_7dea718d/report_gold_pseudo.json
+2026-09-20 20:25         530  finals/comparisons/test__base_7dea718d__vs__test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/gold.md
+2026-09-20 20:25        1383  finals/comparisons/test__base_7dea718d__vs__test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/gold.json
+2026-09-20 21:32         544  finals/comparisons/test__base_7dea718d__vs__test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/gold_pseudo.md
+2026-09-20 21:32        1380  finals/comparisons/test__base_7dea718d__vs__test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/gold_pseudo.json
+2026-09-20 22:39        4454  finals/ledger.jsonl
+2026-09-20 22:39        6167  finals/comparisons/test__base_7dea718d__vs__test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/table.md
+(strata subdirs: 248 files)
+
+### work/logs final_* (names, sizes, mtimes)
+2026-09-18 17:08       23924  work/logs/final_base_test.log
+2026-09-19 22:53       39788  work/logs/final_lr2e4_test.log
+2026-09-20 00:06         899  work/logs/final_gold.log
+2026-09-20 03:02         122  work/logs/final_agreement.log
+2026-09-20 03:02         530  work/logs/final_compare_test.log
+2026-09-20 03:02         531  work/logs/final_compare_gold.log
+2026-09-20 03:02         545  work/logs/final_compare_gold_pseudo.log
+2026-09-20 03:02         890  work/logs/final_gold_base.log
+2026-09-20 22:39         762  work/logs/final_stages.log
+2026-09-20 22:39        6308  work/logs/final_table.log
+2026-09-23 18:13         553  work/logs/final_week_queue.log
+2026-09-16 16:15       13878  work/logs/gold_recheck.txt
+
+### work/analysis (names, mtimes)
+2026-09-21 14:26       12513  work/analysis/runaway.md
+2026-09-21 14:26       24544  work/analysis/runaway.py
+2026-09-21 20:04       13346  work/analysis/run_health.py
+2026-09-21 20:05        5728  work/analysis/run_health.md
+2026-09-23 20:29       15653  work/analysis/protocol_1_1.py
+2026-09-23 20:31        4096  work/analysis/protocol_1.1/dev150
+2026-09-23 20:31        4096  work/analysis/protocol_1.1/gold
+2026-09-23 20:31        4096  work/analysis/protocol_1.1/gold_len2x
+2026-09-23 20:32        4096  work/analysis/protocol_1.1
+2026-09-23 20:36       10026  work/analysis/training_stats.md
+2026-09-23 20:36       10146  work/analysis/dev_curves.csv
+2026-09-23 20:36       16111  work/analysis/training_stats.py
+2026-09-23 20:36      283558  work/analysis/training_curves.csv
+2026-09-23 21:08        4096  work/analysis/protocol_1.1/gold_pseudo
+2026-09-23 21:08        4096  work/analysis/protocol_1.1/test
+2026-09-23 21:08        4096  work/analysis/protocol_1.1/test_len2x
+2026-09-23 21:08        5537  work/analysis/protocol_1.1/SUMMARY.md
+2026-09-23 21:08        6124  work/analysis/protocol_1.1/run.log
+2026-09-23 21:08        7323  work/analysis/protocol_1.1/provenance.json
+2026-09-23 21:10        9132  work/analysis/muc_tieu_2.md
+2026-09-23 23:17        4096  work/analysis/bench
+2026-09-23 23:17       14416  work/analysis/bench.py
+2026-09-23 23:37      210160  work/analysis/bench/base.json
+2026-09-24 00:07        2194  work/analysis/bench.md
+2026-09-24 00:07       32892  work/analysis/bench/run.log
+2026-09-24 00:07      210601  work/analysis/bench/adapted.json
+2026-09-24 00:08        4096  work/analysis
+2026-09-24 00:08       15489  work/analysis/summary.md
+
+### git log (all commits, with dates)
+cdb4bf9 2026-09-24 00:08:46 +0700 Add inference benchmark and user-study kit
+7d10eeb 2026-09-23 23:13:47 +0700 summary.md: final week, paired TER, target 2, merge decision
+0817d47 2026-09-23 23:11:41 +0700 Back up the locked model's LoRA adapter (exp_lr2e4 step 3000)
+552cda6 2026-09-23 22:38:25 +0700 Add protocol 1.1 analysis: target 2, paired TER, markup, training stats
+8bd0bb8 2026-09-23 22:38:17 +0700 Upgrade harness skill viet-ocr-eval to 1.1
+8172abf 2026-09-23 20:20:09 +0700 Add training harness, results and viet-ocr-eval skills
+
+### mlops test_access.log / rehearsal.log (metadata)
+-rw-r--r-- 1 huy huy 5240 2026-09-25 09:15:02.918682830 +0700 /home/huy/master/mlops/rehearsal.log
+-rw-r--r-- 1 huy huy 3203 2026-09-25 09:22:52.626923020 +0700 /home/huy/master/mlops/test_access.log
+4 /home/huy/master/mlops/test_access.log
+
+### mlops/test_access.log — keys and non-metric fields per line
+0 ['at', 'decision_md_blob_sha', 'ended', 'event', 'evidence', 'mlops_commit', 'note', 'prev_line_sha256', 'sets', 'started', 'version', 'views']
+    {'at': '2026-09-25T02:22:52Z', 'version': 'paddleocr-vl-1.6-base', 'sets': ['test', 'gold'], 'started': '2026-09-17T21:03:05Z', 'ended': '2026-09-19T20:02:29Z', 'note': 'access made before evaluate_test.py existed; counts as an access'}
+1 ['at', 'decision_md_blob_sha', 'ended', 'event', 'evidence', 'mlops_commit', 'note', 'prev_line_sha256', 'sets', 'started', 'version', 'views']
+    {'at': '2026-09-25T02:22:52Z', 'version': 'paddleocr-vl-1.6-vbr-lr2e4-s3000', 'sets': ['test', 'gold'], 'started': '2026-09-18T11:08:06Z', 'ended': '2026-09-19T17:06:15Z', 'note': 'access made before evaluate_test.py existed; counts as an access'}
+2 ['at', 'decision_md_blob_sha', 'ended', 'event', 'evidence', 'mlops_commit', 'note', 'prev_line_sha256', 'sets', 'started', 'version', 'views']
+    {'at': '2026-09-25T02:22:52Z', 'version': 'paddleocr-vl-1.6-base', 'sets': ['test'], 'started': '2026-09-24T06:11:16Z', 'ended': '2026-09-24T11:13:51Z', 'note': 'access made before evaluate_test.py existed; counts as an access'}
+3 ['at', 'decision_md_blob_sha', 'ended', 'event', 'evidence', 'mlops_commit', 'note', 'prev_line_sha256', 'sets', 'started', 'version', 'views']
+    {'at': '2026-09-25T02:22:52Z', 'version': 'paddleocr-vl-1.6-vbr-lr2e4-s3000', 'sets': ['test'], 'started': '2026-09-24T11:13:51Z', 'ended': '2026-09-24T18:43:16Z', 'note': 'access made before evaluate_test.py existed; counts as an access'}

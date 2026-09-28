@@ -1,0 +1,12 @@
+# F4/delta-5: every clock read in tracked src (no active-time computation expected)
+$ git ls-files src | grep -v services | xargs grep -nE "Date\.now|performance\.now|new Date\(|getTime\(|dayjs|Date\.parse"
+src/lib/instrumentation/eventQueue.ts:19:/** Wall clock (Date.now) for client_ts, and the tab's monotonic clock (performance.now) for ordering. */
+src/lib/instrumentation/eventQueue.ts:22:export const browserClock: Clock = { wall: () => Date.now(), mono: () => performance.now() };
+src/lib/instrumentation/eventQueue.ts:54:  /** One per page load: performance.now() starts again on a reload, so its values compare only within one. */
+src/lib/instrumentation/eventQueue.ts:85:      client_ts: new Date(time.wall).toISOString(),
+src/mocks/data.ts:48:  return new Date(T0 + db.clock * 1000).toISOString();
+src/mocks/data.ts:229:        created_at: new Date(T0 - 86_400_000).toISOString(),
+src/mocks/data.ts:245:        created_at: new Date(T0 - 86_400_000).toISOString(),
+src/mocks/data.ts:371:const seconds = (a: string, b: string) => Math.round(Date.parse(b) - Date.parse(a)) / 1000;
+src/mocks/handlers.ts:385:                  : !/(Z|[+-]\d\d:\d\d)$/.test(e.client_ts ?? '') || Number.isNaN(Date.parse(e.client_ts))
+src/pages/Queue/index.tsx:252:            setUpdatedAt(new Date());

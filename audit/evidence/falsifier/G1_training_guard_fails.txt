@@ -1,0 +1,22 @@
+$ cd training && ../.venv/bin/python tests/test_no_metric_code.py
+Traceback (most recent call last):
+  File "/home/huy/master/training/tests/test_no_metric_code.py", line 28, in <module>
+    test_no_edit_distance_or_error_rate_code()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/huy/master/training/tests/test_no_metric_code.py", line 24, in test_no_edit_distance_or_error_rate_code
+    assert not hits, "metric code outside viet-ocr-eval:\n" + "\n".join(hits)
+           ^^^^^^^^
+AssertionError: metric code outside viet-ocr-eval:
+work/analysis/runaway.py:21: import metrics as M  # noqa: E402
+exit=0
+
+$ git ls-files training/work/analysis/runaway.py (tracked)
+work/analysis/runaway.py
+
+$ grep -n rate lines
+21:import metrics as M  # noqa: E402
+271:        rows["CER micro excluding runaway pages"][n] = f"{(tot_ed-ed_ra)/(tot_ref-ref_ra)*100:.2f}%"
+272:        rows["CER macro ± sd"][n] = f"{st.mean(cers)*100:.2f} ± {st.pstdev(cers)*100:.2f}"
+274:        rows["CER micro if the cap were off"][n] = f"{(tot_ed-ed_ra+unc)/tot_ref*100:.2f}%"
+323:            out(f"| {key} = {v} | {a['n']} | {a['base_ed']/a['base_ref']*100:.2f}% "
+382:        f"{dd['base'][1]/dd['base'][0]*100:.1f}% | {dd['adapted'][1]/dd['adapted'][0]*100:.1f}% |")

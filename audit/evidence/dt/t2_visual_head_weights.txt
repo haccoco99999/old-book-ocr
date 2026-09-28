@@ -1,0 +1,14 @@
+total tensors 620
+2-D .weight tensors: 297
+visual head 2-D weights (names containing "visual" and "head"):
+   visual.vision_model.head.attention.out_proj.weight [1152, 1152]
+   visual.vision_model.head.mlp.fc1.weight [4304, 1152]
+   visual.vision_model.head.mlp.fc2.weight [1152, 4304]
+visual non-encoder-layer 2-D weights:
+   visual.vision_model.embeddings.packing_position_embedding.weight [32768, 1152]
+   visual.vision_model.embeddings.position_embedding.weight [729, 1152]
+   visual.vision_model.head.attention.out_proj.weight [1152, 1152]
+   visual.vision_model.head.mlp.fc1.weight [4304, 1152]
+   visual.vision_model.head.mlp.fc2.weight [1152, 4304]
+mlp_AR 2-D weights: ['mlp_AR.linear_1.weight', 'mlp_AR.linear_2.weight']
+lm_head / embed: ['lm_head.weight', 'model.embed_tokens.weight', 'visual.vision_model.embeddings.packing_position_embedding.weight', 'visual.vision_model.embeddings.position_embedding.weight']

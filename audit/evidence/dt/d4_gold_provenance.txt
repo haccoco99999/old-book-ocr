@@ -1,0 +1,14 @@
+gold_verified rows 250 distinct pages 250
+verified_by: {'NGUYỄN HOÀNG QUANG HUY': 250}
+verified_at range: 2026-09-15T14:21:43.001Z -> 2026-09-16T09:32:00.073Z
+imported_at: {'2026-09-16T09:32:47+00:00': 30, '2026-09-16T09:11:29+00:00': 220}
+locked_gold: {True: 250} gold_sha256: {'afa9a84a1bfe': 250}
+pseudo_ref_sha256 matches gold.jsonl ref (i.e. verification started from pseudo-GT ref): 250 / 250
+changed_regions type/example count: int pages with >=1 changed region: 106
+notes present: 0
+export_sha256 distinct: 2
+regions identical to pseudo label: 2033/2229
+
+rows imported 09:32:47Z (second export, after the LLM-generated rare-word re-check list): 30
+  their verified_at range: 2026-09-16T09:23:13.895Z -> 2026-09-16T09:32:00.073Z
+  first-import rows verified_at max: 2026-09-16T08:01:03.774Z

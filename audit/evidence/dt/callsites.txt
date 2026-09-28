@@ -1,0 +1,70 @@
+### subprocess invocations of evaluate.py (training code, excluding work/ backups)
+ocrdata/scoring.py:21:    return [sys.executable, str(Path(skill_dir) / "scripts" / "evaluate.py"), "score", str(manifest),
+ocrdata/scoring.py:47:    cmd = [sys.executable, str(Path(skill_dir) / "scripts" / "evaluate.py"), "compare", str(base), str(adapted), "--out", str(out)]
+prepare_data.py:316:    cmd = [sys.executable, str(Path(skill_dir) / "scripts" / "evaluate.py"), "verify", str(a), str(b)]
+train.py:57:        cmd = [sys.executable, str(Path(cfg["paths"]["skill_dir"]) / "scripts" / "evaluate.py"), "verify", str(data / a), str(data / b)]
+work/analysis/protocol_1_1.py:260:                  "sha256": {p: sha256(skill / p) for p in ("SKILL.md", "scripts/evaluate.py", "scripts/metrics.py", "scripts/normalize.py")}},
+
+### any import of skill internals (metrics / normalize / evaluate module) or sys.path into skills
+work/analysis/runaway.py:20:sys.path.insert(0, "/home/huy/master/skills/viet-ocr-eval/scripts")
+work/analysis/runaway.py:21:import metrics as M  # noqa: E402
+work/analysis/protocol_1_1.py:222:    sys.path.insert(0, str(skill / "scripts"))
+work/analysis/protocol_1_1.py:223:    from normalize import canonical  # noqa: E402  (the skill's own normal form)
+(end)
+
+### skill_dir config
+configs/base.yaml:10:  skill_dir: /home/huy/master/skills/viet-ocr-eval
+configs/data.yaml:11:  skill_dir: /home/huy/master/skills/viet-ocr-eval
+configs/data_lines.yaml:11:  skill_dir: /home/huy/master/skills/viet-ocr-eval
+
+### call sites per file
+--- eval_dev.py
+136:    import subprocess
+144:        procs.append((subprocess.Popen(cmd), path))
+173:    from ocrdata.scoring import score_manifest
+218:    report = score_manifest(manifest, f"dev_step-{step:06d}", out / "report.json", Path(cfg["paths"]["skill_dir"]))
+--- baseline.py
+43:    from ocrdata.scoring import score_manifest
+89:            report = score_manifest(manifest, f"dev_seed{seed}", out / f"report_seed{seed}.json", Path(cfg["paths"]["skill_dir"]))
+--- evaluate_final.py
+134:    from ocrdata.scoring import score_manifest
+218:    report = score_manifest(manifest_path, f"{args.split}__{m['key']}", out / f"report_{args.split}.json", Path(cfg["paths"]["skill_dir"]))
+256:    from ocrdata.scoring import score_manifest
+284:        report = score_manifest(manifest_path, f"{on}__{meta['identity']['model']}", out / f"report_{on}.json", skill)
+310:    from ocrdata.scoring import compare_reports
+320:    res = compare_reports(a / ma["scored"][args.on]["report"], b / mb["scored"][args.on]["report"], comp / f"{args.on}.json", skill)
+354:    from ocrdata.scoring import compare_reports, score_manifest
+369:            rep = score_manifest(sub / "manifest_base.jsonl", f"{on}_{field}_{v}_base", sub / "report_base.json", skill)
+370:            score_manifest(sub / "manifest_adapted.jsonl", f"{on}_{field}_{v}_adapted", sub / "report_adapted.json", skill)
+371:            c = compare_reports(sub / "report_base.json", sub / "report_adapted.json", sub / "compare.json", skill)["cer_micro"]
+382:    from ocrdata.scoring import compare_reports
+404:        res = compare_reports(a / ma["scored"][on]["report"], b / mb["scored"][on]["report"], comp / f"{on}.json", skill)
+--- train.py
+18:import subprocess
+57:        cmd = [sys.executable, str(Path(cfg["paths"]["skill_dir"]) / "scripts" / "evaluate.py"), "verify", str(data / a), str(data / b)]
+58:        res = subprocess.run(cmd, capture_output=True, text=True)
+78:    smi = subprocess.run(["nvidia-smi", "--query-gpu=memory.free,memory.total,name", "--format=csv,noheader,nounits"],
+--- leaderboard.py
+34:from ocrdata.scoring import compare_reports, score_manifest  # noqa: E402
+143:    score_manifest(out / "manifest.jsonl", f"baseline_{b['id']}_seed{seed}", report, skill_dir)
+163:        compare_reports(base_report, run_report, out, skill_dir)
+--- prepare_data.py
+31:import subprocess
+45:from ocrdata.scoring import score_rows_parallel
+246:    cost = {p["page_id"]: p["cer"] for p in score_rows_parallel(rows, name, out / "scoring", Path(skill_dir), jobs)} if rows else {}
+316:    cmd = [sys.executable, str(Path(skill_dir) / "scripts" / "evaluate.py"), "verify", str(a), str(b)]
+317:    res = subprocess.run(cmd, capture_output=True, text=True)
+--- gold_review.py
+--- ocrdata/scoring.py
+1:"""The only route to a text-quality number: `viet-ocr-eval score`, as a subprocess."""
+7:import subprocess
+21:    return [sys.executable, str(Path(skill_dir) / "scripts" / "evaluate.py"), "score", str(manifest),
+25:def score_rows(rows: list[dict], run_name: str, out_dir: Path, skill_dir: Path, extra: tuple = ()) -> dict:
+31:    res = subprocess.run(_cmd(skill_dir, manifest, run_name, report, extra), capture_output=True, text=True, env=ENV)
+37:def score_manifest(manifest: Path, run_name: str, report: Path, skill_dir: Path, extra: tuple = ()) -> dict:
+39:    res = subprocess.run(_cmd(skill_dir, Path(manifest), run_name, Path(report), extra), capture_output=True, text=True, env=ENV)
+45:def compare_reports(base: Path, adapted: Path, out: Path, skill_dir: Path) -> dict:
+47:    cmd = [sys.executable, str(Path(skill_dir) / "scripts" / "evaluate.py"), "compare", str(base), str(adapted), "--out", str(out)]
+48:    res = subprocess.run(cmd, capture_output=True, text=True, env=ENV)
+55:def score_rows_parallel(rows: list[dict], run_name: str, out_dir: Path, skill_dir: Path, jobs: int = 16) -> list[dict]:
+57:    `viet-ocr-eval score` subprocesses (no bootstrap). Aggregates must come from an unchunked run."""

@@ -1,0 +1,39 @@
+### training/decode.json
+{
+ "unit": "paragraph region crop",
+ "do_sample": false,
+ "temperature": 0.0,
+ "top_p": 1.0,
+ "num_beams": 1,
+ "repetition_penalty": 1.0,
+ "max_new_tokens": 1024,
+ "seed": 13,
+ "source": "protocol.md section 4; max_new_tokens 1024 for paragraph crops per EDA C1 (region tokens p99 341, max 1207; 28 regions above the cap are excluded from train)"
+}
+
+### sha256
+23287e51c6c24f3e879f56721b55772dff8056c35ec55ea6a4f8132e36c58a72  decode.json
+23287e51c6c24f3e879f56721b55772dff8056c35ec55ea6a4f8132e36c58a72  baselines/20260915-190721_se15963_073700d7_base/decode.json
+
+### every reference to decode params in training code (excluding work/ backups and analysis)
+train.py:32:DECODE_KEYS = {"do_sample": False, "temperature": 0.0, "top_p": 1.0, "num_beams": 1}
+train.py:64:    if bad or not isinstance(decode.get("max_new_tokens"), int) or "seed" not in decode:
+ocrtrain/infer.py:10:generation cannot do. Decoding follows decode.json exactly (greedy); a region whose output reaches max_new_tokens
+ocrtrain/infer.py:33:GREEDY = {"do_sample": False, "temperature": 0.0, "top_p": 1.0, "num_beams": 1}
+ocrtrain/infer.py:40:    if bad or not isinstance(decode.get("max_new_tokens"), int) or "seed" not in decode:
+ocrtrain/infer.py:199:                image_grid_thw=paddle.to_tensor(grid), max_new_tokens=self.decode["max_new_tokens"],
+ocrtrain/infer.py:200:                decode_strategy="greedy_search", repetition_penalty=self.decode["repetition_penalty"],
+ocrtrain/infer.py:206:                "cap_hit": EOS_ID not in row and len(row) >= self.decode["max_new_tokens"]}
+work/analysis/bench.py:215:         f"only size ERNIE's PaddleOCR-VL supports), greedy decoding with decode.json (max_new_tokens "
+work/analysis/bench.py:216:         f"{a['decode']['max_new_tokens']}), bf16, flash attention, {a['workers']} CPU encoding workers, GPU reserve cap "
+work/analysis/runaway.py:102:        f"(greedy, max_new_tokens 1024, seed 13).")
+work/watchdog/telemetry.py:70:    q = "utilization.gpu,memory.used,memory.total,temperature.gpu,power.draw,clocks.sm,fan.speed"
+
+### decode path config
+configs/base.yaml:83:  decode: /home/huy/master/training/decode.json
+
+### work/analysis + work/*.py references
+work/analysis/runaway.py:102:        f"(greedy, max_new_tokens 1024, seed 13).")
+work/watchdog/telemetry.py:70:    q = "utilization.gpu,memory.used,memory.total,temperature.gpu,power.draw,clocks.sm,fan.speed"
+work/analysis/bench.py:215:         f"only size ERNIE's PaddleOCR-VL supports), greedy decoding with decode.json (max_new_tokens "
+work/analysis/bench.py:216:         f"{a['decode']['max_new_tokens']}), bf16, flash attention, {a['workers']} CPU encoding workers, GPU reserve cap "

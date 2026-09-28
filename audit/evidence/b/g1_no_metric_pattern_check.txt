@@ -1,0 +1,20 @@
+# G1: backend tests/test_no_metric_code.py FORBIDDEN (line regex) vs mlops-addendum-25-09 §0 rule
+OK  backend_catches=True  addendum_forbids=True   import editdistance
+OK  backend_catches=True  addendum_forbids=True   import Levenshtein
+OK  backend_catches=True  addendum_forbids=True   from Levenshtein import distance
+OK  backend_catches=True  addendum_forbids=True   import rapidfuzz
+OK  backend_catches=True  addendum_forbids=True   import jiwer
+OK  backend_catches=True  addendum_forbids=True   from torchmetrics.text import CharErrorRate
+GAP backend_catches=False addendum_forbids=True   import nltk.metrics.distance
+GAP backend_catches=False addendum_forbids=True   from nltk.metrics import distance
+OK  backend_catches=True  addendum_forbids=True   from nltk.metrics.distance import edit_distance
+OK  backend_catches=True  addendum_forbids=True   import difflib
+OK  backend_catches=True  addendum_forbids=True   def my_levenshtein(a, b):
+OK  backend_catches=True  addendum_forbids=True   def edit_distance(a, b):
+OK  backend_catches=True  addendum_forbids=True   def editdistance2(a, b):
+OK  backend_catches=True  addendum_forbids=True   def compute_cer(a, b):
+GAP backend_catches=False addendum_forbids=True   def compute_cer_micro(a, b):
+GAP backend_catches=False addendum_forbids=True   def get_wer_score(x):
+GAP backend_catches=False addendum_forbids=True   def calc_ter_by_page(x):
+OK  backend_catches=True  addendum_forbids=True   def calculate_der(x):
+GAP backend_catches=False addendum_forbids=True   def get_der_breakdown(x):

@@ -1,0 +1,10 @@
+d44a9d0 2026-09-24 20:14:54 +0700 Step 6: Playwright E2E, font check page, acceptance checks
+52b283d 2026-09-24 19:59:39 +0700 Step 5: Export screen
+a788ff7 2026-09-24 19:37:05 +0700 Step 4: Review screen
+349f295 2026-09-24 18:34:27 +0700 Step 3: Vietnamese text utilities and the review-event queue
+6e351cb 2026-09-24 18:34:00 +0700 Step 2: Upload and Queue screens
+ac7f87a 2026-09-24 15:19:31 +0700 Faster toolchain: utoopack bundler, Vitest, TypeScript 7 (npm 11)
+fde8c88 2026-09-24 15:01:45 +0700 Adopt Ant Design Pro's Umi setup where it helps: overrides, hash, Biome, error boundary
+28e337b 2026-09-24 14:49:34 +0700 Add Claude Code skills: frontend-design (Anthropic) and antd (Ant Design Pro)
+a9d99db 2026-09-24 14:36:13 +0700 Step 1: scaffold, pinned stack, ProLayout shell, generated API client, MSW mocks
+6132b0c 2026-09-24 14:08:48 +0700 Initial commit: README, .gitignore, .nvmrc

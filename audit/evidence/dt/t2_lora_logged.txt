@@ -1,0 +1,26 @@
+20260915-163758_s3902df_811840f3_smoke/ |  | unique target lines: 0
+20260915-195157_sf747b6_6ff763eb_smoke-eval/ |  | unique target lines: 0
+20260915-200009_sf747b6_6ff763eb_smoke-eval/ |  | unique target lines: 0
+20260915-203645_s60fb42_47d08c20_smoke-sweep/ |  | unique target lines: 0
+20260916-075254_s7c4005_eed27da0_base/ |  | unique target lines: 0
+20260916-150324_s06eaa2_93773b96_memcheck/ |  | unique target lines: 0
+20260916-150618_s06eaa2_7dea718d_base/ |  | unique target lines: 0
+20260917-064001_sdeeda6_b9b95d2f_exp_lm_only/ |  | unique target lines: 0
+20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/ |  | unique target lines: 0
+20260917-215054_s2ea991_efcf7d12_exp_r32/ |  | unique target lines: 0
+20260922-073349_s9f712b_54b12627_exp_lines/ |  | unique target lines: 0
+20260922-120912_s9f712b_131c05d9_exp_mix/ |  | unique target lines: 0
+20260922-170938_s9f712b_3b397b3e_exp_lr2e4_long/ |  | unique target lines: 0
+20260923-121505_s9f712b_6ecef906_exp_lr2e4_seed14/ |  | unique target lines: 0
+logs/base_train.log | [harness] LoRA wrapped 290 layers: {'lm': 126, 'vision': 162, 'projector': 2}[0m  | target lines=290 unique=290 visual-head=0
+logs/base_train2.log | [harness] LoRA wrapped 290 layers: {'lm': 126, 'vision': 162, 'projector': 2}[0m  | target lines=290 unique=290 visual-head=0
+sweeps/main/exp_lm_only_b9b95d2f_attempt1.log | [harness] LoRA wrapped 126 layers: {'lm': 126, 'vision': 0, 'projector': 0}[0m  | target lines=126 unique=126 visual-head=0
+sweeps/main/exp_lr2e4_c57c0a6c_attempt1.log | [harness] LoRA wrapped 290 layers: {'lm': 126, 'vision': 162, 'projector': 2}[0m  | target lines=290 unique=290 visual-head=0
+sweeps/main/exp_r32_efcf7d12_attempt1.log | [harness] LoRA wrapped 290 layers: {'lm': 126, 'vision': 162, 'projector': 2}[0m  | target lines=290 unique=290 visual-head=0
+sweeps/main/leaderboard.log |  | target lines=0 unique=0 visual-head=0
+sweeps/final-week/exp_lines_54b12627_attempt1.log | [harness] LoRA wrapped 290 layers: {'lm': 126, 'vision': 162, 'projector': 2}[0m  | target lines=290 unique=290 visual-head=0
+sweeps/final-week/exp_lr2e4_long_3b397b3e_attempt1.log | [harness] LoRA wrapped 290 layers: {'lm': 126, 'vision': 162, 'projector': 2}[0m  | target lines=290 unique=290 visual-head=0
+sweeps/final-week/exp_lr2e4_long_3b397b3e_attempt2.log | [harness] LoRA wrapped 290 layers: {'lm': 126, 'vision': 162, 'projector': 2}[0m  | target lines=290 unique=290 visual-head=0
+sweeps/final-week/exp_lr2e4_seed14_6ecef906_attempt1.log | [harness] LoRA wrapped 290 layers: {'lm': 126, 'vision': 162, 'projector': 2}[0m  | target lines=290 unique=290 visual-head=0
+sweeps/final-week/exp_mix_131c05d9_attempt1.log | [harness] LoRA wrapped 290 layers: {'lm': 126, 'vision': 162, 'projector': 2}[0m  | target lines=290 unique=290 visual-head=0
+sweeps/final-week/leaderboard.log |  | target lines=0 unique=0 visual-head=0

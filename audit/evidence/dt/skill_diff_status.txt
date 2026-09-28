@@ -1,0 +1,52 @@
+### diff -r viet-ocr-eval vs viet-ocr-eval-1.2/viet-ocr-eval-1.2 (excluding pycache, Zone.Identifier)
+exit=0
+
+### sha256
+b866e9e2cfd8f6ab5aa88b76ccfae8ad5afee2105d8b4c69087890f49748c616  viet-ocr-eval/scripts/evaluate.py
+74981501c518b71b2c880b4b63b16396d5a40e92a5189eff548131ad0887fdd8  viet-ocr-eval/scripts/metrics.py
+2c57b32981ef3a1af83404e12b9bdc472c57513875478067b6d2107f79cd7186  viet-ocr-eval/scripts/normalize.py
+bfe9d09a9f01bf90f6c1ae400ecf2a84d32ca565a3d9320d5322b2cdd82e3871  viet-ocr-eval/SKILL.md
+1f372478542882fa1c224bc6638ca1b6c6fedca1fe2fb9bab1da4cfb029a6140  viet-ocr-eval/references/protocol.md
+5f7fbd7b93c4a6b0f5ddbeed3276858ba70901a244836bde287616d16d29acb1  viet-ocr-eval/references/vietnamese-orthography.md
+b866e9e2cfd8f6ab5aa88b76ccfae8ad5afee2105d8b4c69087890f49748c616  viet-ocr-eval-1.2/viet-ocr-eval-1.2/scripts/evaluate.py
+74981501c518b71b2c880b4b63b16396d5a40e92a5189eff548131ad0887fdd8  viet-ocr-eval-1.2/viet-ocr-eval-1.2/scripts/metrics.py
+2c57b32981ef3a1af83404e12b9bdc472c57513875478067b6d2107f79cd7186  viet-ocr-eval-1.2/viet-ocr-eval-1.2/scripts/normalize.py
+bfe9d09a9f01bf90f6c1ae400ecf2a84d32ca565a3d9320d5322b2cdd82e3871  viet-ocr-eval-1.2/viet-ocr-eval-1.2/SKILL.md
+1f372478542882fa1c224bc6638ca1b6c6fedca1fe2fb9bab1da4cfb029a6140  viet-ocr-eval-1.2/viet-ocr-eval-1.2/references/protocol.md
+5f7fbd7b93c4a6b0f5ddbeed3276858ba70901a244836bde287616d16d29acb1  viet-ocr-eval-1.2/viet-ocr-eval-1.2/references/vietnamese-orthography.md
+b24c0aa6be5780d5535934a124bbff9137c62fa1089d6493568d218782dbebc9  viet-ocr-eval-1.1/scripts/evaluate.py
+74981501c518b71b2c880b4b63b16396d5a40e92a5189eff548131ad0887fdd8  viet-ocr-eval-1.1/scripts/metrics.py
+56d749fde534f65124dbf8122cb184891616b7ac42cecbbab3d90672f0be9922  viet-ocr-eval-1.1/scripts/normalize.py
+
+### git status skills
+ M skills/viet-ocr-eval/SKILL.md
+ M skills/viet-ocr-eval/references/protocol.md
+ M skills/viet-ocr-eval/scripts/evaluate.py
+ M skills/viet-ocr-eval/scripts/normalize.py
+?? skills/viet-ocr-eval-1.2/
+### git diff --stat HEAD skills/viet-ocr-eval
+ skills/viet-ocr-eval/SKILL.md               | 35 ++++++++++-------
+ skills/viet-ocr-eval/references/protocol.md | 58 ++++++++++++++++++++---------
+ skills/viet-ocr-eval/scripts/evaluate.py    | 27 +++++++++++++-
+ skills/viet-ocr-eval/scripts/normalize.py   | 27 ++++++++++++++
+ 4 files changed, 115 insertions(+), 32 deletions(-)
+### diff viet-ocr-eval-1.1 vs HEAD
+same SKILL.md
+same references/protocol.md
+same references/vietnamese-orthography.md
+same scripts/evaluate.py
+same scripts/metrics.py
+same scripts/normalize.py
+### is viet-ocr-eval-1.1 / -1.2 tracked?
+skills/viet-ocr-eval-1.1/SKILL.md
+skills/viet-ocr-eval-1.1/references/protocol.md
+skills/viet-ocr-eval-1.1/references/vietnamese-orthography.md
+skills/viet-ocr-eval-1.1/scripts/evaluate.py
+skills/viet-ocr-eval-1.1/scripts/metrics.py
+skills/viet-ocr-eval-1.1/scripts/normalize.py
+skills/viet-ocr-eval/SKILL.md
+skills/viet-ocr-eval/references/protocol.md
+skills/viet-ocr-eval/references/vietnamese-orthography.md
+skills/viet-ocr-eval/scripts/evaluate.py
+skills/viet-ocr-eval/scripts/metrics.py
+skills/viet-ocr-eval/scripts/normalize.py

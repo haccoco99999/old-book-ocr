@@ -1,0 +1,3 @@
+run at 2026-09-25T04:36:45.022413+00:00
+paddleocr-vl-1.6-base files 20 mismatches []
+paddleocr-vl-1.6-vbr-lr2e4-s3000 files 23 mismatches []

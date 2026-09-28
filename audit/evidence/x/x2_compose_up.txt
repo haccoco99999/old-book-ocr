@@ -1,0 +1,188 @@
+ Image audit-ocr-api:local Building 
+ Image audit-ocr-worker:local Building 
+ Image audit-ocr-api:local Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.84kB done
+#1 DONE 0.0s
+
+#2 [api internal] load build definition from Dockerfile
+#2 transferring dockerfile:
+#2 transferring dockerfile: 1.10kB done
+#2 DONE 0.2s
+
+#3 [api internal] load metadata for ghcr.io/astral-sh/uv:0.8
+#3 ...
+
+#4 [auth] library/python:pull token for registry-1.docker.io
+#4 DONE 0.0s
+
+#3 [worker internal] load metadata for ghcr.io/astral-sh/uv:0.8
+#3 DONE 1.5s
+
+#5 [api internal] load metadata for docker.io/library/python:3.12-slim
+#5 DONE 2.2s
+
+#6 [worker internal] load .dockerignore
+#6 transferring context: 104B done
+#6 DONE 0.1s
+
+#7 [worker internal] load build context
+#7 DONE 0.0s
+
+#8 [api internal] load build context
+#8 DONE 0.0s
+
+#9 [api base 1/4] FROM docker.io/library/python:3.12-slim@sha256:2f17fc044b579bab302c2e8054d3a686e2cb9a83de48e70534b94cd8ebbe06a9
+#9 resolve docker.io/library/python:3.12-slim@sha256:2f17fc044b579bab302c2e8054d3a686e2cb9a83de48e70534b94cd8ebbe06a9 0.1s done
+#9 resolve docker.io/library/python:3.12-slim@sha256:2f17fc044b579bab302c2e8054d3a686e2cb9a83de48e70534b94cd8ebbe06a9 0.1s done
+#9 DONE 0.2s
+
+#10 [api] FROM ghcr.io/astral-sh/uv:0.8@sha256:1d31be550ff927957472b2a491dc3de1ea9b5c2d319a9cea5b6a48021e2990a6
+#10 resolve ghcr.io/astral-sh/uv:0.8@sha256:1d31be550ff927957472b2a491dc3de1ea9b5c2d319a9cea5b6a48021e2990a6 0.1s done
+#10 DONE 0.2s
+
+#7 [worker internal] load build context
+#7 transferring context: 226.13kB 0.0s done
+#7 DONE 0.3s
+
+#8 [migrate internal] load build context
+#8 transferring context: 248.85kB done
+#8 DONE 0.3s
+
+#11 [worker base 4/4] COPY pyproject.toml uv.lock ./
+#11 CACHED
+
+#12 [worker worker 1/3] RUN uv sync --frozen --no-dev --no-install-project --extra worker
+#12 CACHED
+
+#13 [worker worker 2/3] COPY src ./src
+#13 CACHED
+
+#14 [worker worker 3/3] RUN uv sync --frozen --no-dev --extra worker  && mkdir -p /data/storage && chown 1000:1000 /data/storage
+#14 CACHED
+
+#15 [migrate base 4/4] COPY pyproject.toml uv.lock ./
+#15 CACHED
+
+#16 [migrate api 4/5] COPY migrations ./migrations
+#16 CACHED
+
+#17 [migrate api 2/5] COPY src ./src
+#17 CACHED
+
+#18 [migrate base 2/4] COPY --from=ghcr.io/astral-sh/uv:0.8 /uv /usr/local/bin/uv
+#18 CACHED
+
+#19 [migrate base 3/4] WORKDIR /app
+#19 CACHED
+
+#20 [migrate api 3/5] COPY alembic.ini ./
+#20 CACHED
+
+#21 [migrate api 1/5] RUN uv sync --frozen --no-dev --no-install-project --extra api
+#21 CACHED
+
+#22 [migrate api 5/5] RUN uv sync --frozen --no-dev --extra api  && mkdir -p /data/storage && chown 1000:1000 /data/storage
+#22 CACHED
+
+#23 [worker] exporting to image
+#23 exporting layers
+#23 exporting layers done
+#23 exporting manifest sha256:724f2e7c1ae5e859350748e3d1397234b7edb20aaa64fb3308bf14ce1bdd347f
+#23 exporting manifest sha256:724f2e7c1ae5e859350748e3d1397234b7edb20aaa64fb3308bf14ce1bdd347f 0.2s done
+#23 exporting config sha256:3270d6299fddae8ada683b16db2b8fecd2219c36221eb4e3d65cf83224bf0695
+#23 exporting config sha256:3270d6299fddae8ada683b16db2b8fecd2219c36221eb4e3d65cf83224bf0695 0.3s done
+#23 exporting attestation manifest sha256:effacd3dad6ebb40a7a30eb447fb7b497bcdd3e197901158a461b4477d1fa115
+#23 exporting attestation manifest sha256:effacd3dad6ebb40a7a30eb447fb7b497bcdd3e197901158a461b4477d1fa115 0.5s done
+#23 exporting manifest list sha256:45777d7fccc2f5f657c406e90ab617e8a1bad1cb27a0ee51ed2193a81cdc31dd
+#23 exporting manifest list sha256:45777d7fccc2f5f657c406e90ab617e8a1bad1cb27a0ee51ed2193a81cdc31dd 0.3s done
+#23 naming to docker.io/library/audit-ocr-worker:local 0.1s done
+#23 unpacking to docker.io/library/audit-ocr-worker:local
+#23 unpacking to docker.io/library/audit-ocr-worker:local 0.1s done
+#23 DONE 1.8s
+
+#24 [api] exporting to image
+#24 exporting layers done
+#24 exporting manifest sha256:e9475097271fa6ec81b5ba80ebe993ff39b56292b6a2aae05e6ecc9e3f31b12e 0.3s done
+#24 exporting config sha256:54b3e7c6b7c8919c0bd552227f6de4f735298af348314dc647fc11337727ee73 0.3s done
+#24 exporting attestation manifest sha256:8811c21c5b8dd61a8b61ddd697eccec22ddce3932e7b43171ebd627c4a328746 0.5s done
+#24 exporting manifest list sha256:767085951c8c1aaf5b091e7794891c39fa6856cb569425860a533a31bd525686 0.3s done
+#24 naming to docker.io/library/audit-ocr-api:local 0.1s done
+#24 unpacking to docker.io/library/audit-ocr-api:local 0.1s done
+#24 DONE 1.8s
+
+#25 [migrate] exporting to image
+#25 exporting layers done
+#25 exporting manifest sha256:2ce2f42de684edcf7e8ce0151b8fb6b6542ae89b4bbd37493d2af76ec999c6bb 0.3s done
+#25 exporting config sha256:d24d598f0f667e0ba26daff914cb473c93d8d7c0c73ee01da3bb5c7c0c032f9b 0.3s done
+#25 exporting attestation manifest sha256:73bb9c1a1a2a0601fb8e0defb56148d3f93f7e7ce09d81a94740117ea76c96cb 0.5s done
+#25 exporting manifest list sha256:34e1d9200ee0a736108ccc34bdf026874629afe0faaa807cf1c03e1c0535234a 0.3s done
+#25 naming to docker.io/library/audit-ocr-api:local 0.0s done
+#25 unpacking to docker.io/library/audit-ocr-api:local 0.1s done
+#25 DONE 1.8s
+
+#26 [worker] resolving provenance for metadata file
+#26 ...
+
+#27 [api] resolving provenance for metadata file
+#27 DONE 0.2s
+
+#26 [worker] resolving provenance for metadata file
+#26 DONE 0.3s
+
+#28 [migrate] resolving provenance for metadata file
+#28 DONE 0.0s
+ Image audit-ocr-api:local Built 
+ Image audit-ocr-worker:local Built 
+ Image audit-ocr-api:local Built 
+ Network audit-x_default Creating 
+ Network audit-x_default Created 
+ Volume audit-x_pgdata Creating 
+ Volume audit-x_pgdata Created 
+ Volume audit-x_valkeydata Creating 
+ Volume audit-x_valkeydata Created 
+ Container audit-x-valkey-1 Creating 
+ Container audit-x-postgres-1 Creating 
+ Container audit-x-valkey-1 Created 
+ Container audit-x-postgres-1 Created 
+ Container audit-x-migrate-1 Creating 
+ Container audit-x-migrate-1 Created 
+ Container audit-x-worker-1 Creating 
+ Container audit-x-api-1 Creating 
+ Container audit-x-api-1 Created 
+ Container audit-x-worker-1 Created 
+ Container audit-x-valkey-1 Starting 
+ Container audit-x-postgres-1 Starting 
+ Container audit-x-postgres-1 Started 
+ Container audit-x-postgres-1 Waiting 
+ Container audit-x-valkey-1 Started 
+ Container audit-x-postgres-1 Healthy 
+ Container audit-x-migrate-1 Starting 
+ Container audit-x-migrate-1 Started 
+ Container audit-x-migrate-1 Waiting 
+ Container audit-x-valkey-1 Waiting 
+ Container audit-x-valkey-1 Waiting 
+ Container audit-x-migrate-1 Waiting 
+ Container audit-x-valkey-1 Healthy 
+ Container audit-x-valkey-1 Healthy 
+ Container audit-x-migrate-1 Exited 
+ Container audit-x-api-1 Starting 
+ Container audit-x-migrate-1 Exited 
+ Container audit-x-worker-1 Starting 
+ Container audit-x-api-1 Started 
+ Container audit-x-worker-1 Started 
+ Container audit-x-migrate-1 Waiting 
+ Container audit-x-api-1 Waiting 
+ Container audit-x-worker-1 Waiting 
+ Container audit-x-postgres-1 Waiting 
+ Container audit-x-valkey-1 Waiting 
+ Container audit-x-postgres-1 Healthy 
+ Container audit-x-migrate-1 Exited 
+ Container audit-x-valkey-1 Healthy 
+ Container audit-x-worker-1 Healthy 
+ Container audit-x-api-1 Healthy 
+
+real	0m18.191s
+user	0m0.258s
+sys	0m0.160s
+exit=0

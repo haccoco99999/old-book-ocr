@@ -1,0 +1,12 @@
+export 422555f3689e6805.json format viet-ocr-gold-review/1 by NGUYỄN HOÀNG QUANG HUY pages 250 keys ['format', 'gold_sha256', 'verified_by', 'exported_at', 'pages']
+export 85e56b6206d73ef1.json format viet-ocr-gold-review/1 by NGUYỄN HOÀNG QUANG HUY pages 250 keys ['format', 'gold_sha256', 'verified_by', 'exported_at', 'pages']
+verified rows: 250 pages: 250 annotators: Counter({'NGUYỄN HOÀNG QUANG HUY': 250})
+verified_at range: 2026-09-15T14:21:43.001Z -> 2026-09-16T09:32:00.073Z
+imported_at range: 2026-09-16T09:11:29+00:00 -> 2026-09-16T09:32:47+00:00
+rows whose export is not archived: 0; region texts != archived export: 0; ref != join(export regions): 0; stale vs gold.jsonl: 0; non-NFC refs: 0; bad 'changed' flags: 0
+regions changed from the pseudo label: 196/2229
+change kinds: {'content': 186, 'whitespace_only': 10}
+inter-verification gap seconds: median 70.9 p10 21.4 min 4.8
+pages verified <10 s after the previous: 11 ; <30 s: 36
+pages per UTC hour: {'09-15T14': 9, '09-15T15': 21, '09-16T01': 10, '09-16T02': 35, '09-16T03': 48, '09-16T04': 31, '09-16T06': 31, '09-16T07': 34, '09-16T08': 1, '09-16T09': 30}
+examples of <10 s pages (page, gap s, regions, changed): [('048/page_200', 7.3, 2, 0), ('093/page_11', 5.2, 9, 2), ('061/page_6', 4.8, 7, 1), ('061/page_69', 6.4, 6, 1), ('061/page_225', 8.2, 4, 1), ('093/page_84', 8.2, 9, 4), ('081/page_25', 9.5, 3, 1), ('010/page_26', 8.4, 5, 2), ('061/page_303', 4.8, 5, 1), ('016/page_30', 7.3, 9, 2)]

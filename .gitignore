@@ -1,0 +1,10 @@
+# Umbrella repo: submodules (frontend, backend, mlops, eda, training) + skills/, docs/, audit/, CLAUDE.md.
+# Large local-only material stays out of git.
+/dataset/
+/models/
+/third_party/
+/.venv/
+/.venv-*/
+/.claude/
+__pycache__/
+*.pyc

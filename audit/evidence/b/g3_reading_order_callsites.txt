@@ -1,0 +1,49 @@
+# G3: region-ordering call sites in backend (HEAD 2035c27)
+## order_regions uses
+src/ocr_api/exports.py:34:from ocr_core.reading_order import order_regions
+src/ocr_api/exports.py:54:    for i in order_regions([b["bbox"] for b in blocks]) if blocks else []:
+src/ocr_core/plaintext.py:23:from ocr_core.reading_order import ORDER_VERSION, order_regions
+src/ocr_core/plaintext.py:115:    1. Order all blocks with `order_regions`, the reading-order function that training data
+src/ocr_core/plaintext.py:131:    for i in order_regions([b["bbox"] for b in blocks]) if blocks else []:
+src/ocr_worker/pipeline.py:28:from ocr_core.reading_order import order_regions
+src/ocr_worker/pipeline.py:228:    for rank, i in enumerate(order_regions([b["bbox"] for b in blocks]) if blocks else []):
+src/ocr_worker/pipeline.py:229:        blocks[i]["reading_order"] = rank                # for display; to_plaintext() computes its own
+## every sort/sorted in src, tools, recognizer_server, bench.py
+recognizer_server/manage.py:95:    for pidfile in sorted(RUN_DIR.glob("*.pid")) if RUN_DIR.exists() else []:
+recognizer_server/manage.py:120:    for pidfile in sorted(RUN_DIR.glob("*.pid")) if RUN_DIR.exists() else []:
+src/ocr_api/eval_manifest.py:41:        return sorted({int(x) for x in raw.split(",") if x.strip()})
+src/ocr_api/eval_manifest.py:60:            missing = sorted(set(docs) - {d["id"] for d in selected})
+src/ocr_api/eval_manifest.py:72:            " WHERE p.document_id = ANY(%s) ORDER BY p.document_id, p.page_no",
+src/ocr_api/eval_manifest.py:85:        raise HTTPException(409, f"pages were transcribed under different text policies {sorted(policies)}; export them separately")
+src/ocr_worker/recognizer.py:137:        return names.pop() if len(names) == 1 else "mixed-servers:" + ",".join(sorted(names))
+src/ocr_api/jobs.py:117:        raise SubmitError(422, f"unknown text_policy {job.text_policy!r}; known: {sorted(POLICIES)}")
+src/ocr_api/jobs.py:251:            f" {PROGRESS} WHERE {where} ORDER BY j.id DESC LIMIT %(limit)s OFFSET %(offset)s", params).fetchall()
+bench.py:79:    s = sorted(xs)
+bench.py:220:    ids = sorted(json.loads(line)["page_id"] for line in open(TEST_MANIFEST, encoding="utf-8"))
+bench.py:223:        measured = sorted({r["external_page_id"] for r in prev["raw_page_timings"]})
+bench.py:229:    return picked[:n_warmup], sorted(picked[n_warmup:])
+bench.py:336:    measured_docs = {book: upload(token, pages, book) for book, pages in sorted(by_book.items())}
+bench.py:358:        "worker_env": sorted(e for e in worker_cfg if e.split("=")[0] in (
+bench.py:378:        " FROM page_timings t JOIN pages p ON p.id = t.page_id WHERE t.bench_run_id = %s ORDER BY t.started_at",
+bench.py:399:                    "per_process_peak_rss_measured": {k.split(":", 1)[1]: mib(v) for k, v in sorted(measured_peak.items())
+src/ocr_core/reading_order.py:34:    order = sorted(idx, key=lambda i: (boxes[i][lo], boxes[i][hi], i))
+src/ocr_core/reading_order.py:55:        return sorted(idx, key=lambda i: (boxes[i][1], boxes[i][0], i))
+src/ocr_api/exports.py:97:        raise HTTPException(422, f"unknown policy {policy!r}; known: {sorted(POLICIES)}")
+src/ocr_api/admin.py:39:    return sorted(orphans), len(ids)
+src/ocr_api/usability.py:73:                raise HTTPException(422, f"revision(s) {sorted(set(bad))[:5]} do not belong to the event's page")
+src/ocr_api/usability.py:94:    ev = sorted(events, key=lambda e: (e["client_ts"], order[e["event"]]))
+src/ocr_api/usability.py:160:            " ORDER BY e.participant_code, p.document_id, p.page_no, e.client_ts, e.id",
+src/ocr_api/usability.py:166:                    " ORDER BY page_id, rev_no DESC", (list({r["page_id"] for r in rows}),)).fetchall():
+src/ocr_worker/pipeline.py:275:        "SELECT count(*), percentile_cont(0.5) WITHIN GROUP (ORDER BY length(r.text))"
+src/ocr_core/plaintext.py:124:        raise ValueError(f"unknown text policy {policy!r}; known: {sorted(POLICIES)}")
+src/ocr_core/plaintext.py:144:    stats.excluded_by_label = dict(sorted(excluded.items()))
+src/ocr_core/plaintext.py:145:    stats.unknown_labels = dict(sorted(unknown.items()))
+src/ocr_core/plaintext.py:146:    stats.markup_removed_by_kind = dict(sorted(removed.items()))
+tools/d4_eval.py:80:        by_book = {b: sorted(by_book[b])[:limit] for b in sorted(by_book)[:2]}
+tools/d4_eval.py:81:    return {b: sorted(p, key=lambda x: int(x.rsplit("_", 1)[1])) for b, p in sorted(by_book.items())}
+## vendored file hash vs training
+bfd4775a3eff6a81232249c778aa43e7330eb2c1f0f870a91a57ea2a6b166e70  src/ocr_core/reading_order.py
+bfd4775a3eff6a81232249c778aa43e7330eb2c1f0f870a91a57ea2a6b166e70  ../training/ocrdata/reading_order.py
+src/ocr_core/reading_order.py:24:ORDER_VERSION = "xycut-v1"
+tests/test_plaintext.py:13:# sha256 of training/ocrdata/reading_order.py at master-training-2 commit 8172abf (decision D3)
+tests/test_plaintext.py:106:    assert hashlib.sha256(VENDORED.read_bytes()).hexdigest() == READING_ORDER_SHA256

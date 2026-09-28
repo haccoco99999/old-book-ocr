@@ -1,0 +1,76 @@
+===== verify train.jsonl test.jsonl (skill 1.2 working tree)
+train: 19780 pages / 89 books
+test:  3978 pages / 23 books
+test refs not in NFC: 0
+test refs mostly non-Latin script: 8
+test refs Latin-script but probably not Vietnamese: 0
+test refs empty: 0
+  -> VieBookRead contains occasional non-Vietnamese pages. Filter them or make them their own stratum; do not let them sit unlabelled in the main test number.
+
+OK — no leakage detected.
+exit=0
+===== verify train.jsonl gold.jsonl (skill 1.2 working tree)
+train: 19780 pages / 89 books
+test:  250 pages / 23 books
+test refs not in NFC: 0
+test refs mostly non-Latin script: 2
+test refs Latin-script but probably not Vietnamese: 0
+test refs empty: 0
+  -> VieBookRead contains occasional non-Vietnamese pages. Filter them or make them their own stratum; do not let them sit unlabelled in the main test number.
+
+OK — no leakage detected.
+exit=0
+===== verify dev.jsonl test.jsonl (skill 1.2 working tree)
+train: 1520 pages / 11 books
+test:  3978 pages / 23 books
+test refs not in NFC: 0
+test refs mostly non-Latin script: 8
+test refs Latin-script but probably not Vietnamese: 0
+test refs empty: 0
+  -> VieBookRead contains occasional non-Vietnamese pages. Filter them or make them their own stratum; do not let them sit unlabelled in the main test number.
+
+OK — no leakage detected.
+exit=0
+===== verify dev.jsonl gold.jsonl (skill 1.2 working tree)
+train: 1520 pages / 11 books
+test:  250 pages / 23 books
+test refs not in NFC: 0
+test refs mostly non-Latin script: 2
+test refs Latin-script but probably not Vietnamese: 0
+test refs empty: 0
+  -> VieBookRead contains occasional non-Vietnamese pages. Filter them or make them their own stratum; do not let them sit unlabelled in the main test number.
+
+OK — no leakage detected.
+exit=0
+===== verify train.jsonl gold_verified.jsonl (skill 1.2 working tree)
+train: 19780 pages / 89 books
+test:  250 pages / 23 books
+test refs not in NFC: 0
+test refs mostly non-Latin script: 2
+test refs Latin-script but probably not Vietnamese: 0
+test refs empty: 0
+  -> VieBookRead contains occasional non-Vietnamese pages. Filter them or make them their own stratum; do not let them sit unlabelled in the main test number.
+
+OK — no leakage detected.
+exit=0
+===== verify dev.jsonl gold_verified.jsonl (skill 1.2 working tree)
+train: 1520 pages / 11 books
+test:  250 pages / 23 books
+test refs not in NFC: 0
+test refs mostly non-Latin script: 2
+test refs Latin-script but probably not Vietnamese: 0
+test refs empty: 0
+  -> VieBookRead contains occasional non-Vietnamese pages. Filter them or make them their own stratum; do not let them sit unlabelled in the main test number.
+
+OK — no leakage detected.
+exit=0
+===== verify train.jsonl dev.jsonl (skill 1.2 working tree)
+train: 19780 pages / 89 books
+test:  1520 pages / 11 books
+test refs not in NFC: 0
+test refs mostly non-Latin script: 0
+test refs Latin-script but probably not Vietnamese: 0
+test refs empty: 0
+
+OK — no leakage detected.
+exit=0

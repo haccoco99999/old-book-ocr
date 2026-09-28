@@ -1,0 +1,16 @@
+# X1/B-risk: test suite targets whatever TEST_DATABASE_URL / TEST_VALKEY_URL name, no guard
+25:def reset_schema_and_migrate(url: str, *, roundtrip: bool = False) -> None:
+31:        conn.execute("DROP SCHEMA public CASCADE; CREATE SCHEMA public")
+44:    r.flushdb()
+## README suggestion (points at the live stack's ports 5432 / 6379)
+```bash
+uv sync --all-extras
+uv run pytest                                   # schema tests skip without a database
+export TEST_DATABASE_URL=postgresql://ocr:ocr@127.0.0.1:5432/ocr_test   # disposable: the schema is dropped
+export TEST_VALKEY_URL=redis://127.0.0.1:6379/15                        # disposable: the database is flushed
+uv run pytest
+```
+## policy used by evaluation drivers
+backend/tools/d4_eval.py:51:POLICY = "page-v1"
+mlops/mlops/testeval.py:37:POLICY = "page-v1"                             # evaluation jobs' text policy (backend decision D5)
+279:    ap.add_argument("--policy", default="page-v1")

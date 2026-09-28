@@ -1,0 +1,25 @@
+# F4: every text-entry control in tracked src (manual check: none asks for a name)
+$ git ls-files src | grep -v services | xargs grep -nE "<Input|<TextArea|<textarea|ProFormText|valueType|<Input\.|type=\"text\"|AutoComplete|<Select|search:|fieldProps"
+src/pages/Export/index.tsx:57:    { title: t('documents.col.created'), dataIndex: 'created_at', valueType: 'dateTime', width: 180 },
+src/pages/Export/index.tsx:60:      valueType: 'option',
+src/pages/Export/index.tsx:94:            fieldProps={{ style: { display: 'flex', flexDirection: 'column', gap: 6 } }}
+src/pages/Queue/index.tsx:54:      search: false,
+src/pages/Queue/index.tsx:72:      valueType: 'digit',
+src/pages/Queue/index.tsx:73:      fieldProps: { min: 1, precision: 0, placeholder: t('queue.search.document.placeholder') },
+src/pages/Queue/index.tsx:84:      valueType: 'select',
+src/pages/Queue/index.tsx:86:      fieldProps: { placeholder: t('queue.search.status.placeholder') },
+src/pages/Queue/index.tsx:106:      search: false,
+src/pages/Queue/index.tsx:128:      search: false,
+src/pages/Queue/index.tsx:136:      search: false,
+src/pages/Queue/index.tsx:152:      search: false,
+src/pages/Queue/index.tsx:164:      search: false,
+src/pages/Queue/index.tsx:198:      valueType: 'option',
+src/pages/Review/ReviewHome.tsx:74:    { title: t('documents.col.created'), dataIndex: 'created_at', valueType: 'dateTime', width: 180 },
+src/pages/Review/ReviewHome.tsx:77:      valueType: 'option',
+src/pages/Review/components/ParticipantGate.tsx:54:      <Input
+src/pages/Review/components/TextPane.tsx:94:              type="text"
+src/pages/Review/components/TextPane.tsx:104:              type="text"
+src/pages/Review/components/TextPane.tsx:135:        <textarea
+src/pages/Upload/components/DocumentsTable.tsx:62:    { title: t('documents.col.created'), dataIndex: 'created_at', valueType: 'dateTime', width: 180 },
+src/pages/Upload/components/DocumentsTable.tsx:65:      valueType: 'option',
+src/pages/Upload/components/StagedFiles.tsx:25:    <Button type="text" size="small" icon={<CloseOutlined />} aria-label={label} onClick={() => onRemove(files)} />

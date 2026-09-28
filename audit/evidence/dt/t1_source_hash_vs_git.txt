@@ -1,0 +1,8 @@
+source_sha256 of the working tree now: 9f712b7aa6be
+commit 0817d47 training/ source_sha256: 9f712b7aa6be
+commit 552cda6 training/ source_sha256: 9f712b7aa6be
+commit 7d10eeb training/ source_sha256: 9f712b7aa6be
+commit 8172abf training/ source_sha256: 9f712b7aa6be
+commit 8bd0bb8 training/ source_sha256: 9f712b7aa6be
+commit cdb4bf9 training/ source_sha256: 9f712b7aa6be
+runs source_sha256 prefixes: ['06eaa25ab636', '2ea991a0d583', '3902df2920f2', '60fb420462ee', '7c400563e459', '9f712b7aa6be', 'deeda6ed8dd9', 'f747b63deab6']

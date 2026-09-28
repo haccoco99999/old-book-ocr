@@ -1,0 +1,8 @@
+REHEARSAL_LOG = /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/mlops/rehearsal.log TEST_LOG = /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/mlops/test_access.log
+paddleocr-vl-1.6-base dirty before: {'mlops': 0, 'training': 4, 'backend': 0}
+[evaluate_test 2026-09-25T04:40:09Z] paddleocr-vl-1.6-base: rehearsal sim1 started (dev)
+[evaluate_test 2026-09-25T04:40:09Z] paddleocr-vl-1.6-base: fixed-crop done [('fixed-crop/dev', 0.01)]
+[evaluate_test 2026-09-25T04:40:09Z] paddleocr-vl-1.6-base: end-to-end done [('end-to-end/dev', 0.01)]
+paddleocr-vl-1.6-base rehearsal: completed
+paddleocr-vl-1.6-vbr-lr2e4-s3000 dirty before: {'mlops': 1, 'training': 4, 'backend': 0}
+paddleocr-vl-1.6-vbr-lr2e4-s3000 rehearsal: REFUSED -> tracked files are modified in {'mlops': 1}; commit them first

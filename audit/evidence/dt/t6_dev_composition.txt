@@ -1,0 +1,73 @@
+dev150 page_ids_sha256: 47f474f04e9f9b203c9b5b10358bb65d1ca3c265d26ae5c71cbff7c77b97c831 (eval records: 47f474f0...)
+
+dev (1520 pages): regions 14044; regions with empty reference text 0
+  regions by region_type: {'body': 11608, 'page_number': 1349, 'running_head': 475, 'small_text': 238, 'footnote': 236, 'no_azure_paragraph': 138}
+  pages containing >=1 region of type: {'body': 1517, 'page_number': 1343, 'running_head': 475, 'small_text': 200, 'footnote': 176, 'no_azure_paragraph': 19}
+  pages whose ref == region texts joined by "\n" in stored order: 1520/1520
+
+dev150 eval subset: regions 1323; regions with empty reference text 0
+  regions by region_type: {'body': 1096, 'page_number': 130, 'running_head': 42, 'footnote': 27, 'small_text': 22, 'no_azure_paragraph': 6}
+  pages containing >=1 region of type: {'body': 150, 'page_number': 130, 'running_head': 42, 'footnote': 22, 'small_text': 15, 'no_azure_paragraph': 1}
+  pages whose ref == region texts joined by "\n" in stored order: 150/150
+
+Azure paragraphs with no `final` region (mapped_to_empty; never cropped for dev/test/gold):
+{
+ "definition": "Azure paragraph with no `final` region within 10 px (no label; never enters any split)",
+ "azure_paragraphs": 237888,
+ "mapped_to_empty": 8127,
+ "rate": 0.0342,
+ "by_region_type": {
+  "body": {
+   "azure_paragraphs": 186584,
+   "mapped_to_empty": 4422,
+   "rate": 0.0237
+  },
+  "footer": {
+   "azure_paragraphs": 166,
+   "mapped_to_empty": 0,
+   "rate": 0.0
+  },
+  "footnote": {
+   "azure_paragraphs": 3233,
+   "mapped_to_empty": 193,
+   "rate": 0.0597
+  },
+  "page_number": {
+   "azure_paragraphs": 22668,
+   "mapped_to_empty": 342,
+   "rate": 0.0151
+  },
+  "running_head": {
+   "azure_paragraphs": 17651,
+   "mapped_to_empty": 36,
+   "rate": 0.002
+  },
+  "small_text": {
+   "azure_paragraphs": 7586,
+   "mapped_to_empty": 3134,
+   "rate": 0.4131
+  }
+ },
+ "final_regions_without_azure_paragraph": 1780
+}
+
+region_types over all final regions: {'body': 182162, 'small_text': 4452, 'footnote': 3040, 'page_number': 22326, 'running_head': 17615, 'footer': 166, 'no_azure_paragraph': 1780}
+
+# dev150: exact-equality and character COUNTS per region type (no rates computed; base = seed-13 baseline, adapted = exp_lr2e4 step 3000)
+| region_type | regions | ref_chars | base_chars | adapted_chars | base==ref (NFC, ws-collapsed) | adapted==ref (NFC, ws-collapsed) | base empty | adapted empty | base!=adapted |
+| body | 1096 | 185830 | 186009 | 185883 | 78 | 458 | 0 | 0 | 999 |
+| page_number | 130 | 552 | 446 | 552 | 65 | 116 | 0 | 0 | 64 |
+| running_head | 42 | 509 | 555 | 510 | 8 | 26 | 0 | 0 | 33 |
+| footnote | 27 | 2386 | 2376 | 2379 | 1 | 10 | 0 | 0 | 25 |
+| small_text | 22 | 246 | 257 | 240 | 9 | 12 | 0 | 0 | 11 |
+| no_azure_paragraph | 6 | 176 | 948 | 624 | 0 | 0 | 0 | 0 | 6 |
+| TOTAL | 1323 | 189699 | 190591 | 190188 | 161 | 622 | 0 | 0 | 1138 |
+# dev (1520): pages with >=2 regions cropped from an identical polygon: 9; regions involved: 128
+# dev150: pages with >=2 regions cropped from an identical polygon: 1; regions involved: 6
+
+# dev150 duplicated-crop page(s): ['091/page_27']
+  viet-ocr-eval 1.2 per-page counts, base   : {'ref_chars': 652, 'char_edits': 812, 'base_ins': 579, 'base_del': 2, 'tone_sub': 8, 'letter_diacritic_sub': 0, 'base_sub': 21, 'ws_errors': 202, 'runaway': False, 'markup_chars': 0}
+  viet-ocr-eval 1.2 per-page counts, adapted: {'ref_chars': 652, 'char_edits': 510, 'base_ins': 372, 'base_del': 2, 'tone_sub': 4, 'letter_diacritic_sub': 1, 'base_sub': 46, 'ws_errors': 85, 'runaway': False, 'markup_chars': 0}
+  totals over dev150 (sum of the CLI per-page counts): base_ins base 1064 adapted 598
+# base pages with markup (page_id, markup_chars) per the CLI: [('026/page_10', 8), ('035/page_174', 2), ('117/page_65', 4)]
+# per-page keys available: ['base_del', 'base_ins', 'base_sub', 'cer', 'char_edits', 'empty_hyp', 'letter_diacritic_sub', 'markup_chars', 'page_id', 'ref_chars', 'ref_diacritic_graphemes', 'ref_spaces', 'ref_tokens', 'ref_tone_graphemes', 'runaway', 'strata', 'token_edits', 'tone_sub', 'wer', 'ws_errors']

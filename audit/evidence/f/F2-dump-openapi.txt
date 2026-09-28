@@ -1,0 +1,8 @@
+# backend HEAD 2035c27 extracted with git archive into scratch; app built with create_app(), no lifespan run (no DB/storage touched)
+$ env -i PATH=... DATABASE_URL=postgresql://none@127.0.0.1:1/none VALKEY_URL=redis://127.0.0.1:1 STORAGE_ROOT=/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/nostorage PYTHONPATH=/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/be-head/src /home/huy/master/backend/.venv/bin/python dump_openapi.py
+ocr_api from: /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/be-head/src/ocr_api/__init__.py
+ocr_core from: /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/be-head/src/ocr_core/__init__.py
+{"ts": "2026-09-25T04:27:12.017Z", "level": "WARNING", "service": "api", "logger": "ocr_api", "msg": "API_TOKEN is the default development token; set API_TOKEN before exposing the API", "job_id": null, "model_version_id": null}
+{"ts": "2026-09-25T04:27:12.018Z", "level": "WARNING", "service": "api", "logger": "ocr_api", "msg": "API_TOKEN is the default development token; set API_TOKEN before exposing the API", "job_id": null, "model_version_id": null}
+paths: 17
+exit=0

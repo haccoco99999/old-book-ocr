@@ -1,0 +1,34 @@
+$ grep -n "RECOGNIZER_URL\|LAYOUT_URL" backend/.env
+8:RECOGNIZER_URL=http://host.docker.internal:8090,http://host.docker.internal:8092
+9:LAYOUT_URL=http://host.docker.internal:8091
+
+# live pidfiles (backend/data/run/*.pid): kind port cmd
+recognizer 8090 --model /home/huy/master/training/runs/20260917-154010_s2ea991_c57c0a6c_exp_lr2e4 --served-model-name paddleocr-vl-1.6-vbr-lr2e4-s3000 --port 8090 --encode-workers 2 --gpu-cap-mb 10000
+layout 8091 --port 8091 --gpu-cap-mb 3000
+recognizer 8092 --model /home/huy/master/training/runs/20260917-154010_s2ea991_c57c0a6c_exp_lr2e4 --served-model-name paddleocr-vl-1.6-vbr-lr2e4-s3000 --port 8092 --encode-workers 2 --gpu-cap-mb 10000
+
+# testeval: fixed-crop stops recognizers only (layout :8091 keeps its GPU context)
+def fixed_crop(version: dict, split: str, pages: int | None, gold: bool, out: Path) -> dict[str, Path]:
+    # The harness's preflight wants the GPU to itself (24 GB free), as when the locked finals were generated:
+    # one engine on the GPU at a time. run() restores the recognizers that were serving before.
+    for s in servers.recognizers():
+        servers.stop(s["port"])
+        log(f"stopped :{s['port']} ({s['serves']}) for the fixed-crop view")
+
+# testeval: end-to-end starts the version on EVERY worker port
+def serve_on(name: str, ports: list[int]) -> None:
+    """One model at a time on every worker port, after the artefact re-check of serve.sh."""
+    version, _, row = serving.preflight(name)
+    for s in servers.recognizers():
+        if s["serves"] != name or s["port"] not in ports:
+            servers.stop(s["port"])
+            log(f"stopped :{s['port']} ({s['serves']})")
+    running = {s["port"] for s in servers.recognizers()}
+    spec = "base" if version["model_spec"] == "base" else str(paths.resolve(version["run_dir"]))
+    for port in ports:
+        if port not in running:
+            servers.start_recognizer(spec, name, port)
+            log(f"started {name} on :{port}")
+
+# harness VRAM guard is a free-memory threshold only
+88:  min_free_vram_gb: 24

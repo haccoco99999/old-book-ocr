@@ -1,0 +1,335 @@
+{
+  "run_name": "x3_fake_dev5",
+  "manifest": "/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/x3/m_machine_ref.jsonl",
+  "protocol_version": "1.1",
+  "normalization": {
+    "collapse_whitespace": true,
+    "canonical_tone": true,
+    "lowercase": false
+  },
+  "cap_runaway": true,
+  "overall": {
+    "n_pages": 5,
+    "cer_micro": 0.8126979100696643,
+    "cer_macro": 0.8092592316738376,
+    "cer_macro_sd": 0.04119742400330523,
+    "cer_median": 0.8015488867376573,
+    "wer_micro": 0.9621848739495799,
+    "der": 0.0440771349862259,
+    "ter": 0.05,
+    "wser": 0.6852320675105485,
+    "breakdown": {
+      "base_sub": 602,
+      "tone_sub": 50,
+      "letter_diacritic_sub": 14,
+      "base_ins": 1,
+      "base_del": 3654,
+      "whitespace": 812
+    },
+    "health": {
+      "runaway_pages": 0,
+      "runaway_rate": 0.0,
+      "empty_pages": 0,
+      "empty_rate": 0.0,
+      "markup_pages": 0,
+      "markup_chars": 0
+    },
+    "denominators": {
+      "ref_chars": 6316,
+      "ref_tokens": 1190,
+      "ref_diacritic_graphemes": 1452,
+      "ref_tone_graphemes": 1000,
+      "ref_spaces": 1185
+    },
+    "ci95": {
+      "cer_micro": [
+        0.777171937477281,
+        0.8442730315820114
+      ],
+      "der": [
+        0.028894472361809045,
+        0.0625
+      ],
+      "wer_micro": [
+        0.9506607929515418,
+        0.971875
+      ]
+    }
+  },
+  "strata": {
+    "difficulty": {
+      "low": {
+        "n_pages": 4,
+        "cer_micro": 0.824706833805095,
+        "cer_macro": 0.8192382731689393,
+        "cer_macro_sd": 0.03998868837897872,
+        "cer_median": 0.8211884333759665,
+        "wer_micro": 0.9596174282678002,
+        "der": 0.038294168842471714,
+        "ter": 0.0425,
+        "wser": 0.7225186766275347,
+        "breakdown": {
+          "base_sub": 376,
+          "tone_sub": 34,
+          "letter_diacritic_sub": 10,
+          "base_ins": 1,
+          "base_del": 2981,
+          "whitespace": 677
+        },
+        "health": {
+          "runaway_pages": 0,
+          "runaway_rate": 0.0,
+          "empty_pages": 0,
+          "empty_rate": 0.0,
+          "markup_pages": 0,
+          "markup_chars": 0
+        },
+        "denominators": {
+          "ref_chars": 4946,
+          "ref_tokens": 941,
+          "ref_diacritic_graphemes": 1149,
+          "ref_tone_graphemes": 800,
+          "ref_spaces": 937
+        }
+      },
+      "mid": {
+        "n_pages": 1,
+        "cer_micro": 0.7693430656934307,
+        "cer_macro": 0.7693430656934307,
+        "cer_macro_sd": NaN,
+        "cer_median": 0.7693430656934307,
+        "wer_micro": 0.9718875502008032,
+        "der": 0.066006600660066,
+        "ter": 0.08,
+        "wser": 0.5443548387096774,
+        "breakdown": {
+          "base_sub": 226,
+          "tone_sub": 16,
+          "letter_diacritic_sub": 4,
+          "base_ins": 0,
+          "base_del": 673,
+          "whitespace": 135
+        },
+        "health": {
+          "runaway_pages": 0,
+          "runaway_rate": 0.0,
+          "empty_pages": 0,
+          "empty_rate": 0.0,
+          "markup_pages": 0,
+          "markup_chars": 0
+        },
+        "denominators": {
+          "ref_chars": 1370,
+          "ref_tokens": 249,
+          "ref_diacritic_graphemes": 303,
+          "ref_tone_graphemes": 200,
+          "ref_spaces": 248
+        }
+      }
+    },
+    "era": {
+      "1946–1975": {
+        "n_pages": 5,
+        "cer_micro": 0.8126979100696643,
+        "cer_macro": 0.8092592316738376,
+        "cer_macro_sd": 0.04119742400330523,
+        "cer_median": 0.8015488867376573,
+        "wer_micro": 0.9621848739495799,
+        "der": 0.0440771349862259,
+        "ter": 0.05,
+        "wser": 0.6852320675105485,
+        "breakdown": {
+          "base_sub": 602,
+          "tone_sub": 50,
+          "letter_diacritic_sub": 14,
+          "base_ins": 1,
+          "base_del": 3654,
+          "whitespace": 812
+        },
+        "health": {
+          "runaway_pages": 0,
+          "runaway_rate": 0.0,
+          "empty_pages": 0,
+          "empty_rate": 0.0,
+          "markup_pages": 0,
+          "markup_chars": 0
+        },
+        "denominators": {
+          "ref_chars": 6316,
+          "ref_tokens": 1190,
+          "ref_diacritic_graphemes": 1452,
+          "ref_tone_graphemes": 1000,
+          "ref_spaces": 1185
+        }
+      }
+    },
+    "language": {
+      "vi": {
+        "n_pages": 5,
+        "cer_micro": 0.8126979100696643,
+        "cer_macro": 0.8092592316738376,
+        "cer_macro_sd": 0.04119742400330523,
+        "cer_median": 0.8015488867376573,
+        "wer_micro": 0.9621848739495799,
+        "der": 0.0440771349862259,
+        "ter": 0.05,
+        "wser": 0.6852320675105485,
+        "breakdown": {
+          "base_sub": 602,
+          "tone_sub": 50,
+          "letter_diacritic_sub": 14,
+          "base_ins": 1,
+          "base_del": 3654,
+          "whitespace": 812
+        },
+        "health": {
+          "runaway_pages": 0,
+          "runaway_rate": 0.0,
+          "empty_pages": 0,
+          "empty_rate": 0.0,
+          "markup_pages": 0,
+          "markup_chars": 0
+        },
+        "denominators": {
+          "ref_chars": 6316,
+          "ref_tokens": 1190,
+          "ref_diacritic_graphemes": 1452,
+          "ref_tone_graphemes": 1000,
+          "ref_spaces": 1185
+        }
+      }
+    }
+  },
+  "pages": [
+    {
+      "page_id": "026/page_4",
+      "cer": 0.7725072604065828,
+      "wer": 0.9387755102040817,
+      "ref_chars": 1033,
+      "char_edits": 798,
+      "tone_sub": 12,
+      "letter_diacritic_sub": 4,
+      "base_sub": 110,
+      "base_ins": 0,
+      "base_del": 547,
+      "ws_errors": 125,
+      "ref_diacritic_graphemes": 237,
+      "ref_tone_graphemes": 168,
+      "ref_spaces": 195,
+      "ref_tokens": 196,
+      "token_edits": 184,
+      "runaway": false,
+      "empty_hyp": false,
+      "markup_chars": 0,
+      "strata": {
+        "era": "1946–1975",
+        "difficulty": "low",
+        "language": "vi"
+      }
+    },
+    {
+      "page_id": "026/page_5",
+      "cer": 0.8408279800142755,
+      "wer": 0.9529411764705882,
+      "ref_chars": 1401,
+      "char_edits": 1178,
+      "tone_sub": 7,
+      "letter_diacritic_sub": 0,
+      "base_sub": 75,
+      "base_ins": 1,
+      "base_del": 899,
+      "ws_errors": 196,
+      "ref_diacritic_graphemes": 332,
+      "ref_tone_graphemes": 230,
+      "ref_spaces": 254,
+      "ref_tokens": 255,
+      "token_edits": 243,
+      "runaway": false,
+      "empty_hyp": false,
+      "markup_chars": 0,
+      "strata": {
+        "era": "1946–1975",
+        "difficulty": "low",
+        "language": "vi"
+      }
+    },
+    {
+      "page_id": "026/page_6",
+      "cer": 0.8620689655172413,
+      "wer": 0.9726027397260274,
+      "ref_chars": 1479,
+      "char_edits": 1275,
+      "tone_sub": 11,
+      "letter_diacritic_sub": 0,
+      "base_sub": 76,
+      "base_ins": 0,
+      "base_del": 956,
+      "ws_errors": 232,
+      "ref_diacritic_graphemes": 348,
+      "ref_tone_graphemes": 241,
+      "ref_spaces": 291,
+      "ref_tokens": 292,
+      "token_edits": 284,
+      "runaway": false,
+      "empty_hyp": false,
+      "markup_chars": 0,
+      "strata": {
+        "era": "1946–1975",
+        "difficulty": "low",
+        "language": "vi"
+      }
+    },
+    {
+      "page_id": "026/page_7",
+      "cer": 0.7693430656934307,
+      "wer": 0.9718875502008032,
+      "ref_chars": 1370,
+      "char_edits": 1054,
+      "tone_sub": 16,
+      "letter_diacritic_sub": 4,
+      "base_sub": 226,
+      "base_ins": 0,
+      "base_del": 673,
+      "ws_errors": 135,
+      "ref_diacritic_graphemes": 303,
+      "ref_tone_graphemes": 200,
+      "ref_spaces": 248,
+      "ref_tokens": 249,
+      "token_edits": 242,
+      "runaway": false,
+      "empty_hyp": false,
+      "markup_chars": 0,
+      "strata": {
+        "era": "1946–1975",
+        "difficulty": "mid",
+        "language": "vi"
+      }
+    },
+    {
+      "page_id": "026/page_8",
+      "cer": 0.8015488867376573,
+      "wer": 0.9696969696969697,
+      "ref_chars": 1033,
+      "char_edits": 828,
+      "tone_sub": 4,
+      "letter_diacritic_sub": 6,
+      "base_sub": 115,
+      "base_ins": 0,
+      "base_del": 579,
+      "ws_errors": 124,
+      "ref_diacritic_graphemes": 232,
+      "ref_tone_graphemes": 161,
+      "ref_spaces": 197,
+      "ref_tokens": 198,
+      "token_edits": 192,
+      "runaway": false,
+      "empty_hyp": false,
+      "markup_chars": 0,
+      "strata": {
+        "era": "1946–1975",
+        "difficulty": "low",
+        "language": "vi"
+      }
+    }
+  ]
+}

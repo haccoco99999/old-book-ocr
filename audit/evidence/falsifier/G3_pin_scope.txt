@@ -1,0 +1,9 @@
+## monorepo layout, training copy mutated (row_gap >= -> >)
+=========================== short test summary info ============================
+FAILED tests/test_plaintext.py::test_reading_order_is_the_vendored_training_function
+1 failed, 10 deselected in 0.03s
+## training repo tests referencing reading_order:
+(none)
+## backend alone (clean clone / Docker: no ../training), vendored copy intact
+.                                                                        [100%]
+1 passed, 10 deselected in 0.01s

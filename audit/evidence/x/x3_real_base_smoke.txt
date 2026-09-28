@@ -1,0 +1,63 @@
+## (attempt 2: the audit script's job-id lookup was wrong; job 3 was created by attempt 1 for document 2)
+list keys ['jobs', 'total', 'limit', 'offset']
+{"id":3,"document_id":2,"model_version_id":2,"idempotency_key":"x3-real-base-1","status":"succeeded","attempts":1,"text_policy":"body-v1","bench_run_id":null,"first_page":null,"last_page":null,"enqueued_at":"2026-09-25T04:42:37.706241+00:00","started_at":"2026-09-25T04:42:37.811061+00:00","finished_at":"2026-09-25T04:43:17.853859+00:00","queue_wait_s":0.105,"service_s":40.043,"as_of":"2026-09-25T04:53:11.414726+00:00","error":null,"retry_of":null,"progress":{"pages_total":5,"pages_done":5}}
+## pages of document 2
+[(6, '026/page_4'), (7, '026/page_5'), (8, '026/page_6'), (9, '026/page_7'), (10, '026/page_8')]
+## machine revision 0 of page 6
+{'rev_no': 0, 'source': 'machine', 'model_version': 'paddleocr-vl-1.6-base', 'text_policy': 'body-v1', 'plaintext_stats': {'order': 'xycut-v1', 'policy': 'body-v1', 'chars_out': 1018, 'blocks_kept': 4, 'blocks_empty': 0, 'blocks_total': 5, 'unknown_labels': {}, 'excluded_by_label': {'number': 1}, 'markup_chars_removed': 0, 'markup_removed_by_kind': {}}}
+blocks 5 ['doc_title', 'number', 'text']
+## one edit as P02 on page 6
+{"id":12,"page_id":6,"rev_no":1,"source":"human","author":"P02","parent_rev_no":0,"job_id":null,"model_version_id":null,"model_version":null,"text_policy":null,"created_at":"2026-09-25T04:53:29.982686+00:00","chars":1020
+## export json latest
+[200] 52821 bytes
+## eval-manifest source=machine, mv 2, doc 2
+HTTP/1.1 200 OK
+content-disposition: attachment; filename="eval-manifest-mv2-machine.jsonl"
+{'page_id': '026/page_4', 'book_id': '026', 'hyp': '<1018 chars>', 'model_version': 'paddleocr-vl-1.6-base', 'text_policy': 'body-v1'}
+{'page_id': '026/page_5', 'book_id': '026', 'hyp': '<1363 chars>', 'model_version': 'paddleocr-vl-1.6-base', 'text_policy': 'body-v1'}
+{'page_id': '026/page_6', 'book_id': '026', 'hyp': '<1435 chars>', 'model_version': 'paddleocr-vl-1.6-base', 'text_policy': 'body-v1'}
+{'page_id': '026/page_7', 'book_id': '026', 'hyp': '<1318 chars>', 'model_version': 'paddleocr-vl-1.6-base', 'text_policy': 'body-v1'}
+{'page_id': '026/page_8', 'book_id': '026', 'hyp': '<1024 chars>', 'model_version': 'paddleocr-vl-1.6-base', 'text_policy': 'body-v1'}
+## join dev refs + viet-ocr-eval score
+5 pages -> /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/x3/m_real_ref.jsonl
+score exit=0
+
+[written] /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/x3/report_x3_real_base_dev5.json
+[written] /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/x3/report_x3_real_base_dev5.md
+# viet-ocr-eval — x3_real_base_dev5
+
+protocol 1.1 · normalization {'collapse_whitespace': True, 'canonical_tone': True, 'lowercase': False} · runaway capped: True · n = 5 pages
+
+| metric | % | denominator |
+|---|---|---|
+| CER (micro) | 4.05 [1.73–6.92] | 6316 chars |
+| CER (macro ± sd) | 3.82 ± 3.37 | per page |
+| CER (median page) | 1.96 | per page |
+| WER (syllable) | 12.02 [6.66–17.33] | 1190 syllables |
+| **DER** | 3.37 [2.53–4.41] | 1452 diacritic graphemes |
+| TER (tone only) | 4.00 | 1000 tone-bearing graphemes |
+| WSER (whitespace) | 4.73 | 1185 spaces |
+
+## Error breakdown (counts)
+
+| category | count | share |
+|---|---|---|
+| base letter (substitution) | 28 | 10.9% |
+| tone mark | 40 | 15.6% |
+| letter diacritic (circumflex/breve/horn/stroke) | 9 | 3.5% |
+| insertion | 45 | 17.6% |
+| deletion | 78 | 30.5% |
+| whitespace | 56 | 21.9% |
+
+## Run health
+
+- runaway pages: 0 (0.00%)
+- empty outputs: 0 (0.00%)
+- pages with markup in the hypothesis: 0 (0 markup characters)
+
+## Stratified by `difficulty`
+
+| value | n | CER | DER | WSER |
+|---|---|---|---|---|
+| low | 4 | 3.96 | 2.96 | 3.74 |
+| mid | 1 | 4.38 | 4.95 | 8.47 |

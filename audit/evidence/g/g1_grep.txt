@@ -1,0 +1,14 @@
+## G1 import grep (training, skills excluded from forbidden set? no - listed separately), backend, mlops, frontend/src
+## cmd: grep -rnE imports of forbidden libs, excluding venvs/node_modules/third_party/dataset
+backend/tests/test_no_metric_code.py:36:    for bad in ("def cer(a, b):", "def page_cer(x):", "def compute_WER(x):", "import jiwer",
+backend/tests/test_no_metric_code.py:37:                "from rapidfuzz import fuzz", "def error_rate(x):", "import difflib"):
+mlops/tests/test_no_metric_code.py:48:    bad = "import difflib\nfrom rapidfuzz import fuzz\nimport Levenshtein as L\nfrom torchmetrics import text\n" \
+eda/notebooks/eda_lib.py:15:import difflib
+## JS/TS imports in frontend/src
+frontend/src/pages/Review/components/HistoryDrawer.tsx:3:import { diffWordsWithSpace } from 'diff';
+## function defs
+training/tests/test_no_metric_code.py:16:def test_no_edit_distance_or_error_rate_code():
+backend/tests/test_no_metric_code.py:22:def test_no_edit_distance_or_error_rate_code():
+skills/viet-ocr-eval-1.1/scripts/metrics.py:120:def edit_distance(ref: list, hyp: list) -> int:
+skills/viet-ocr-eval-1.2/viet-ocr-eval-1.2/scripts/metrics.py:120:def edit_distance(ref: list, hyp: list) -> int:
+skills/viet-ocr-eval/scripts/metrics.py:120:def edit_distance(ref: list, hyp: list) -> int:

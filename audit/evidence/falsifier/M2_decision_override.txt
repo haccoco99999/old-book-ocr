@@ -1,0 +1,5 @@
+real decision.md  : seed14 serve = False test = False
+--decision <fake> : seed14 serve = True test = True -> step 1 'declared' would pass
+record's decision_md_blob_sha expression: ['"decision_md_blob_sha": decision.blob_sha(), "serving_plan": self.dec["decision"]["serving_plan"],']
+require_committed checks: ['r = subprocess.run(["git", "-C", str(paths.MLOPS), "status", "--porcelain", "--untracked-files=no"],', 'if decision.blob_sha() is None:']
+blob_sha() of the real file: fc2e096c1c63 ; blob_sha(fake) = None

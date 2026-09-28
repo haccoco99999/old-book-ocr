@@ -1,0 +1,13 @@
+# training/finals/ledger.jsonl — non-metric fields only (metric fields cer_micro*, pairs, strata withheld)
+0 {"at": "2026-09-17T21:03:05+00:00", "event": "test_generation_started", "code_sha256": "2ea991a0d583", "final_id": "test__base_7dea718d", "model": "base_7dea718d"}
+1 {"at": "2026-09-18T10:08:52+00:00", "event": "test_scored", "code_sha256": "2ea991a0d583", "final_id": "test__base_7dea718d", "model": "base_7dea718d"}
+2 {"at": "2026-09-18T11:08:06+00:00", "event": "test_generation_started", "code_sha256": "2ea991a0d583", "final_id": "test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4", "model": "20260917-154010_s2ea991_c57c0a6c_exp_lr2e4"}
+3 {"at": "2026-09-19T15:53:22+00:00", "event": "test_scored", "code_sha256": "2ea991a0d583", "final_id": "test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4", "model": "20260917-154010_s2ea991_c57c0a6c_exp_lr2e4"}
+4 {"at": "2026-09-19T17:06:15+00:00", "event": "gold_scored", "code_sha256": "2ea991a0d583", "final_id": "test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4", "verified_pages": 250, "verified_file_sha256": "b33afd0338619260a180fd6823bcc8bb04297e4aca1111bf02f8590782b613aa", "annotator_policy": "earliest verification per page"}
+5 {"at": "2026-09-19T17:06:37+00:00", "event": "compared", "code_sha256": "2ea991a0d583", "on": "test", "base": "test__base_7dea718d", "adapted": "test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4"}
+6 {"at": "2026-09-19T20:02:06+00:00", "event": "gold_scored", "code_sha256": "2ea991a0d583", "final_id": "test__base_7dea718d", "verified_pages": 250, "verified_file_sha256": "b33afd0338619260a180fd6823bcc8bb04297e4aca1111bf02f8590782b613aa", "annotator_policy": "earliest verification per page"}
+7 {"at": "2026-09-19T20:02:28+00:00", "event": "compared", "code_sha256": "2ea991a0d583", "on": "test", "base": "test__base_7dea718d", "adapted": "test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4"}
+8 {"at": "2026-09-19T20:02:29+00:00", "event": "compared", "code_sha256": "2ea991a0d583", "on": "gold", "base": "test__base_7dea718d", "adapted": "test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4"}
+9 {"at": "2026-09-19T20:02:30+00:00", "event": "compared", "code_sha256": "2ea991a0d583", "on": "gold_pseudo", "base": "test__base_7dea718d", "adapted": "test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4"}
+10 {"at": "2026-09-19T20:02:30+00:00", "event": "agreement", "code_sha256": "2ea991a0d583", "verified_file_sha256": "b33afd0338619260a180fd6823bcc8bb04297e4aca1111bf02f8590782b613aa"}
+11 {"at": "2026-09-20T15:39:04+00:00", "event": "table", "code_sha256": "2ea991a0d583", "base": "test__base_7dea718d", "adapted": "test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4"}

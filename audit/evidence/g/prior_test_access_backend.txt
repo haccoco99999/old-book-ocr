@@ -1,0 +1,65 @@
+## d4_eval.py docstring
+"""D4: the locked test set through the deployed pipeline, once per model, scored by viet-ocr-eval.
+
+    mkdir -p reports/eval/d4
+    setsid nohup uv run python tools/d4_eval.py >> reports/eval/d4/run.log 2>&1 < /dev/null &
+    uv run python tools/d4_eval.py --status          # progress, from anywhere
+
+For each model (base, then adapted; one model served at a time, decision D4):
+1. Stop every inference server, start the layout server and N recognition servers for this model,
+   recreate the worker against them, and register or confirm the model version.
+2. Upload the 3,978 locked test pages through the API: one document per book, in chunks of at most
+   100 pages. VieBookRead page and book ids are attached, and D2 means each model gets its own upload.
+3. Submit one job per document with text_policy page-v1 (decision D5), wait, and resubmit failed
+   jobs (at most twice; pages already done are skipped).
+4. Export the machine manifest, join the locked references by page_id (tools/join_reference.py),
+   and score it with `viet-ocr-eval score`.
+Then `viet-ocr-eval compare base adapted` gives the paired result.
+
+Resumable: every upload, job and finished stage is recorded in <out>/state.json as it happens, so
+running the script again after a crash or reboot continues where it stopped: no upload twice, and
+the same idempotency keys. Everything goes under reports/eval/d4/ (not in git: it holds book text).
+The locked tables in training/finals/ are never touched.
+
+These numbers measure the whole deployed system: PP-DocLayoutV3 regions instead of ground-truth
+polygons. They are an additional result next to the locked tables, not a replacement (D4).
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+import time
+import uuid
+from collections import defaultdict
+from datetime import datetime, timezone
+from pathlib import Path
+
+BACKEND = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BACKEND))
+sys.path.insert(0, str(BACKEND / "recognizer_server"))
+sys.path.insert(0, str(BACKEND / "tools"))
+
+import bench  # noqa: E402  (api_call, upload, submit, TEST_MANIFEST, MODELS)
+import manage  # noqa: E402
+from join_reference import join  # noqa: E402
+from register_model import model_version_record, register  # noqa: E402
+## backend commits mentioning D4/test
+9ea09b6 2026-09-24 13:22:10 +0700 d4_eval: per-run tag in job idempotency keys; manage.stop signals all servers at once
+f09c4d5 2026-09-24 13:11:14 +0700 tools/d4_eval.py: unattended, resumable D4 run (locked test set x base/adapted)
+d4755dc 2026-09-24 12:55:45 +0700 Add benchmark run B (3 servers x 2 in flight) and the A/B comparison
+77ad45b 2026-09-24 11:37:40 +0700 Step 5: real inference, served-model/preprocessing checks, bench.py
+6d4fb6c 2026-09-24 10:56:12 +0700 wip: step 5 servers, clients, bench (before the gate run)
+a3a0632 2026-09-24 00:40:48 +0700 Record decisions D1-D4 in the migration plan
+## files under backend/reports (names only)
+total 304
+drwxr-xr-x  3 huy huy   4096 Sep 24 12:55 .
+drwxr-xr-x 16 huy huy   4096 Sep 25 07:05 ..
+-rw-r--r--  1 huy huy  13147 Sep 24 10:52 bench_20260924T034919Z.json
+-rw-r--r--  1 huy huy 136923 Sep 24 11:37 bench_20260924T035616Z.json
+-rw-r--r--  1 huy huy 137209 Sep 24 12:55 bench_20260924T052050Z.json
+-rw-r--r--  1 huy huy   2705 Sep 24 12:55 bench_comparison.md
+drwxr-xr-x  4 huy huy   4096 Sep 24 13:32 eval

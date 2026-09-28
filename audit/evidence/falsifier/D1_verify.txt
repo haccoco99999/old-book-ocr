@@ -1,0 +1,75 @@
+### data: verify train.jsonl test.jsonl
+train: 19780 pages / 89 books
+test:  3978 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data: verify train.jsonl gold.jsonl
+train: 19780 pages / 89 books
+test:  250 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data: verify dev.jsonl test.jsonl
+train: 1520 pages / 11 books
+test:  3978 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data: verify dev.jsonl gold.jsonl
+train: 1520 pages / 11 books
+test:  250 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data: verify train.jsonl dev.jsonl
+train: 19780 pages / 89 books
+test:  1520 pages / 11 books
+OK — no leakage detected.
+exit=0
+### data-lines: verify train.jsonl test.jsonl
+train: 19780 pages / 89 books
+test:  3978 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data-lines: verify train.jsonl gold.jsonl
+train: 19780 pages / 89 books
+test:  250 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data-lines: verify dev.jsonl test.jsonl
+train: 1520 pages / 11 books
+test:  3978 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data-lines: verify dev.jsonl gold.jsonl
+train: 1520 pages / 11 books
+test:  250 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data-lines: verify train.jsonl dev.jsonl
+train: 19780 pages / 89 books
+test:  1520 pages / 11 books
+OK — no leakage detected.
+exit=0
+### data-mixed: verify train.jsonl test.jsonl
+train: 39560 pages / 89 books
+test:  3978 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data-mixed: verify train.jsonl gold.jsonl
+train: 39560 pages / 89 books
+test:  250 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data-mixed: verify dev.jsonl test.jsonl
+train: 1520 pages / 11 books
+test:  3978 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data-mixed: verify dev.jsonl gold.jsonl
+train: 1520 pages / 11 books
+test:  250 pages / 23 books
+OK — no leakage detected.
+exit=0
+### data-mixed: verify train.jsonl dev.jsonl
+train: 39560 pages / 89 books
+test:  1520 pages / 11 books
+OK — no leakage detected.
+exit=0

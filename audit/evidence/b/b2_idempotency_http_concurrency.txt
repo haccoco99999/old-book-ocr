@@ -1,0 +1,18 @@
+# B2: 20 concurrent POST /jobs with one Idempotency-Key over HTTP (scratch api :18000, document 1, fake-ocr-v1), 2026-09-25T16:26:39+07:00
+status codes: {201: 1, 200: 19} | distinct job ids: [6]
+same key, different body -> 409 {'detail': 'idempotency key was already used for a different request'}
+ id |   idempotency_key   |  status   | outbox_rows 
+----+---------------------+-----------+-------------
+  6 | audit-b2-concurrent | succeeded |           1
+(1 row)
+
+           conname            |            pg_get_constraintdef            
+------------------------------+--------------------------------------------
+ ocr_jobs_idempotency_key_key | UNIQUE (idempotency_key)
+ ocr_jobs_id_model_policy     | UNIQUE (id, model_version_id, text_policy)
+ ocr_jobs_id_model            | UNIQUE (id, model_version_id)
+(3 rows)
+
+tests/test_jobs.py::test_five_concurrent_submissions_with_one_key_create_one_job PASSED [ 39%]
+tests/test_jobs.py::test_http_api_201_then_200_and_job_status PASSED     [ 45%]
+tests/test_migrations.py::test_idempotency_key_is_unique PASSED          [ 48%]

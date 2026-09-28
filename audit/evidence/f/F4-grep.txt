@@ -1,0 +1,21 @@
+# F4: strings in locales and src that could be a metric (manual review of each hit)
+$ grep -niE "%|phần trăm|percent|chính xác|accura|lỗi|error rate|sửa|edit|count|số lần|tỉ lệ|tỷ lệ|rate|score|điểm|CER|WER" src/locales/vi-VN.ts
+src/locales/en-US.ts:199:  'export.format.txt.help': 'Plain UTF-8 text; pages are separated by a form feed, as pdftotext does.',
+exit=0
+
+$ git ls-files src | xargs grep -nE "\* ?100|/ ?100\b|toFixed|percent|Progress" (excluding locales)
+src/lib/uploads.ts:20:  percent: number;
+src/lib/uploads.ts:70:      percent: 0,
+src/lib/uploads.ts:88:  update(key, { stage: 'waiting', percent: item.document ? 100 : 0, error: undefined });
+src/lib/uploads.ts:149:    update(key, { stage: 'uploading', percent: 0 });
+src/lib/uploads.ts:156:          const percent = Math.min(100, Math.floor((event.loaded / event.total) * 100));
+src/lib/uploads.ts:157:          update(key, percent === 100 ? { stage: 'processing', percent } : { percent });
+src/lib/uploads.ts:161:      update(key, { document, percent: 100 });
+src/lib/uploads.ts:163:      if (controller.signal.aborted) update(key, { stage: 'cancelled', percent: 0 });
+src/pages/Queue/index.tsx:114:            <Progress
+src/pages/Queue/index.tsx:117:              percent={job.progress.pages_total ? (100 * job.progress.pages_done) / job.progress.pages_total : 0}
+src/pages/Review/components/ImagePane.tsx:211:          {intl.formatNumber(scale, { style: 'percent' })}
+src/pages/Upload/components/UploadProgress.tsx:28:            <Progress percent={item.percent} size="small" status="active" />
+
+$ name/họ tên fields: git ls-files src | xargs grep -niE "họ tên|full.?name|firstName|lastName|participant_name|user_?name|\"name\"|name:"
+src/locales/vi-VN.ts:126:  'participant.intro': 'Nhập mã được phát cho bạn, ví dụ P03. Không nhập họ tên.',

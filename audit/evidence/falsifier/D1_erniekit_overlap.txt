@@ -1,0 +1,14 @@
+work/20260915-163758_s3902df_811840f3_smoke/erniekit_train.jsonl: samples=2000 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260915-195157_sf747b6_6ff763eb_smoke-eval/erniekit_train.jsonl: samples=2000 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260915-200009_sf747b6_6ff763eb_smoke-eval/erniekit_train.jsonl: samples=2000 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260915-203645_s60fb42_47d08c20_smoke-sweep/erniekit_train.jsonl: samples=2000 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260916-075254_s7c4005_eed27da0_base/erniekit_train.jsonl: samples=173215 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260916-150324_s06eaa2_93773b96_memcheck/erniekit_train.jsonl: samples=4000 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260916-150618_s06eaa2_7dea718d_base/erniekit_train.jsonl: samples=173215 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260917-064001_sdeeda6_b9b95d2f_exp_lm_only/erniekit_train.jsonl: samples=173215 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/erniekit_train.jsonl: samples=173215 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260917-215054_s2ea991_efcf7d12_exp_r32/erniekit_train.jsonl: samples=173215 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260922-073349_s9f712b_54b12627_exp_lines/erniekit_train.jsonl: samples=558749 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260922-120912_s9f712b_131c05d9_exp_mix/erniekit_train.jsonl: samples=731964 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260922-170938_s9f712b_3b397b3e_exp_lr2e4_long/erniekit_train.jsonl: samples=173215 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0
+work/20260923-121505_s9f712b_6ecef906_exp_lr2e4_seed14/erniekit_train.jsonl: samples=173215 books=89 unparsed=0 test_books=0 dev_books=0 test_pages=0 gold_pages=0 dev_pages=0

@@ -1,0 +1,26 @@
+# Does the dev server overwrite the production build in dist/? (scratch copy, inside unshare -rn); 2026-09-25T11:39:10+07:00
+## before: production build present
+dist/index.html
+26
+0
+## run 'npm run dev:mock' for 20 s
+## after
+ls: cannot access 'dist/index.html': No such file or directory
+201
+root-of-the-server chunks: 4
+_06a5wfxfh-ao6.css
+_06a5wfxfh-ao6.css.map
+_0jwpiu1ogd34b.async.js
+_0jwpiu1ogd34b.async.js.map
+_1t_r8qwhdim6p.async.js
+
+## the REAL repo's dist/ (read-only listing)
+total 87016
+drwxr-xr-x  3 huy huy   20480 2026-09-24 20:10:48.038709428 +0700 .
+drwxr-xr-x 15 huy huy    4096 2026-09-24 20:10:47.866704293 +0700 ..
+-rw-rw-r--  1 huy huy   13540 2026-09-24 20:10:48.022708951 +0700 _06a5wfxfh-ao6.css
+ls: cannot access '/home/huy/master/frontend/dist/index.html': No such file or directory
+files: 201; root-of-the-server chunks: 4
+total 12
+drwxr-xr-x  2 huy huy 4096 2026-09-24 20:11:05.778313922 +0700 .
+drwxr-xr-x 15 huy huy 4096 2026-09-24 20:10:47.866704293 +0700 ..

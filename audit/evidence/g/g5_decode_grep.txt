@@ -1,0 +1,55 @@
+## training/decode.json
+{
+ "unit": "paragraph region crop",
+ "do_sample": false,
+ "temperature": 0.0,
+ "top_p": 1.0,
+ "num_beams": 1,
+ "repetition_penalty": 1.0,
+ "max_new_tokens": 1024,
+ "seed": 13,
+ "source": "protocol.md section 4; max_new_tokens 1024 for paragraph crops per EDA C1 (region tokens p99 341, max 1207; 28 regions above the cap are excluded from train)"
+}
+
+## training readers
+training/eval_dev.py:10:decode.json seed, and pages are scored by viet-ocr-eval. The record, including the full report, is
+training/leaderboard.py:10:Runs are grouped by what makes dev numbers comparable: dev file, page subset, decode.json, and the scorer's protocol
+training/leaderboard.py:14:The baseline for a run is the newest baseline with the same dev file, decode.json, model, pixels and input format that
+training/leaderboard.py:111:        return "different decode.json"
+training/ocrtrain/infer.py:10:generation cannot do. Decoding follows decode.json exactly (greedy); a region whose output reaches max_new_tokens
+training/ocrtrain/infer.py:33:GREEDY = {"do_sample": False, "temperature": 0.0, "top_p": 1.0, "num_beams": 1}
+training/ocrtrain/infer.py:40:    if bad or not isinstance(decode.get("max_new_tokens"), int) or "seed" not in decode:
+training/ocrtrain/infer.py:199:                image_grid_thw=paddle.to_tensor(grid), max_new_tokens=self.decode["max_new_tokens"],
+training/ocrtrain/infer.py:200:                decode_strategy="greedy_search", repetition_penalty=self.decode["repetition_penalty"],
+training/ocrtrain/infer.py:206:                "cap_hit": EOS_ID not in row and len(row) >= self.decode["max_new_tokens"]}
+training/baseline.py:4:  baseline.py --config configs/base.yaml                 full dev, seeds from decode.json (s, s+1, s+2)
+training/baseline.py:32:    ap.add_argument("--seeds", type=int, nargs="+", help="default: decode.json seed, +1, +2")
+training/baseline.py:60:    shutil.copyfile(cfg["eval"]["decode"], out / "decode.json")
+training/evaluate_final.py:145:    pre = preflight(cfg)  # split hashes, train/test and train/dev leakage (viet-ocr-eval verify), decode.json, model, disk, VRAM
+training/ocrtrain/rundir.py:68:SOURCE_GLOBS = ("*.py", "ocrtrain/**/*.py", "ocrdata/**/*.py", "tests/**/*.py", "decode.json", "requirements-train.txt")
+training/train.py:9:data/grouping consistency, decode.json, disk space and VRAM headroom.
+training/train.py:32:DECODE_KEYS = {"do_sample": False, "temperature": 0.0, "top_p": 1.0, "num_beams": 1}
+training/train.py:64:    if bad or not isinstance(decode.get("max_new_tokens"), int) or "seed" not in decode:
+training/train.py:65:        problems.append(f"decode.json is not frozen greedy decoding: {bad or decode}")
+## backend
+backend/src/ocr_worker/recognizer.py:25:    max_new_tokens: int = 1024
+backend/src/ocr_worker/recognizer.py:26:    temperature: float = 0.0
+backend/src/ocr_worker/recognizer.py:27:    top_p: float = 1.0
+backend/src/ocr_worker/recognizer.py:28:    repetition_penalty: float = 1.0
+backend/src/ocr_worker/recognizer.py:41:    finish_reason: str          # "stop" | "length" (hit max_new_tokens)
+backend/src/ocr_worker/recognizer.py:115:        text = text[: decode.max_new_tokens * 4]
+backend/src/ocr_worker/telemetry.py:23:CAP_HITS = Counter("ocr_regions_cap_hit_total", "Regions whose generation stopped at max_new_tokens")
+backend/recognizer_server/recognition_server.py:6:processes, and generation is batch 1 with greedy decoding from decode.json. The only addition
+backend/recognizer_server/recognition_server.py:49:DECODE_KEYS = ("max_new_tokens", "temperature", "top_p", "repetition_penalty")
+backend/recognizer_server/recognition_server.py:164:            ("recognizer_cap_hits_total", "Regions stopped at max_new_tokens", stats["cap_hits"]),
+backend/recognizer_server/recognition_server.py:174:        mismatch = {k: (want[k], decode.get(k)) for k in DECODE_KEYS if k in want and want[k] != decode.get(k)}
+backend/recognizer_server/recognition_server.py:176:            raise jsonhttp.HTTPError(422, f"decode config differs from the server's decode.json: {mismatch}")
+## mlops
+mlops/register_base.py:6:recognition server reports (the same Engine, config and decode.json), and the parity gate checks the base
+mlops/mlops/dashboard.py:96:    L.add(series("Regions stopped at max_new_tokens", "Per hour: worker count and the :8090 server's own count.",
+mlops/mlops/serve.py:8:   adapter; decode.json; config) is hashed again. Any difference refuses the launch.
+mlops/mlops/promotion.py:50:    files["training/decode.json"] = hashing.sha256_file(paths.TRAINING / "decode.json")
+mlops/mlops/promotion.py:143:            problems.append("served decode_cfg differs from training/decode.json")
+mlops/mlops/repro.py:217:    pkg.copy(T / "decode.json", "config/decode.json")
+mlops/mlops/parity.py:31:DECODE_KEYS = ("max_new_tokens", "temperature", "top_p", "repetition_penalty")
+mlops/mlops/parity.py:36:    return json.loads((paths.TRAINING / "decode.json").read_text(encoding="utf-8"))

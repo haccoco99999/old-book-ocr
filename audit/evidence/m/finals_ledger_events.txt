@@ -1,0 +1,12 @@
+{'at': '2026-09-17T21:03:05+00:00', 'event': 'test_generation_started', 'final_id': 'test__base_7dea718d', 'model': 'base_7dea718d'}
+{'at': '2026-09-18T10:08:52+00:00', 'event': 'test_scored', 'final_id': 'test__base_7dea718d', 'model': 'base_7dea718d'}
+{'at': '2026-09-18T11:08:06+00:00', 'event': 'test_generation_started', 'final_id': 'test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4', 'model': '20260917-154010_s2ea991_c57c0a6c_exp_lr2e4'}
+{'at': '2026-09-19T15:53:22+00:00', 'event': 'test_scored', 'final_id': 'test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4', 'model': '20260917-154010_s2ea991_c57c0a6c_exp_lr2e4'}
+{'at': '2026-09-19T17:06:15+00:00', 'event': 'gold_scored', 'final_id': 'test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4', 'verified_pages': 250}
+{'at': '2026-09-19T17:06:37+00:00', 'event': 'compared', 'on': 'test', 'base': 'test__base_7dea718d', 'adapted': 'test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4'}
+{'at': '2026-09-19T20:02:06+00:00', 'event': 'gold_scored', 'final_id': 'test__base_7dea718d', 'verified_pages': 250}
+{'at': '2026-09-19T20:02:28+00:00', 'event': 'compared', 'on': 'test', 'base': 'test__base_7dea718d', 'adapted': 'test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4'}
+{'at': '2026-09-19T20:02:29+00:00', 'event': 'compared', 'on': 'gold', 'base': 'test__base_7dea718d', 'adapted': 'test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4'}
+{'at': '2026-09-19T20:02:30+00:00', 'event': 'compared', 'on': 'gold_pseudo', 'base': 'test__base_7dea718d', 'adapted': 'test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4'}
+{'at': '2026-09-19T20:02:30+00:00', 'event': 'agreement'}
+{'at': '2026-09-20T15:39:04+00:00', 'event': 'table', 'base': 'test__base_7dea718d', 'adapted': 'test__20260917-154010_s2ea991_c57c0a6c_exp_lr2e4', 'strata': ['era', 'difficulty', 'language']}

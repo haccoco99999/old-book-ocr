@@ -1,0 +1,40 @@
+# B12 side-check: a new job (new key) on an already-processed document (doc 1, job 1 wrote rev 0 earlier). scratch, 2026-09-25T16:26:48+07:00
+{"id":6,"document_id":1,"model_version_id":1,"idempotency_key":"audit-b2-concurrent","status":"succeeded","attempts":1,"text_policy":"body-v1","bench_run_id":null,"first_page":null,"last_page":null,"enqueued_at":"2026-09-25T09:26:39.582121+00:00","started_at":"2026-09-25T09:26:39.691704+00:00","finished_at":"2026-09-25T09:26:39.709285+00:00","queue_wait_s":0.11,"service_s":0.018,"as_of":"2026-09-25T09:26:48.868457+00:00","error":null,"retry_of":null,"progress":{"pages_total":5,"pages_done":5}}
+ page_id | rev_no | job_id 
+---------+--------+--------
+       1 |      0 |      1
+       2 |      0 |      1
+       3 |      0 |      1
+       4 |      0 |      1
+       5 |      0 |      1
+(5 rows)
+
+ timing_rows_for_job6 
+----------------------
+                    0
+(1 row)
+
+## idempotency key construction in evaluation drivers
+/home/huy/master/backend/tools/d4_eval.py:129:            job_id = bench.submit(TOKEN, doc, name, f"d4-{st.data['run_tag']}-{model}-{key}-r{round_}", None, POLICY)
+/home/huy/master/backend/tools/d4_eval.py:168:        raise SystemExit(f"eval-manifest: HTTP {r.status_code}: {r.text[:500]}")
+/home/huy/master/mlops/mlops/testeval.py:243:                         headers={"Idempotency-Key": key})["id"]
+/home/huy/master/mlops/mlops/testeval.py:297:            job = api.submit(state["docs"][k], name, f"eval-{run_id}-{name}-{k}-r{rnd}")
+/home/huy/master/backend/bench.py:248:    return api_call("POST", "/jobs", token, json=body, headers={"Idempotency-Key": key})["id"]
+/home/huy/master/backend/bench.py:340:    warm_jobs = [submit(token, d, name, f"bench-{stamp}-warm-{d}", None, args.policy) for d in warm_docs]
+/home/huy/master/backend/bench.py:366:    jobs = [submit(token, d, name, f"bench-{stamp}-{book}", run_id, args.policy) for book, d in measured_docs.items()]
+## new key, text_policy page-v1, same already-processed document 1
+{'id': 27, 'status': 'queued', 'text_policy': 'page-v1'}
+{'id': None, 'status': None, 'text_policy': None, 'progress': None, 'error': None}
+## machine manifest for document 1 after the page-v1 job 'succeeded'
+026/page_4 body-v1
+026/page_5 body-v1
+026/page_6 body-v1
+026/page_7 body-v1
+026/page_8 body-v1
+## job 27 (the id is 27, not 7: ON CONFLICT DO NOTHING consumed identity values)
+{'id': 27, 'status': 'succeeded', 'text_policy': 'page-v1', 'progress': {'pages_total': 5, 'pages_done': 5}, 'error': None}
+ timing_rows_for_job27 
+-----------------------
+                     0
+(1 row)
+

@@ -1,0 +1,74 @@
+
+## register fake model version
+{"id":1,"name":"fake-ocr-v1","base_model_ref":"FakeRecognizer","base_commit_sha":"none","adapter_sha256":null,"weights_uri":"none://fake","weights_sha256":"0000000000000000000000000000000000000000000000000000000000000000","preprocess_cfg":{"crop":{"format":"jpeg","quality":95,"channels":3,"margin_px":8},"layout":"fake-layout-v1"},"decode_cfg":{"seed":13,"temperature":0.0,"max_new_tokens":1024},"eval_report":null,"created_at":"2026-09-25T04:29:54.237025+00:00","is_active":false} [201]
+
+## upload 5 dev pages (book 026, pages 4-8) as one document
+doc id 1 pages [(1, '026/page_4'), (2, '026/page_5'), (3, '026/page_6'), (4, '026/page_7'), (5, '026/page_8')]
+
+## submit job (idempotency key x3-smoke-1), then the same key again
+{"id":1,"document_id":1,"model_version_id":1,"idempotency_key":"x3-smoke-1","status":"queued","attempts":0,"text_policy":"body-v1","bench_run_id":null,"first_page":null,"last_page":null,"enqueued_at":"2026-09-25T04:29:55.124167+00:00","started_at":null,"finished_at":null,"queue_wait_s":0.004,"service_s":null,"as_of":"2026-09-25T04:29:55.128622+00:00","error":null,"retry_of":null} [201]
+{"id":1,"document_id":1,"model_version_id":1,"idempotency_key":"x3-smoke-1","status":"queued","attempts":0,"text_policy":"body-v1","bench_run_id":null,"first_page":null,"last_page":null,"enqueued_at":
+
+## wait for job 1
+{"id":1,"document_id":1,"model_version_id":1,"idempotency_key":"x3-smoke-1","status":"succeeded","attempts":1,"text_policy":"body-v1","bench_run_id":null,"first_page":null,"last_page":null,"enqueued_at":"2026-09-25T04:29:55.124167+00:00","started_at":"2026-09-25T04:29:55.349477+00:00","finished_at":"2026-09-25T04:29:57.121237+00:00","queue_wait_s":0.225,"service_s":1.772,"as_of":"2026-09-25T04:29:57.281908+00:00","error":null,"retry_of":null,"progress":{"pages_total":5,"pages_done":5}}
+
+## review: GET page 1, then save one edit as P01
+latest rev 0 history [0]
+{"id":6,"page_id":1,"rev_no":1,"source":"human","author":"P01","parent_rev_no":0,"job_id":null,"model_version_id":null,"model_version":null,"text_policy":null,"created_at":"2026-09-25T04:29:57.341873+00:00","chars":365} [201]
+
+## export txt (latest) - first 200 bytes
+một trời Quốc rằng và Nam ấy những tiếng Nội đây lịch chương của trong văn quyển.
+chương các trong người tháng đất nước tháng nước văn đó tháng.
+đây ngày người người Quốc năm tháng Gòn Hà trời quyển chữ những Nam văn một đâ
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys,json;d=json.load(sys.stdin);d=d.get('items',d);print([m['id'] for m in d if m['name']=='fake-ocr-v1'][0])
+                                                                                           ~^^^^^^^^
+TypeError: string indices must be integers, not 'str'
+
+## eval-manifest source=machine (mv )
+HTTP/1.1 422 Unprocessable Entity
+0 /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/x3/m_machine.jsonl
+{'detail': [{'type': 'int_parsing', 'loc': ['query', 'model_version_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': ''}]}
+
+## eval-manifest source=human
+HTTP/1.1 422 Unprocessable Entity
+{'detail': [{'type': 'int_parsing', 'loc': ['query', 'model_version_id'], 'msg': 'Input should be a valid integer, unable to parse string as an integer', 'input': ''}]}
+
+## join dev references (join_reference.py) and score with viet-ocr-eval
+Traceback (most recent call last):
+  File "/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/backend-clean/tools/join_reference.py", line 62, in <module>
+    main()
+    ~~~~^^
+  File "/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/backend-clean/tools/join_reference.py", line 53, in main
+    joined, problems = join(manifest, refs)
+                       ~~~~^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/backend-clean/tools/join_reference.py", line 24, in join
+    ref = refs.get(row["page_id"])
+                   ~~~^^^^^^^^^^^
+KeyError: 'page_id'
+score exit=1
+    rows = load_manifest(args.manifest)
+  File "/home/huy/master/skills/viet-ocr-eval/scripts/evaluate.py", line 39, in load_manifest
+    with open(path, encoding="utf-8") as fh:
+         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/x3/m_machine_ref.jsonl'
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json;r=json.load(open('/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/x3/report_x3_fake_dev5.json'));print('protocol',r.get('protocol_version'),'pages',r.get('n_pages',r.get('pages')),'health keys',list(r.get('health',{}).keys())[:8])
+                            ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/x3/report_x3_fake_dev5.json'
+
+## join_reference on the human manifest (expected refusal)
+Traceback (most recent call last):
+  File "/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/backend-clean/tools/join_reference.py", line 62, in <module>
+    main()
+    ~~~~^^
+  File "/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/backend-clean/tools/join_reference.py", line 53, in main
+    joined, problems = join(manifest, refs)
+                       ~~~~^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/backend-clean/tools/join_reference.py", line 24, in join
+    ref = refs.get(row["page_id"])
+                   ~~~^^^^^^^^^^^
+KeyError: 'page_id'
+exit=1

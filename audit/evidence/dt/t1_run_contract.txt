@@ -1,0 +1,104 @@
+=== 20260915-163758_s3902df_811840f3_smoke [other]
+  rundir.validate problems: ['missing best', 'eval: no dev report']
+  eval files: 0 steps [] | dev_cer_by_step keys []
+  checkpoint dirs: ['step-000020', 'step-000040', 'step-000060'] | kept_steps: None
+=== 20260915-195157_sf747b6_6ff763eb_smoke-eval [other]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=40)
+  eval files: 3 steps [20, 40, 60] | dev_cer_by_step keys [20, 40, 60]
+  argmin(dev_cer_by_step) = 40 best_step = 40 match = True
+  checkpoint dirs: ['step-000040', 'step-000060'] | kept_steps: [40, 60]
+=== 20260915-200009_sf747b6_6ff763eb_smoke-eval [other]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=40)
+  eval files: 3 steps [20, 40, 60] | dev_cer_by_step keys [20, 40, 60]
+  argmin(dev_cer_by_step) = 40 best_step = 40 match = True
+  checkpoint dirs: ['step-000040', 'step-000060'] | kept_steps: [40, 60]
+=== 20260915-203645_s60fb42_47d08c20_smoke-sweep [other]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=10)
+  eval files: 2 steps [10, 20] | dev_cer_by_step keys [10, 20]
+  argmin(dev_cer_by_step) = 10 best_step = 10 match = True
+  checkpoint dirs: ['step-000010', 'step-000020'] | kept_steps: [10, 20]
+=== 20260916-075254_s7c4005_eed27da0_base [other]
+  rundir.validate problems: ['missing best', 'run.json: missing ended_at', 'checkpoints/last missing', 'eval: no dev report']
+  eval files: 0 steps [] | dev_cer_by_step keys []
+  checkpoint dirs: [] | kept_steps: None
+=== 20260916-150324_s06eaa2_93773b96_memcheck [other]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=20)
+  eval files: 1 steps [20] | dev_cer_by_step keys [20]
+  argmin(dev_cer_by_step) = 20 best_step = 20 match = True
+  checkpoint dirs: ['step-000020'] | kept_steps: [20]
+=== 20260916-150618_s06eaa2_7dea718d_base [TRAINING]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=2500)
+  eval files: 12 steps [250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000] | dev_cer_by_step keys [250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000]
+  argmin(dev_cer_by_step) = 2500 best_step = 2500 match = True
+  checkpoint dirs: ['step-002500', 'step-002750', 'step-003000'] | kept_steps: [2500, 2750, 3000]
+=== 20260917-064001_sdeeda6_b9b95d2f_exp_lm_only [TRAINING]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=2000)
+  eval files: 12 steps [250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000] | dev_cer_by_step keys [250, 500, 750, 1000, 1250, 1500, 1750, 2000, 2250, 2500, 2750, 3000]
+  argmin(dev_cer_by_step) = 2000 best_step = 2000 match = True
+  checkpoint dirs: ['step-002000', 'step-002250', 'step-003000'] | kept_steps: [2000, 2250, 3000]
+=== 20260917-154010_s2ea991_c57c0a6c_exp_lr2e4 [TRAINING]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=3000)
+  eval files: 6 steps [500, 1000, 1500, 2000, 2500, 3000] | dev_cer_by_step keys [500, 1000, 1500, 2000, 2500, 3000]
+  argmin(dev_cer_by_step) = 3000 best_step = 3000 match = True
+  checkpoint dirs: ['step-000250', 'step-000750', 'step-001250', 'step-001750', 'step-002000', 'step-002250', 'step-002500', 'step-002750', 'step-003000'] | kept_steps: [2000, 2500, 3000]
+=== 20260917-215054_s2ea991_efcf7d12_exp_r32 [TRAINING]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=3000)
+  eval files: 6 steps [500, 1000, 1500, 2000, 2500, 3000] | dev_cer_by_step keys [500, 1000, 1500, 2000, 2500, 3000]
+  argmin(dev_cer_by_step) = 3000 best_step = 3000 match = True
+  checkpoint dirs: ['step-000250', 'step-000750', 'step-001250', 'step-001500', 'step-001750', 'step-002000', 'step-002250', 'step-002750', 'step-003000'] | kept_steps: [1500, 2000, 3000]
+=== 20260922-073349_s9f712b_54b12627_exp_lines [TRAINING]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=500)
+  eval files: 6 steps [500, 1000, 1500, 2000, 2500, 3000] | dev_cer_by_step keys [500, 1000, 1500, 2000, 2500, 3000]
+  argmin(dev_cer_by_step) = 500 best_step = 500 match = True
+  checkpoint dirs: ['step-000250', 'step-000500', 'step-000750', 'step-001250', 'step-001750', 'step-002250', 'step-002500', 'step-002750', 'step-003000'] | kept_steps: [500, 2500, 3000]
+=== 20260922-120912_s9f712b_131c05d9_exp_mix [TRAINING]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=3000)
+  eval files: 6 steps [500, 1000, 1500, 2000, 2500, 3000] | dev_cer_by_step keys [500, 1000, 1500, 2000, 2500, 3000]
+  argmin(dev_cer_by_step) = 3000 best_step = 3000 match = True
+  checkpoint dirs: ['step-000250', 'step-000750', 'step-001000', 'step-001250', 'step-001750', 'step-002000', 'step-002250', 'step-002750', 'step-003000'] | kept_steps: [1000, 2000, 3000]
+=== 20260922-170938_s9f712b_3b397b3e_exp_lr2e4_long [TRAINING]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=5500)
+  eval files: 12 steps [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000] | dev_cer_by_step keys [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000]
+  argmin(dev_cer_by_step) = 5500 best_step = 5500 match = True
+  checkpoint dirs: ['step-000250', 'step-000750', 'step-001250', 'step-001750', 'step-002000', 'step-002250', 'step-002750', 'step-003250', 'step-003750', 'step-004250', 'step-004750', 'step-005250', 'step-005500', 'step-005750', 'step-006000'] | kept_steps: [2000, 5500, 6000]
+=== 20260923-121505_s9f712b_6ecef906_exp_lr2e4_seed14 [TRAINING]
+  rundir.validate problems: none
+  best/ sha256sum -c: lora_config.json: OK | lora_model_state.pdparams: OK rc= 0
+  best/ files present: ['lora_config.json', 'lora_model_state.pdparams'] listed: ['lora_config.json', 'lora_model_state.pdparams']
+  best/ hashes == checkpoints_saved[best_step]: True (best_step=3000)
+  eval files: 6 steps [500, 1000, 1500, 2000, 2500, 3000] | dev_cer_by_step keys [500, 1000, 1500, 2000, 2500, 3000]
+  argmin(dev_cer_by_step) = 3000 best_step = 3000 match = True
+  checkpoint dirs: ['step-000250', 'step-000750', 'step-001000', 'step-001250', 'step-001750', 'step-002250', 'step-002500', 'step-002750', 'step-003000'] | kept_steps: [1000, 2500, 3000]

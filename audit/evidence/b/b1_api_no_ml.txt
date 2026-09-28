@@ -1,0 +1,11 @@
+# B1: API process and image have no torch/paddle (scratch audit-x-api-1, clean checkout 2035c27), 2026-09-25T16:26:27+07:00
+## installed in the api image?
+{'torch': False, 'paddle': False, 'paddlex': False, 'paddleocr': False, 'paddleformers': False, 'transformers': False, 'vllm': False, 'tensorflow': False, 'jax': False}
+## shared objects mapped by running processes in the api container matching torch|paddle|cuda
+/opt/venv/bin/python /opt/venv/bin/uvicorn ocr_api.main:app --host 0.0.0.0 --port 8000 
+0
+sh -c for p in /proc/[0-9]*; do cat $p/cmdline 2>/dev/null | tr "\0" " "; echo; grep -ciE "torch|paddle|libcuda" $p/maps 2>/dev/null; done 
+0
+## pytest: tests/test_import_boundary.py (from pytest_backend.txt)
+tests/test_import_boundary.py::test_api_import_pulls_in_no_ml_framework_and_is_fast PASSED [ 26%]
+tests/test_import_boundary.py::test_no_ml_import_statement_in_api_code PASSED [ 27%]

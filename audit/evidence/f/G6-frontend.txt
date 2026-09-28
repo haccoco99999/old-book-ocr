@@ -1,0 +1,36 @@
+# G6 (frontend)
+$ git ls-files | grep -E "lock|\.env|npmrc"
+.env
+.env.local.example
+.npmrc
+package-lock.json
+
+$ git show HEAD:.env
+# Umi dev server. 8000 is the API and 3000 is Grafana.
+PORT=8080
+HOST=127.0.0.1
+
+$ git log --all --diff-filter=A --name-only --format="%h %s" | grep -iE "\.env|secret|\.pem|\.key|id_rsa|credentials|token"  (any such file ever added, all history)
+.env
+.env.local.example
+
+$ git grep -nIiE "(api[_-]?key|secret|password|passwd|bearer [A-Za-z0-9._-]{12,}|token\s*[:=]\s*['\"][A-Za-z0-9._-]{12,}|ghp_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN)" -- . ":!package-lock.json" ":!public/mockServiceWorker.js"
+exit=1
+
+$ git grep -nI "dev-token\|API_TOKEN"
+.env.local.example:3:# API_TOKEN=dev-token
+.umirc.ts:6:// backend and adds the bearer token server-side (API_TOKEN in .env.local), so the browser never
+.umirc.ts:11:const API_TOKEN = process.env.API_TOKEN || 'dev-token';
+.umirc.ts:111:            if (LOOPBACK.has(req.socket?.remoteAddress)) proxyReq.setHeader('Authorization', `Bearer ${API_TOKEN}`);
+README.md:50:and adds `Authorization: Bearer $API_TOKEN` itself, so the browser never holds the token. It does this
+
+$ git log --all -p | grep -ciE "^\+.*(ghp_|sk-[A-Za-z0-9]{20}|AKIA|BEGIN .*PRIVATE)"  (history scan)
+0
+
+$ ls -la .env.local  (untracked, gitignored)
+ls: cannot access '.env.local': No such file or directory
+$ grep -l "dev-token\|API_TOKEN\|Authorization" dist/*.js dist/*.html  (scratch production build: does the browser bundle hold a token?)
+exit=1 (1 = token string not in bundle)
+dist/_0z0ul1-pslfs0.7267b228.async.js:Authorization"])
+dist/_0z0ul1-pslfs0.7267b228.async.js:Authorization"
+dist/_0z0ul1-pslfs0.7267b228.async.js:Authorization"

@@ -1,0 +1,86 @@
+# mlops test suite, run in scratch copy /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/mlops (rsync of /home/huy/master/mlops @ cd10b01), Fri Sep 25 04:29:11 UTC 2026
+# env: MASTER_DIR=/home/huy/master MLFLOW_TRACKING_URI=sqlite:///$S/pytest_mlflow.db PROMETHEUS_URL/GRAFANA_URL/OCR_API=http://127.0.0.1:9 (dead port)
+# python: /home/huy/master/mlops/.venv/bin/python -m pytest -v -p no:cacheprovider -rA
+# deselected (safety rule 1: they parse existing TEST-set viet-ocr-eval reports/compares): tests/test_tracking.py::test_compare_logs_the_diacritic_share_with_its_interval tests/test_tracking.py::test_report_logs_health_and_strata tests/test_repro.py::test_results_are_read_from_the_reports_with_both_verdicts
+# RESULT: 42 passed, 1 skipped (dashboard Prometheus query test: Prometheus pointed at dead port on purpose, live stack not touched), 3 deselected, 0 failed
+
+[evaluate_test 2026-09-25T04:27:24Z] paddleocr-vl-1.6-base: fixed-crop done [('fixed-crop/test', 0.01), ('fixed-crop/gold', 0.01)]
+[evaluate_test 2026-09-25T04:27:24Z] paddleocr-vl-1.6-base: end-to-end done [('end-to-end/test', 0.01), ('end-to-end/gold', 0.01)]
+______________________ test_dev_only_replicate_is_refused ______________________
+----------------------------- Captured stdout call -----------------------------
+[promote] declared: FAILED - paddleocr-vl-1.6-vbr-lr2e4-seed14-s3000 is declared with serve: false (seed_replicate); it is never registered or served
+______________________ test_corrupted_adapter_is_refused _______________________
+----------------------------- Captured stdout call -----------------------------
+[promote] declared: ok
+[promote] run_contract: ok
+[promote] adapter_sha256: FAILED - SHA256SUMS e5d33196062527499e613a84396a0d7c3be1bce72f91466f6b7334466edf91bf, file dc02280080901771feb24cc5509cd3f00d2e29376d0455e1d835e388406ae102, decision.md e5d33196062527499e613a84396a0d7c3be1bce72f91466f6b7334466edf91bf
+______________________ test_wrong_served_model_is_refused ______________________
+----------------------------- Captured stdout call -----------------------------
+[promote] declared: ok
+[promote] run_contract: ok
+[promote] adapter_sha256: ok
+[promote] weight_check: ok
+[promote] served: FAILED - http://127.0.0.1:44877 serves ['some-other-model'], expected exactly ['paddleocr-vl-1.6-vbr-lr2e4-s3000']
+______________________ test_parity_failure_leaves_nothing ______________________
+----------------------------- Captured stdout call -----------------------------
+[promote] declared: ok
+[promote] run_contract: ok
+[promote] adapter_sha256: ok
+[promote] weight_check: ok
+[promote] parity: FAILED - relative CER difference +1.1857 (threshold 0.01), 20 pages changed
+______________ test_every_key_shape_logs_as_param_metric_and_tag _______________
+---------------------------- Captured stderr setup -----------------------------
+2026/09/25 11:29:00 INFO mlflow.store.db.utils: Creating initial MLflow database tables...
+2026/09/25 11:29:00 INFO mlflow.store.db.utils: Updating database tables
+_____________ test_the_final_run_is_linked_to_its_declared_version _____________
+---------------------------- Captured stderr setup -----------------------------
+2026/09/25 11:29:00 INFO mlflow.store.db.utils: Creating initial MLflow database tables...
+2026/09/25 11:29:00 INFO mlflow.store.db.utils: Updating database tables
+------------------------------ Captured log setup ------------------------------
+INFO     mlflow.store.db.utils:utils.py:87 Creating initial MLflow database tables...
+INFO     mlflow.store.db.utils:utils.py:294 Updating database tables
+=========================== short test summary info ============================
+PASSED tests/test_dashboard.py::test_structure
+PASSED tests/test_dashboard.py::test_committed_json_is_what_the_generator_writes
+PASSED tests/test_decision.py::test_real_decision_file_parses_and_declares_three_versions
+PASSED tests/test_decision.py::test_declared_run_resolves_relative_paths
+PASSED tests/test_decision.py::test_undeclared_versions_and_runs_are_refused
+PASSED tests/test_decision.py::test_unresolved_and_duplicate_keys
+PASSED tests/test_evaluate_test.py::test_test_access_needs_a_rehearsal_of_the_current_code
+PASSED tests/test_evaluate_test.py::test_one_access_logs_start_and_end_and_commits_both
+PASSED tests/test_evaluate_test.py::test_second_access_needs_a_reason_which_is_logged
+PASSED tests/test_evaluate_test.py::test_undeclared_and_dev_only_versions_are_refused
+PASSED tests/test_evaluate_test.py::test_markup_aborts_and_the_aborted_run_still_counts
+PASSED tests/test_evaluate_test.py::test_a_missing_page_aborts
+PASSED tests/test_evaluate_test.py::test_decision_md_is_frozen_after_the_first_access
+PASSED tests/test_evaluate_test.py::test_incomplete_preregistration_and_dirty_trees_are_refused
+PASSED tests/test_evaluate_test.py::test_markup_rule_follows_decision_md
+PASSED tests/test_no_metric_code.py::test_layer_computes_no_metric
+PASSED tests/test_no_metric_code.py::test_the_check_catches_what_it_should
+PASSED tests/test_no_metric_code.py::test_ordinary_words_are_not_flagged
+PASSED tests/test_parity.py::test_pages_are_fixed_and_inside_the_dev_evaluation_subset
+PASSED tests/test_parity.py::test_identical_outputs_pass
+PASSED tests/test_parity.py::test_another_models_outputs_abort
+PASSED tests/test_parity.py::test_answers_from_another_served_name_abort
+PASSED tests/test_promote_refusals.py::test_dev_only_replicate_is_refused
+PASSED tests/test_promote_refusals.py::test_corrupted_adapter_is_refused
+PASSED tests/test_promote_refusals.py::test_wrong_served_model_is_refused
+PASSED tests/test_promote_refusals.py::test_parity_failure_leaves_nothing
+PASSED tests/test_repro.py::test_copy_glob_leaves_out_manifests
+PASSED tests/test_serve.py::test_changed_or_missing_files_are_reported
+PASSED tests/test_serve.py::test_dev_only_and_unpromoted_versions_are_not_served
+PASSED tests/test_splits_corpus.py::test_real_splits_pass_without_leakage_checks
+PASSED tests/test_splits_corpus.py::test_a_changed_split_file_is_an_error
+PASSED tests/test_splits_corpus.py::test_corpus_manifest_detects_changed_new_and_missing_files
+PASSED tests/test_tracking.py::test_every_key_shape_logs_as_param_metric_and_tag
+PASSED tests/test_tracking.py::test_duplicate_steps_keep_the_post_resume_rows_and_are_never_averaged
+PASSED tests/test_tracking.py::test_the_long_run_carries_its_incident_and_gpu_hours_exclude_downtime
+PASSED tests/test_tracking.py::test_the_final_run_is_linked_to_its_declared_version
+PASSED tests/test_weightcheck.py::test_real_adapter_passes
+PASSED tests/test_weightcheck.py::test_dropped_module_is_named
+PASSED tests/test_weightcheck.py::test_zeroed_b_is_caught
+PASSED tests/test_weightcheck.py::test_swapped_orientation_is_caught_on_a_non_square_module
+PASSED tests/test_weightcheck.py::test_module_with_no_base_tensor_is_listed
+PASSED tests/test_weightcheck.py::test_non_finite_and_undeclared_extras_are_caught
+SKIPPED [1] tests/test_dashboard.py:40: Prometheus is not running
+====== 42 passed, 1 skipped, 3 deselected, 1 warning in 98.47s (0:01:38) =======

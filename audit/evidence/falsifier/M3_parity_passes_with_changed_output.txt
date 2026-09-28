@@ -1,0 +1,1 @@
+{"pages": 20, "regions": 193, "regions_changed": 1, "pages_changed": 1, "relative_cer_difference": 0.002380952380952477, "threshold": 0.01, "passed": true}

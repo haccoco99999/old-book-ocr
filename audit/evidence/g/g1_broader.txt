@@ -1,0 +1,40 @@
+## broader defs/usages (beyond the spec regex)
+training/tests/test_no_metric_code.py:16:def test_no_edit_distance_or_error_rate_code():
+backend/tests/test_no_metric_code.py:22:def test_no_edit_distance_or_error_rate_code():
+backend/tests/test_no_metric_code.py:36:    for bad in ("def cer(a, b):", "def page_cer(x):", "def compute_WER(x):", "import jiwer",
+backend/tests/test_no_metric_code.py:37:                "from rapidfuzz import fuzz", "def error_rate(x):", "import difflib"):
+backend/tests/test_no_metric_code.py:39:    for ok in ("def _render(page):", "def filter(x):", "def order_regions(p):", "def header(x):"):
+backend/tools/register_model.py:36:def register(record: dict, api: str, token: str) -> tuple[int, dict]:
+backend/src/ocr_api/ingest.py:214:def _render(page: pdfium.PdfPage, limits: Limits) -> PageImage:
+backend/src/ocr_worker/queue.py:133:def dead_letter(r: redis.Redis, job_id: int, error: dict) -> None:
+mlops/tests/test_no_metric_code.py:49:          "def compute_cer(a, b): pass\ndef get_wer(a, b): pass\ndef my_edit_distance(a, b): pass\n"
+mlops/tests/test_no_metric_code.py:54:    ok = "def render_header(order, filter, loader, parameter, after): pass\n" \
+mlops/mlops/backend.py:25:def register(recognizer_url: str, layout_url: str) -> tuple[int, dict]:
+mlops/mlops/weightcheck.py:44:def safetensors_header(path: Path) -> tuple[dict, int]:
+mlops/mlops/promotion.py:187:    def register(self) -> dict:
+eda/notebooks/eda_lib.py:313:    sm = difflib.SequenceMatcher(None, [k for k, _, _ in a_toks], [k for k, _, _ in g_toks], autojunk=False)
+eda/notebooks/eda_lib.py:316:    for tag, i1, i2, j1, j2 in sm.get_opcodes():
+eda/notebooks/eda_lib.py:525:    sm = difflib.SequenceMatcher(None, [_match_key(t) for t, _, _ in a], [_match_key(t) for t, _, _ in g], autojunk=False)
+eda/notebooks/eda_lib.py:526:    for tag, i1, i2, j1, j2 in sm.get_opcodes():
+## eda_lib difflib usage
+5:subprocess (see `score_rows`). The alignment below uses difflib's
+6-matching-block search to find anchors; it never produces a rate.
+7-"""
+8-
+--
+15:import difflib
+16-import json
+17-import math
+18-import re
+--
+313:    sm = difflib.SequenceMatcher(None, [k for k, _, _ in a_toks], [k for k, _, _ in g_toks], autojunk=False)
+314-    tok_map: list[tuple[int, int] | None] = [None] * len(a_toks)
+315-    exact = [False] * len(a_toks)
+316-    for tag, i1, i2, j1, j2 in sm.get_opcodes():
+--
+525:    sm = difflib.SequenceMatcher(None, [_match_key(t) for t, _, _ in a], [_match_key(t) for t, _, _ in g], autojunk=False)
+526-    for tag, i1, i2, j1, j2 in sm.get_opcodes():
+527-        if tag == "equal":
+528-            for k in range(i2 - i1):
+## eda tracked?
+.gitignore:2:/*	eda/notebooks/eda_lib.py

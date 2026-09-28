@@ -1,0 +1,31 @@
+## G2 Fri Sep 25 04:39:25 UTC 2026: evaluation call sites in mlops (non-.venv)
+mlops/repro.py:243:        {"protocol_version": evalcli.protocol_version(), "skill_dir": str(paths.SKILL),
+evaluate_test.py:69:                res = evalcli.compare(base_path, path, cmp_path)
+mlops/parity.py:92:    evalcli.score(ref_manifest, f"parity_reference_{name}", workdir / "report_reference.json")
+mlops/parity.py:93:    evalcli.score(srv_manifest, f"parity_served_{name}", workdir / "report_served.json")
+mlops/parity.py:94:    comp = evalcli.compare(workdir / "report_reference.json", workdir / "report_served.json", workdir / "compare.json")
+mlops/parity.py:106:        "threshold": threshold, "protocol_version": evalcli.protocol_version(),
+mlops/testeval.py:334:        evalcli.score(path, f"e2e_{set_name}__{name}", reports[set_name])
+mlops/promotion.py:180:        st = evalcli.selftest()
+mlops/promotion.py:183:        ver = evalcli.verify(data / "train.jsonl", data / "test.jsonl")
+mlops/promotion.py:227:            "viet_ocr_eval_protocol": evalcli.protocol_version(),
+mlops/splits.py:100:                r = evalcli.verify(b / "train.jsonl", REFERENCE / f"{other}.jsonl")
+mlops/splits.py:106:            "protocol_version": evalcli.protocol_version()}
+## any import of skill internals (metrics/normalize/evaluate modules, SKILL on sys.path):
+(none)
+## sys.path insertions:
+mlops/fixed_crop.py:22:sys.path.insert(0, str(TRAINING))
+mlops/parity.py:27:sys.path.insert(0, str(paths.TRAINING))
+tests/_weightcheck_cases.py:11:sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "mlops"))
+mlops/servers.py:11:sys.path.insert(0, str(paths.BACKEND / "recognizer_server"))
+## expected version checks:
+mlops/promotion.py:227:            "viet_ocr_eval_protocol": evalcli.protocol_version(),
+mlops/evallog.py:34:    params = [("protocol_version", d.get("protocol_version")), ("run_name", d.get("run_name")),
+mlops/repro.py:243:        {"protocol_version": evalcli.protocol_version(), "skill_dir": str(paths.SKILL),
+mlops/splits.py:106:            "protocol_version": evalcli.protocol_version()}
+mlops/testeval.py:183:    return {"pages": len(got), "markup_chars": markup, "markup_limit": limit, "protocol_version": r.get("protocol_version"),
+mlops/backfill.py:143:             "dev_protocol_versions": ",".join(sorted({e["report"].get("protocol_version", "?") for e in evals})) or "none",
+mlops/evalcli.py:50:def protocol_version() -> str:
+mlops/evalcli.py:52:        if '"protocol_version":' in line:
+mlops/evalcli.py:54:    raise RuntimeError("protocol_version not found in viet-ocr-eval")
+mlops/parity.py:106:        "threshold": threshold, "protocol_version": evalcli.protocol_version(),

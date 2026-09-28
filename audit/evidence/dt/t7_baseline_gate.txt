@@ -1,0 +1,107 @@
+### baselines/20260915-190721_se15963_073700d7_base/baseline.json : gate + generation (verbatim JSON)
+{
+ "seeds": [
+  13,
+  14,
+  15
+ ],
+ "generation": {
+  "batch_size": 1,
+  "why": "ERNIE's PaddleOCR-VL LM raises NotImplementedError for batch_size != 1",
+  "encode_workers": 8,
+  "prefetch": 64
+ },
+ "dev": {
+  "file": "dev.jsonl",
+  "sha256": "2ee42f32ae54c7ff03dd0b33450e86c06e72b72c7d1ee0f2754302a675604a8a",
+  "pages": 1520,
+  "regions": 14044,
+  "subset": null,
+  "page_ids_sha256": "8f373293b5a5510675989eb09669d6d27fbcf085f386ac24f3d2b52a634f9b82"
+ },
+ "gate": {
+  "cer_micro_by_seed": {
+   "13": 0.038090925619097604,
+   "14": 0.038090925619097604,
+   "15": 0.038090925619097604
+  },
+  "cer_micro_mean": 0.038090925619097604,
+  "cer_micro_sd": 0.0,
+  "sd_over_mean": 0.0,
+  "gate": "sd < 0.10 * mean",
+  "gate_passed": true,
+  "run_health_by_seed": {
+   "13": {
+    "runaway_pages": 8,
+    "runaway_rate": 0.005263157894736842,
+    "empty_pages": 0,
+    "empty_rate": 0.0
+   },
+   "14": {
+    "runaway_pages": 8,
+    "runaway_rate": 0.005263157894736842,
+    "empty_pages": 0,
+    "empty_rate": 0.0
+   },
+   "15": {
+    "runaway_pages": 8,
+    "runaway_rate": 0.005263157894736842,
+    "empty_pages": 0,
+    "empty_rate": 0.0
+   }
+  },
+  "cap_hits_by_seed": {
+   "13": 0,
+   "14": 0,
+   "15": 0
+  },
+  "identical_region_outputs_between_seeds": {
+   "13-14": 14044,
+   "13-15": 14044,
+   "14-15": 14044
+  },
+  "regions": 14044,
+  "note_if_failed": "read the runaway rate first (protocol.md section 4)"
+ }
+}
+
+### baseline.py: seeds loop and gate
+51:    seeds = args.seeds or [decode["seed"], decode["seed"] + 1, decode["seed"] + 2]
+81:        for seed in seeds:
+103:    sys.exit(0 if summary["gate_passed"] else 2)
+108:    seeds = sorted(meta["seeds_done"], key=int)
+115:    identical = {f"{a}-{b}": sum(x == y for x, y in zip(texts[a], texts[b])) for i, a in enumerate(seeds) for b in seeds[i + 1:]}
+117:            "sd_over_mean": sd / mean if mean else None, "gate": "sd < 0.10 * mean", "gate_passed": sd < 0.10 * mean,
+119:            "identical_region_outputs_between_seeds": identical, "regions": meta["dev"]["regions"],
+
+### work/logs/batching_probe.json (batch>1 unsupported in the Paddle engine)
+{
+ "started_at": "2026-09-17 06:38:40",
+ "group": {
+  "regions": 8,
+  "prompt_tokens": 169,
+  "grid": [
+   1,
+   24,
+   26
+  ]
+ },
+ "single": {
+  "seconds": 1.7,
+  "tokens": 16
+ },
+ "patch": {
+  "original_sha256": "888fd5562d3d11704a62977b4cde85cd7c5be841122e6dcddbd64363db305f54",
+  "removed": "if batch_size != 1:\n            raise NotImplementedError"
+ },
+ "batch_2": {
+  "error": "KeyError: 'seconds'"
+ },
+ "batch_4": {
+  "error": "KeyError: 'seconds'"
+ },
+ "batch_8": {
+  "error": "KeyError: 'seconds'"
+ },
+ "ended_at": "2026-09-17 06:38:57"
+}

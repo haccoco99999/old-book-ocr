@@ -1,0 +1,110 @@
+diff --git a/skills/viet-ocr-eval/scripts/evaluate.py b/skills/viet-ocr-eval/scripts/evaluate.py
+index e995be5..b904a52 100644
+--- a/skills/viet-ocr-eval/scripts/evaluate.py
++++ b/skills/viet-ocr-eval/scripts/evaluate.py
+@@ -29,7 +29,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+ from metrics import (  # noqa: E402
+     aggregate, bootstrap_ci, paired_delta, reduction_shares, score_page,
+ )
+-from normalize import canonical  # noqa: E402
++from normalize import canonical, vi_marker_density  # noqa: E402
+ 
+ NORM_KEYS = ("collapse_whitespace", "canonical_tone", "lowercase")
+ 
+@@ -365,6 +365,7 @@ def cmd_verify(args):
+         problems.append("duplicate page_id in the test manifest")
+ 
+     nfc_bad = other_script = empty = 0
++    not_vi = []
+     for r in test:
+         t = _text(r, "ref")
+         if not t.strip():
+@@ -378,12 +379,22 @@ def cmd_verify(args):
+             )
+             if latin / len(letters) < 0.9:
+                 other_script += 1
++            elif (len(letters) >= args.vi_min_letters
++                  and vi_marker_density(t) < args.vi_threshold):
++                not_vi.append(r.get("page_id"))
+ 
+     print(f"train: {len(train)} pages / {len(tb)} books")
+     print(f"test:  {len(test)} pages / {len(sb)} books")
+     print(f"test refs not in NFC: {nfc_bad}")
+     print(f"test refs mostly non-Latin script: {other_script}")
++    print(f"test refs Latin-script but probably not Vietnamese: {len(not_vi)}"
++          + (f"  e.g. {not_vi[:5]}" if not_vi else ""))
+     print(f"test refs empty: {empty}")
++    if not_vi:
++        print("  -> These pages have almost none of the marks only Vietnamese "
++              "uses (horn, breve, hook above, dot below, đ). In VieBookRead "
++              "they are usually French or English. Inspect a few, then filter "
++              "them or make them their own stratum.")
+     if other_script:
+         print("  -> VieBookRead contains occasional non-Vietnamese pages. "
+               "Filter them or make them their own stratum; do not let them sit "
+@@ -478,6 +489,15 @@ def cmd_selftest(args):
+     check("share ws-only fix", round(r["share"]["ws_errors"], 6), 1.0)
+     check("share ws-only diacritic", round(r["share"]["diacritic"], 6), 0.0)
+ 
++    # language screening: French passes a Latin-script check but not this one
++    from normalize import vi_marker_density
++    fr = ("Le gouvernement général de l'Indochine a décidé que les écoles "
++          "seront ouvertes à tous les élèves de la colonie.")
++    vi = ("Chính phủ đã quyết định mở cửa các trường học cho tất cả học sinh "
++          "trong tỉnh, và việc này được thực hiện ngay trong năm ấy.")
++    check("french scores zero", vi_marker_density(fr), 0.0)
++    check("vietnamese scores above 1", vi_marker_density(vi) > 1.0, True)
++
+     if fails:
+         print("SELFTEST FAILED")
+         for f in fails:
+@@ -520,6 +540,11 @@ def main():
+     v = sub.add_parser("verify")
+     v.add_argument("train")
+     v.add_argument("test")
++    v.add_argument("--vi-threshold", type=float, default=1.0,
++                   help="Vietnamese-only marks per 100 letters below which a "
++                        "Latin-script page is flagged as probably not Vietnamese")
++    v.add_argument("--vi-min-letters", type=int, default=50,
++                   help="skip the language check on pages with fewer letters")
+     v.set_defaults(func=cmd_verify)
+ 
+     t = sub.add_parser("selftest")
+diff --git a/skills/viet-ocr-eval/scripts/normalize.py b/skills/viet-ocr-eval/scripts/normalize.py
+index fc229b2..901c475 100644
+--- a/skills/viet-ocr-eval/scripts/normalize.py
++++ b/skills/viet-ocr-eval/scripts/normalize.py
+@@ -176,6 +176,33 @@ def canonical(
+     return text
+ 
+ 
++# --- Language screening -------------------------------------------------------
++
++# Marks that exist in Vietnamese orthography and in neither French nor English:
++# horn, breve, hook above, dot below — plus the letter d-with-stroke.
++_VI_ONLY_MARKS = {"\u031b", "\u0306", "\u0309", "\u0323"}
++
++
++def vi_marker_density(text: str) -> float:
++    """Vietnamese-only marks per 100 letters.
++
++    Vietnamese prose scores well above 1; French and English score 0 because
++    they never use these marks. Used by `verify` to find Latin-script pages
++    that are not Vietnamese, which a Latin-script ratio cannot detect.
++    """
++    letters = 0
++    marks = 0
++    for ch in unicodedata.normalize("NFD", text):
++        if ch in _VI_ONLY_MARKS:
++            marks += 1
++        elif ch in ("\u0111", "\u0110"):
++            marks += 1
++            letters += 1
++        elif ch.isalpha():
++            letters += 1
++    return 100.0 * marks / letters if letters else 0.0
++
++
+ # --- Grapheme view (used by the diacritic-aware categoriser) -----------------
+ 
+ 

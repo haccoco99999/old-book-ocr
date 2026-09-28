@@ -1,0 +1,3 @@
+to_plaintext page-v1: 'LỊCH SỬ\nĐoạn một\nhai\n(1) chú thích'
+to_plaintext body-v1: 'Đoạn một\nhai'
+md export           : '**Đoạn** một<br>hai\n\n(1) chú thích'

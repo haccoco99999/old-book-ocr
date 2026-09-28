@@ -1,0 +1,14 @@
+case                                                         training  backend  mlops
+import difflib                                               MISSED    caught   caught
+from difflib import SequenceMatcher as SM                    MISSED    caught   caught
+from nltk import edit_distance                               caught    caught   MISSED
+import nltk | d = nltk.edit_distance(a, b)                   caught    caught   MISSED
+from nltk.metrics import distance as dd                      MISSED    MISSED   caught
+from torchmetrics.functional.text import char_error_rate     caught    caught   MISSED
+from torchmetrics.functional import char_error_rate as f     caught    caught   MISSED
+import importlib | m = importlib.import_module('jiw' + 'er') MISSED    MISSED   MISSED
+m = __import__('difflib')                                    MISSED    caught   MISSED
+import Levenshtein as L                                      caught    caught   caught
+def compute_cer(a, b): pass                                  caught    caught   caught
+def cer_of(a, b): pass                                       MISSED    MISSED   MISSED
+def get_ter(a, b): pass                                      caught    caught   caught

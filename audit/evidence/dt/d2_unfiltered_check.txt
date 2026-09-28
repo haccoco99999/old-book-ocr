@@ -1,0 +1,5 @@
+gold rows whose regions and ref are identical to the test row: 250/250
+unfiltered_proof: {"dev": {"pages_with_gt_in_split_books": 1520, "pages_in_manifest": 1520, "regions_in_final_json": 14044, "regions_in_manifest": 14044, "unfiltered": true}, "test": {"pages_with_gt_in_split_books": 3978, "pages_in_manifest": 3978, "regions_in_final_json": 37422, "regions_in_manifest": 37422, "unfiltered": true}}
+train_filter.by_reason: {'cost': 5326, 'no_azure_paragraph': 1093, 'non_vietnamese_region': 366, 'non_vietnamese_page': 187, 'length_ratio': 47, 'over_token_cap': 28} thresholds: {'cost_threshold': 0.15, 'length_ratio': [0.5, 2.0], 'max_label_tokens': 1024}
+dev: rows whose region count equals every `final` region of the page in regions_all.jsonl: 1520/1520; units: {'paragraph'}; any n_units_rejected field: False
+test: rows whose region count equals every `final` region of the page in regions_all.jsonl: 3978/3978; units: {'paragraph'}; any n_units_rejected field: False

@@ -1,0 +1,6 @@
+long (>=120 char) region texts shared across splits, grouped by (split,book) sets:
+      1  (('test', '097'), ('train', '095'))
+      1  (('test', '097'), ('train', '109'))
+total shared long region texts: 2
+[('test', '097/page_317'), ('train', '095/page_30')] | tiếng « khoa học » ở đây xin hiểu cho nghĩa rộng. nó là phương pháp tổ chức, là sự phân ch
+[('test', '097/page_155'), ('train', '109/page_130')] | ta yêu nhau xa cũng nên gần, tham bên phú quí, phụ bần khó coi. chớ ta yêu nhau duyên phận

@@ -1,0 +1,52 @@
+## keys re-hashed by serve.py preflight (promotion record model_files), final version:
+adapter/SHA256SUMS
+adapter/lora_config.json
+adapter/lora_model_state.pdparams
+base_model/LICENSE
+base_model/README.md
+base_model/added_tokens.json
+base_model/chat_template.jinja
+base_model/config.json
+base_model/configuration_paddleocr_vl.py
+base_model/generation_config.json
+base_model/image_processing_paddleocr_vl.py
+base_model/inference.yml
+base_model/model.safetensors
+base_model/modeling_paddleocr_vl.py
+base_model/preprocessor_config.json
+base_model/processing_paddleocr_vl.py
+base_model/processor_config.json
+base_model/special_tokens_map.json
+base_model/tokenizer.json
+base_model/tokenizer.model
+base_model/tokenizer_config.json
+run/resolved_config.yaml
+training/decode.json
+
+## code executed by the served recognizer / harness that is NOT in the record:
+  training/ocrtrain/infer.py  (exists: yes)
+  training/ocrtrain/formats.py  (exists: yes)
+  training/ocrtrain/bridge.py  (exists: yes)
+  training/ocrtrain/compat.py  (exists: yes)
+  training/ocrtrain/sysenv.py  (exists: yes)
+  training/evaluate_final.py  (exists: yes)
+  backend/recognizer_server/recognition_server.py  (exists: yes)
+  third_party/ERNIE  (exists: yes)
+  .venv-train/lib/python3.12/site-packages/paddleformers  (exists: yes)
+  third_party/syslibs  (exists: yes)
+
+## base_model remote-code .py files that ARE hashed are HF/transformers files; the Paddle path imports ERNIE classes instead:
+58:    from ernie.tokenizer import Ernie4_5_Tokenizer
+59:    from erniekit.hparams.preprocess_args import End2EndProcessorArguments
+143:    from ernie.configuration_paddleocr_vl import PaddleOCRVLConfig
+144:    from ernie.modeling_paddleocr_vl import PaddleOCRVLForConditionalGeneration
+
+## serve.py preflight does not compare record['git'] (commits) with the current trees:
+  (no 'git' in mlops/mlops/serve.py)
+
+## launch paths without preflight:
+mlops/mlops/serve.py:72:        servers.start_recognizer(spec, a.version, a.port, a.encode_workers, a.gpu_cap_mb)
+mlops/mlops/servers.py:36:    return manage.start_recognizer(model_spec, name, port, encode_workers, gpu_cap_mb)
+mlops/mlops/promotion.py:278:        servers.start_recognizer(spec, version["name"], start_port)
+mlops/mlops/testeval.py:265:            servers.start_recognizer(spec, name, port)
+mlops/mlops/testeval.py:432:            servers.start_recognizer(spec, name, port)

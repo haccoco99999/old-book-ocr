@@ -1,0 +1,269 @@
+$ grep -nE "\"[\^~]|: \"(latest|\*|next|beta)" package.json
+exit=1 (1 = no range specifiers found)
+
+$ npm ls antd @ant-design/icons @ant-design/v5-patch-for-react-19 @ant-design/pro-components react react-dom --all
+master-2-frontend@0.1.0 /home/huy/master/frontend
+├─┬ @ant-design/icons@6.3.4 overridden
+│ ├─┬ @rc-component/util@1.13.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├── react-dom@19.2.8 deduped
+│ └── react@19.2.8 deduped
+├─┬ @ant-design/pro-components@3.1.14-7 overridden
+│ ├─┬ @ant-design/cssinjs-utils@2.1.2
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @ant-design/cssinjs@2.1.2
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├── @ant-design/icons@6.3.4 deduped
+│ ├─┬ @dnd-kit/core@6.3.1
+│ │ ├─┬ @dnd-kit/accessibility@3.1.1
+│ │ │ └── react@19.2.8 deduped
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @dnd-kit/modifiers@9.0.0
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @dnd-kit/sortable@10.0.0
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @dnd-kit/utilities@3.2.2
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/form@1.8.6
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/resize-observer@1.1.2
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/table@1.12.0
+│ │ ├─┬ @rc-component/context@2.0.2
+│ │ │ ├── react-dom@19.2.8 deduped
+│ │ │ └── react@19.2.8 deduped
+│ │ ├─┬ @rc-component/virtual-list@1.5.2
+│ │ │ ├── react-dom@19.2.8 deduped
+│ │ │ └── react@19.2.8 deduped
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├── antd@6.6.5 deduped
+│ ├── react-dom@19.2.8 deduped
+│ ├─┬ react-draggable@4.4.6
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├── react@19.2.8 deduped
+│ └─┬ swr@2.5.1
+│   ├── react@19.2.8 deduped
+│   └─┬ use-sync-external-store@1.7.0
+│     └── react@19.2.8 deduped
+├─┬ @testing-library/react@16.3.3
+│ ├── react-dom@19.2.8 deduped
+│ └── react@19.2.8 deduped
+├─┬ @umijs/max@4.7.20
+│ ├─┬ @umijs/plugins@4.7.20
+│ │ ├─┬ @ahooksjs/use-request@2.8.15
+│ │ │ └── react@16.14.0
+│ │ ├─┬ @ant-design/cssinjs@1.24.0
+│ │ │ ├─┬ rc-util@5.44.4
+│ │ │ │ ├── react-dom@19.2.8 deduped
+│ │ │ │ └── react@19.2.8 deduped
+│ │ │ ├─┬ react-dom@16.14.0
+│ │ │ │ └── react@16.14.0 deduped
+│ │ │ └── react@16.14.0 deduped
+│ │ ├── @ant-design/icons@6.3.4 deduped
+│ │ ├── @ant-design/pro-components@3.1.14-7 deduped
+│ │ ├─┬ @tanstack/react-query-devtools@4.44.0
+│ │ │ ├── react-dom@16.14.0 deduped
+│ │ │ └── react@16.14.0 deduped
+│ │ ├─┬ @tanstack/react-query@4.44.0
+│ │ │ ├── react-dom@16.14.0 deduped
+│ │ │ └── react@16.14.0 deduped
+│ │ ├─┬ @umijs/valtio@1.0.4
+│ │ │ └─┬ valtio@1.11.2
+│ │ │   ├── react@19.2.8 deduped
+│ │ │   └─┬ use-sync-external-store@1.2.0
+│ │ │     └── react@19.2.8 deduped invalid: "^16.6.0 || ^17.0.0 || ^18.0.0" from node_modules/@umijs/renderer-react/node_modules/react-helmet-async, "^16.8.0 || ^17.0.0 || ^18.0.0" from node_modules/valtio/node_modules/use-sync-external-store
+│ │ ├─┬ dva-immer@1.0.2
+│ │ │ └─┬ dva@2.5.0-beta.2
+│ │ │   ├── react-dom@16.14.0 deduped
+│ │ │   ├─┬ react-redux@5.1.2
+│ │ │   │ └── react@16.14.0 deduped
+│ │ │   ├─┬ react-router-dom@4.3.1
+│ │ │   │ ├─┬ react-router@4.3.1
+│ │ │   │ │ └── react@16.14.0 deduped
+│ │ │   │ └── react@16.14.0 deduped
+│ │ │   ├─┬ react-router-redux@5.0.0-alpha.9
+│ │ │   │ ├─┬ react-router@4.3.1
+│ │ │   │ │ └── react@19.2.8 deduped invalid: "^16.6.0 || ^17.0.0 || ^18.0.0" from node_modules/@umijs/renderer-react/node_modules/react-helmet-async, "^16.8.0 || ^17.0.0 || ^18.0.0" from node_modules/valtio/node_modules/use-sync-external-store
+│ │ │   │ └── react@19.2.8 deduped invalid: "^16.6.0 || ^17.0.0 || ^18.0.0" from node_modules/@umijs/renderer-react/node_modules/react-helmet-async, "^16.8.0 || ^17.0.0 || ^18.0.0" from node_modules/valtio/node_modules/use-sync-external-store
+│ │ │   └── react@16.14.0 deduped
+│ │ ├─┬ react-intl@3.12.1
+│ │ │ └── react@16.14.0 deduped
+│ │ ├─┬ react-redux@8.1.3
+│ │ │ ├── react-dom@16.14.0 deduped
+│ │ │ └── react@16.14.0 deduped
+│ │ └─┬ styled-components@6.1.1
+│ │   ├── react-dom@16.14.0 deduped
+│ │   └── react@16.14.0 deduped
+│ ├── antd@6.6.5 deduped
+│ └─┬ umi@4.7.20
+│   ├─┬ @umijs/preset-umi@4.7.20
+│   │ ├─┬ @umijs/bundler-utoopack@4.7.20
+│   │ │ └─┬ @utoo/pack@1.5.20
+│   │ │   └─┬ styled-jsx@5.1.7
+│   │ │     └── react@19.2.8 deduped invalid: "^16.6.0 || ^17.0.0 || ^18.0.0" from node_modules/@umijs/renderer-react/node_modules/react-helmet-async, "^16.8.0 || ^17.0.0 || ^18.0.0" from node_modules/valtio/node_modules/use-sync-external-store
+│   │ ├─┬ click-to-react-component@1.1.3
+│   │ │ ├─┬ @floating-ui/react-dom-interactions@0.3.1
+│   │ │ │ ├─┬ @floating-ui/react-dom@0.6.3
+│   │ │ │ │ ├── react-dom@19.2.8 deduped invalid: "^16.6.0 || ^17.0.0 || ^18.0.0" from node_modules/@umijs/renderer-react/node_modules/react-helmet-async
+│   │ │ │ │ └── react@19.2.8 deduped invalid: "^16.6.0 || ^17.0.0 || ^18.0.0" from node_modules/@umijs/renderer-react/node_modules/react-helmet-async, "^16.8.0 || ^17.0.0 || ^18.0.0" from node_modules/valtio/node_modules/use-sync-external-store
+│   │ │ │ └─┬ use-isomorphic-layout-effect@1.2.1
+│   │ │ │   └── react@19.2.8 deduped invalid: "^16.6.0 || ^17.0.0 || ^18.0.0" from node_modules/@umijs/renderer-react/node_modules/react-helmet-async, "^16.8.0 || ^17.0.0 || ^18.0.0" from node_modules/valtio/node_modules/use-sync-external-store
+│   │ │ └── react@19.2.8 deduped
+│   │ ├─┬ react-dom@18.3.1
+│   │ │ └── react@18.3.1 deduped
+│   │ ├─┬ react-router-dom@6.3.0
+│   │ │ ├── react-dom@19.2.8 deduped
+│   │ │ └── react@19.2.8 deduped
+│   │ ├─┬ react-router@6.3.0
+│   │ │ └── react@19.2.8 deduped
+│   │ └── react@18.3.1
+│   ├─┬ @umijs/renderer-react@4.7.20
+│   │ ├─┬ @loadable/component@5.15.2
+│   │ │ └── react@19.2.8 deduped
+│   │ ├── react-dom@19.2.8 deduped
+│   │ ├─┬ react-helmet-async@1.3.0
+│   │ │ ├── react-dom@19.2.8 deduped invalid: "^16.6.0 || ^17.0.0 || ^18.0.0" from node_modules/@umijs/renderer-react/node_modules/react-helmet-async
+│   │ │ └── react@19.2.8 deduped invalid: "^16.6.0 || ^17.0.0 || ^18.0.0" from node_modules/@umijs/renderer-react/node_modules/react-helmet-async
+│   │ └── react@19.2.8 deduped
+│   └─┬ @umijs/server@4.7.20
+│     ├─┬ react-dom@18.3.1
+│     │ └── react@18.3.1 deduped
+│     └── react@18.3.1
+├─┬ antd@6.6.5
+│ ├── @ant-design/icons@6.3.4 deduped
+│ ├─┬ @ant-design/react-slick@2.0.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/cascader@1.22.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/checkbox@2.0.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/collapse@1.2.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/color-picker@3.1.1
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/dialog@1.10.0
+│ │ ├─┬ @rc-component/portal@2.2.1
+│ │ │ ├── react-dom@19.2.8 deduped
+│ │ │ └── react@19.2.8 deduped
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/drawer@1.4.2
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/dropdown@1.0.3
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/image@1.10.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/input-number@1.6.2
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/input@1.3.1
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/listy@1.2.3
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/mentions@1.12.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/menu@1.5.0
+│ │ ├─┬ @rc-component/overflow@1.0.1
+│ │ │ ├── react-dom@19.2.8 deduped
+│ │ │ └── react@19.2.8 deduped
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/motion@1.3.3
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/mutate-observer@2.0.1
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/notification@2.0.8
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/pagination@1.4.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/picker@1.12.2
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/progress@1.0.3
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/qrcode@2.0.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/rate@1.0.1
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/segmented@1.4.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/select@1.10.1
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/slider@1.1.1
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/steps@1.2.3
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/switch@1.0.3
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/table@1.11.1
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/tabs@1.13.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/tooltip@1.5.2
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/tour@2.4.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/tree-select@1.16.1
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/tree@1.4.0
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/trigger@3.10.1
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├─┬ @rc-component/upload@1.1.1
+│ │ ├── react-dom@19.2.8 deduped
+│ │ └── react@19.2.8 deduped
+│ ├── react-dom@19.2.8 deduped
+│ └── react@19.2.8 deduped
+├─┬ react-dom@19.2.8
+│ └── react@19.2.8 deduped
+└── react@19.2.8
+
+npm error code ELSPROBLEMS
+npm error invalid: react-dom@19.2.8 /home/huy/master/frontend/node_modules/react-dom
+npm error invalid: react@19.2.8 /home/huy/master/frontend/node_modules/react
+npm error A complete log of this run can be found in: /home/huy/.npm/_logs/2026-09-25T04_25_18_946Z-debug-0.log
+exit=1
+
+$ npm ls @ant-design/v5-patch-for-react-19 --all
+master-2-frontend@0.1.0 /home/huy/master/frontend
+└── (empty)
+
+exit=1

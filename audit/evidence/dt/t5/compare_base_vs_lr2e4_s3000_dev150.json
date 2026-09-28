@@ -1,0 +1,101 @@
+{
+  "cer_micro": {
+    "metric": "cer_micro",
+    "n_paired_pages": 150,
+    "base": 0.037798221561643135,
+    "adapted": 0.016185326602260207,
+    "absolute_delta": -0.021612894959382928,
+    "relative_delta": -0.5717966101694915,
+    "relative_delta_ci95": [
+      -0.6210023866348449,
+      -0.522212543554007
+    ],
+    "p_adapted_better": 1.0
+  },
+  "der": {
+    "metric": "der",
+    "n_paired_pages": 150,
+    "base": 0.09119021440351842,
+    "adapted": 0.023868425875022907,
+    "absolute_delta": -0.06732178852849552,
+    "relative_delta": -0.7382567194172319,
+    "relative_delta_ci95": [
+      -0.7786259541984731,
+      -0.6997389033942559
+    ],
+    "p_adapted_better": 1.0
+  },
+  "ter": {
+    "metric": "ter",
+    "n_paired_pages": 150,
+    "base": 0.09885879279527018,
+    "adapted": 0.029458270314863193,
+    "absolute_delta": -0.06940052248040698,
+    "relative_delta": -0.7020166898470097,
+    "relative_delta_ci95": [
+      -0.7509462528387585,
+      -0.6574202496532593
+    ],
+    "p_adapted_better": 1.0
+  },
+  "wer_micro": {
+    "metric": "wer_micro",
+    "n_paired_pages": 150,
+    "base": 0.14457226221510056,
+    "adapted": 0.06311434242938799,
+    "absolute_delta": -0.08145791978571257,
+    "relative_delta": -0.5634408602150538,
+    "relative_delta_ci95": [
+      -0.5963551064597618,
+      -0.5288567384808932
+    ],
+    "p_adapted_better": 1.0
+  },
+  "wser": {
+    "metric": "wser",
+    "n_paired_pages": 150,
+    "base": 0.023786093176199504,
+    "adapted": 0.0158893982670475,
+    "absolute_delta": -0.007896694909152003,
+    "relative_delta": -0.3319878910191725,
+    "relative_delta_ci95": [
+      -0.42741341193809873,
+      -0.20320197044334973
+    ],
+    "p_adapted_better": 1.0
+  },
+  "reduction_shares": {
+    "total_reduction": 4217,
+    "reduction": {
+      "tone_sub": 2019,
+      "letter_sub": 920,
+      "base_sub": 431,
+      "base_ins": 466,
+      "base_del": 52,
+      "ws_errors": 329,
+      "runaway": 0,
+      "diacritic": 2939
+    },
+    "share": {
+      "tone_sub": 0.4787763813137301,
+      "letter_sub": 0.21816457197059522,
+      "base_sub": 0.10220535926013753,
+      "base_ins": 0.11050509841119278,
+      "base_del": 0.012331041024424947,
+      "ws_errors": 0.07801754801991938,
+      "runaway": 0.0,
+      "diacritic": 0.6969409532843254
+    },
+    "n_paired_pages": 150,
+    "diacritic_share_ci95": [
+      0.5934548649242258,
+      0.7801518133258364
+    ],
+    "p_diacritic_largest": 1.0,
+    "n_valid_resamples": 1000
+  },
+  "markup_chars": {
+    "base": 14,
+    "adapted": 0
+  }
+}

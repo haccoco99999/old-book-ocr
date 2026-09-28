@@ -1,0 +1,5 @@
+dev: books=11 raw_page_files=1526 raw_pages_with_regions=1520 manifest_pages=1520 raw_regions=14044 manifest_regions=14044 pages_missing=0 [] pages_with_region_count_diff=0 pages_with_region_text_multiset_diff=0
+test: books=23 raw_page_files=4065 raw_pages_with_regions=3978 manifest_pages=3978 raw_regions=37422 manifest_regions=37422 pages_missing=0 [] pages_with_region_count_diff=0 pages_with_region_text_multiset_diff=0
+gold: books=23 raw_page_files=4065 raw_pages_with_regions=250 manifest_pages=250 raw_regions=2229 manifest_regions=2229 pages_missing=0 [] pages_with_region_count_diff=0 pages_with_region_text_multiset_diff=0
+data_manifest corpus: {'books': 123, 'pages': 25585, 'pages_with_gt': 25278, 'pages_without_gt_excluded': 307, 'final_regions': 231541}
+unfiltered_proof: {"dev": {"pages_with_gt_in_split_books": 1520, "pages_in_manifest": 1520, "regions_in_final_json": 14044, "regions_in_manifest": 14044, "unfiltered": true}, "test": {"pages_with_gt_in_split_books": 3978, "pages_in_manifest": 3978, "regions_in_final_json": 37422, "regions_in_manifest": 37422, "unfiltered": true}}

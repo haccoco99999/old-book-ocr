@@ -1,0 +1,7 @@
+## backend NFC call sites
+backend/src/ocr_core/plaintext.py:121:    4. Join the kept blocks with "\\n", as the locked evaluation joined regions, and NFC-normalise.
+backend/src/ocr_core/plaintext.py:143:    out = unicodedata.normalize("NFC", "\n".join(parts))
+## training NFC
+training/ocrdata/align.py:160:    line_texts = [unicodedata.normalize("NFC", t) for t in line_texts]
+training/ocrdata/align.py:161:    gt = unicodedata.normalize("NFC", gt)
+## mlops NFC

@@ -1,0 +1,3004 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OCR platform",
+    "version": "0.3.0"
+  },
+  "paths": {
+    "/healthz": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Healthz",
+        "description": "Liveness: the process is serving. Checks no dependency, so a database outage never\ngets the API restarted in a loop.",
+        "operationId": "healthz",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Liveness"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/readyz": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Readyz",
+        "operationId": "readyz",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Metrics",
+        "operationId": "metrics",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents": {
+      "post": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "Upload Document",
+        "operationId": "upload_document",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_document"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ingested",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "List Documents",
+        "operationId": "list_documents",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents/{document_id}": {
+      "get": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "Get Document",
+        "operationId": "get_document",
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Document Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "Delete Document",
+        "description": "Hard delete: the document, its pages, every revision (machine and human), timings, usability\nevents, jobs and queue rows, in one transaction (ON DELETE CASCADE), then its image directory.\nOnly a content-free audit row remains: entity id, action, actor, time. No filename, no text.\n\nRefused (409) while jobs for the document are queued or running, unless force=true, and while\nit has usability events, unless events_exported=true: export them first with\nGET /exports/usability.csv?document_id=<id>, because deletion destroys them.\nResponse: counts only.",
+        "operationId": "delete_document",
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Document Id"
+            }
+          },
+          {
+            "name": "force",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Force"
+            }
+          },
+          {
+            "name": "events_exported",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Events Exported"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentDeleted"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pages/{page_id}/image": {
+      "get": {
+        "tags": [
+          "documents"
+        ],
+        "summary": "Get Page Image",
+        "operationId": "get_page_image",
+        "parameters": [
+          {
+            "name": "page_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Page Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A file download (Content-Disposition: attachment)",
+            "content": {
+              "image/jpeg": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "image/png": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/model-versions": {
+      "get": {
+        "tags": [
+          "jobs"
+        ],
+        "summary": "List Model Versions",
+        "operationId": "list_model_versions",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelVersionList"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "jobs"
+        ],
+        "summary": "Register Model Version",
+        "description": "Register a model version. Re-registering identical fields returns the existing row; the same\nname with different fields is refused (409), because rows are frozen once they exist.",
+        "operationId": "register_model_version",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModelVersionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelVersionOut"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Already registered with identical fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelVersionOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jobs": {
+      "post": {
+        "tags": [
+          "jobs"
+        ],
+        "summary": "Create Job",
+        "description": "Queue OCR for a document. `Idempotency-Key` is required; repeating a request with the same\nkey returns the same job (200) instead of creating another (201).",
+        "operationId": "create_job",
+        "parameters": [
+          {
+            "name": "idempotency-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOut"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The job this Idempotency-Key already created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "jobs"
+        ],
+        "summary": "List Jobs",
+        "description": "Jobs, newest first, with progress and timings, for the queue view.",
+        "operationId": "list_jobs",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "queued",
+                    "running",
+                    "retry_wait",
+                    "succeeded",
+                    "failed"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "document_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Document Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jobs/{job_id}": {
+      "get": {
+        "tags": [
+          "jobs"
+        ],
+        "summary": "Get Job",
+        "operationId": "get_job",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jobs/{job_id}/retry": {
+      "post": {
+        "tags": [
+          "jobs"
+        ],
+        "summary": "Retry Job",
+        "description": "Queue a new job for a failed job's document, model version, page range and text policy.\n\nThe failed job stays as it is, error included. The worker skips pages that already have a\nmachine revision, so the retry does only what is left. One retry per job: its idempotency key\nis `retry:<job_id>`, so repeating the call returns the same retry job (200).",
+        "operationId": "retry_job",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The retry job was queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOut"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "This job was already retried: the existing retry job",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pages/{page_id}": {
+      "get": {
+        "tags": [
+          "review"
+        ],
+        "summary": "Get Page",
+        "description": "Everything the side-by-side view needs: image URL, the latest text, and the history.",
+        "operationId": "get_page",
+        "parameters": [
+          {
+            "name": "page_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Page Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pages/{page_id}/revisions/{rev_no}": {
+      "get": {
+        "tags": [
+          "review"
+        ],
+        "summary": "Get Revision",
+        "operationId": "get_revision",
+        "parameters": [
+          {
+            "name": "page_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Page Id"
+            }
+          },
+          {
+            "name": "rev_no",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Rev No"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevisionDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pages/{page_id}/revisions": {
+      "post": {
+        "tags": [
+          "review"
+        ],
+        "summary": "Save Correction",
+        "operationId": "save_correction",
+        "parameters": [
+          {
+            "name": "page_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Page Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevisionIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Saved as a new revision",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevisionSummary"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "The text equals the parent revision: nothing saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorrectionUnchanged"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/documents/{document_id}/export": {
+      "get": {
+        "tags": [
+          "exports"
+        ],
+        "summary": "Export Document",
+        "operationId": "export_document",
+        "parameters": [
+          {
+            "name": "document_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Document Id"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "txt",
+                "md",
+                "json"
+              ],
+              "type": "string",
+              "default": "txt",
+              "title": "Format"
+            }
+          },
+          {
+            "name": "revision",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "latest",
+                "machine"
+              ],
+              "type": "string",
+              "default": "latest",
+              "title": "Revision"
+            }
+          },
+          {
+            "name": "policy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "to_plaintext() policy for machine text",
+              "title": "Policy"
+            },
+            "description": "to_plaintext() policy for machine text"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A file download (Content-Disposition: attachment)",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/markdown": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/review-events": {
+      "post": {
+        "tags": [
+          "usability"
+        ],
+        "summary": "Post Review Events",
+        "description": "Store a batch of events; `server_ts` is set on receipt. A re-sent event (same session_id and\nclient_event_id) is ignored, so a retried batch cannot double-count.",
+        "operationId": "post_review_events",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventBatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventsAccepted"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exports/usability.csv": {
+      "get": {
+        "tags": [
+          "usability"
+        ],
+        "summary": "Usability Csv",
+        "description": "kind=summary: one row per participant and page (times as above). kind=events: the raw events.",
+        "operationId": "usability_csv",
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "summary",
+                "events"
+              ],
+              "type": "string",
+              "default": "summary",
+              "title": "Kind"
+            }
+          },
+          {
+            "name": "participant_code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^P[0-9]{2,3}$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Participant Code"
+            }
+          },
+          {
+            "name": "document_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Document Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A file download (Content-Disposition: attachment)",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exports/eval-manifest": {
+      "get": {
+        "tags": [
+          "exports"
+        ],
+        "summary": "Eval Manifest",
+        "operationId": "eval_manifest",
+        "parameters": [
+          {
+            "name": "model_version_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Model Version Id"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "machine",
+                "human"
+              ],
+              "type": "string",
+              "default": "machine",
+              "title": "Source"
+            }
+          },
+          {
+            "name": "document_ids",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "comma-separated; default: every document of the model version",
+              "title": "Document Ids"
+            },
+            "description": "comma-separated; default: every document of the model version"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Block": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "bbox": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Bbox",
+            "description": "[x0, y0, x1, y1] in page pixels"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "label",
+          "bbox"
+        ],
+        "title": "Block",
+        "description": "One layout region of a machine revision. Kept open: recogniser metadata varies."
+      },
+      "Body_upload_document": {
+        "properties": {
+          "files": {
+            "items": {
+              "type": "string",
+              "contentMediaType": "application/octet-stream"
+            },
+            "type": "array",
+            "title": "Files",
+            "description": "One PDF, or one or more images; pages keep the order given."
+          },
+          "external_book_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Book Id",
+            "description": "VieBookRead book id, for evaluation"
+          },
+          "external_page_id": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Page Id",
+            "description": "VieBookRead page ids, one per page, in page order"
+          }
+        },
+        "type": "object",
+        "required": [
+          "files"
+        ],
+        "title": "Body_upload_document"
+      },
+      "CorrectionUnchanged": {
+        "properties": {
+          "unchanged": {
+            "type": "boolean",
+            "const": true,
+            "title": "Unchanged"
+          },
+          "rev_no": {
+            "type": "integer",
+            "title": "Rev No"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "unchanged",
+          "rev_no"
+        ],
+        "title": "CorrectionUnchanged"
+      },
+      "DeleteCounts": {
+        "properties": {
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          },
+          "revisions": {
+            "type": "integer",
+            "title": "Revisions"
+          },
+          "timings": {
+            "type": "integer",
+            "title": "Timings"
+          },
+          "review_events": {
+            "type": "integer",
+            "title": "Review Events"
+          },
+          "jobs": {
+            "type": "integer",
+            "title": "Jobs"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "pages",
+          "revisions",
+          "timings",
+          "review_events",
+          "jobs"
+        ],
+        "title": "DeleteCounts"
+      },
+      "DocumentDeleted": {
+        "properties": {
+          "deleted": {
+            "type": "integer",
+            "title": "Deleted"
+          },
+          "removed": {
+            "$ref": "#/components/schemas/DeleteCounts"
+          },
+          "files_removed": {
+            "type": "boolean",
+            "title": "Files Removed"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "deleted",
+          "removed",
+          "files_removed"
+        ],
+        "title": "DocumentDeleted"
+      },
+      "DocumentList": {
+        "properties": {
+          "documents": {
+            "items": {
+              "$ref": "#/components/schemas/DocumentListItem"
+            },
+            "type": "array",
+            "title": "Documents"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "number of documents, for pagination"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "documents",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "DocumentList"
+      },
+      "DocumentListItem": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "mime_type": {
+            "type": "string",
+            "title": "Mime Type"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "extracting",
+              "ready",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "page_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page Count"
+          },
+          "external_book_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Book Id"
+          },
+          "model_version_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "filename",
+          "mime_type",
+          "status",
+          "page_count",
+          "external_book_id",
+          "model_version_id",
+          "created_at"
+        ],
+        "title": "DocumentListItem"
+      },
+      "DocumentOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "content_hash": {
+            "type": "string",
+            "title": "Content Hash"
+          },
+          "mime_type": {
+            "type": "string",
+            "title": "Mime Type"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "extracting",
+              "ready",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "page_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page Count"
+          },
+          "external_book_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Book Id"
+          },
+          "model_version_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version Id",
+            "description": "set by the first job (D2: one model version per document)"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "pages": {
+            "items": {
+              "$ref": "#/components/schemas/PageSummary"
+            },
+            "type": "array",
+            "title": "Pages"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "filename",
+          "content_hash",
+          "mime_type",
+          "status",
+          "page_count",
+          "external_book_id",
+          "model_version_id",
+          "created_at",
+          "pages"
+        ],
+        "title": "DocumentOut"
+      },
+      "EventBatch": {
+        "properties": {
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/EventIn"
+            },
+            "type": "array",
+            "maxItems": 500,
+            "title": "Events"
+          }
+        },
+        "type": "object",
+        "required": [
+          "events"
+        ],
+        "title": "EventBatch"
+      },
+      "EventIn": {
+        "properties": {
+          "page_id": {
+            "type": "integer",
+            "title": "Page Id"
+          },
+          "revision_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revision Id"
+          },
+          "participant_code": {
+            "type": "string",
+            "pattern": "^P[0-9]{2,3}$",
+            "title": "Participant Code",
+            "description": "an opaque code such as P03, never a name"
+          },
+          "session_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Session Id"
+          },
+          "client_event_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Client Event Id"
+          },
+          "event": {
+            "type": "string",
+            "enum": [
+              "open",
+              "first_edit",
+              "save",
+              "leave",
+              "idle_start",
+              "idle_end"
+            ],
+            "title": "Event"
+          },
+          "client_ts": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Client Ts"
+          },
+          "client_mono_ms": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Mono Ms",
+            "description": "performance.now() in the tab: a monotonic clock that starts with the tab, so the order of a session's events survives a wall-clock change. Comparable only within one session_id."
+          }
+        },
+        "type": "object",
+        "required": [
+          "page_id",
+          "participant_code",
+          "session_id",
+          "client_event_id",
+          "event",
+          "client_ts"
+        ],
+        "title": "EventIn"
+      },
+      "EventsAccepted": {
+        "properties": {
+          "accepted": {
+            "type": "integer",
+            "title": "Accepted"
+          },
+          "duplicates": {
+            "type": "integer",
+            "title": "Duplicates",
+            "description": "events already stored (same session_id and client_event_id)"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "accepted",
+          "duplicates"
+        ],
+        "title": "EventsAccepted"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "JobError": {
+        "properties": {
+          "class": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Class",
+            "description": "exception class"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "retryable": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retryable"
+          },
+          "attempt": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attempt"
+          },
+          "page_no": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page No"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "JobError",
+        "description": "The worker's record of the last failure. Kept open (extra fields allowed): it is diagnostic."
+      },
+      "JobIn": {
+        "properties": {
+          "document_id": {
+            "type": "integer",
+            "title": "Document Id"
+          },
+          "model_version": {
+            "type": "string",
+            "title": "Model Version",
+            "description": "model_versions.name"
+          },
+          "first_page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Page"
+          },
+          "last_page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Page"
+          },
+          "text_policy": {
+            "type": "string",
+            "title": "Text Policy",
+            "default": "body-v1"
+          },
+          "bench_run_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bench Run Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "document_id",
+          "model_version"
+        ],
+        "title": "JobIn"
+      },
+      "JobList": {
+        "properties": {
+          "jobs": {
+            "items": {
+              "$ref": "#/components/schemas/JobListItem"
+            },
+            "type": "array",
+            "title": "Jobs"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "jobs",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "JobList"
+      },
+      "JobListItem": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "document_id": {
+            "type": "integer",
+            "title": "Document Id"
+          },
+          "model_version_id": {
+            "type": "integer",
+            "title": "Model Version Id"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "title": "Idempotency Key"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "retry_wait",
+              "succeeded",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "attempts": {
+            "type": "integer",
+            "title": "Attempts"
+          },
+          "text_policy": {
+            "type": "string",
+            "title": "Text Policy"
+          },
+          "bench_run_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bench Run Id"
+          },
+          "first_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Page"
+          },
+          "last_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Page"
+          },
+          "enqueued_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Enqueued At"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At",
+            "description": "start of the first attempt"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "queue_wait_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Queue Wait S",
+            "description": "started_at - enqueued_at, seconds. While the job is still queued: as_of - enqueued_at."
+          },
+          "service_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Service S",
+            "description": "finished_at - started_at, seconds (every attempt and any retry backoff in between). While running: as_of - started_at. Null before the first attempt starts."
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date-time",
+            "title": "As Of",
+            "description": "database time the durations were measured at"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "retry_of": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retry Of",
+            "description": "the failed job this one retries (POST /jobs/{job_id}/retry)"
+          },
+          "progress": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobProgress"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "only on GET /jobs/{job_id} and GET /jobs"
+          },
+          "document_filename": {
+            "type": "string",
+            "title": "Document Filename"
+          },
+          "model_version": {
+            "type": "string",
+            "title": "Model Version",
+            "description": "model_versions.name"
+          },
+          "retried_by": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retried By",
+            "description": "the job created by retrying this one, if any"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "document_id",
+          "model_version_id",
+          "idempotency_key",
+          "status",
+          "attempts",
+          "text_policy",
+          "bench_run_id",
+          "first_page",
+          "last_page",
+          "enqueued_at",
+          "started_at",
+          "finished_at",
+          "queue_wait_s",
+          "service_s",
+          "as_of",
+          "error",
+          "retry_of",
+          "document_filename",
+          "model_version",
+          "retried_by"
+        ],
+        "title": "JobListItem"
+      },
+      "JobOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "document_id": {
+            "type": "integer",
+            "title": "Document Id"
+          },
+          "model_version_id": {
+            "type": "integer",
+            "title": "Model Version Id"
+          },
+          "idempotency_key": {
+            "type": "string",
+            "title": "Idempotency Key"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "running",
+              "retry_wait",
+              "succeeded",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "attempts": {
+            "type": "integer",
+            "title": "Attempts"
+          },
+          "text_policy": {
+            "type": "string",
+            "title": "Text Policy"
+          },
+          "bench_run_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bench Run Id"
+          },
+          "first_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Page"
+          },
+          "last_page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Page"
+          },
+          "enqueued_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Enqueued At"
+          },
+          "started_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Started At",
+            "description": "start of the first attempt"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "queue_wait_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Queue Wait S",
+            "description": "started_at - enqueued_at, seconds. While the job is still queued: as_of - enqueued_at."
+          },
+          "service_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Service S",
+            "description": "finished_at - started_at, seconds (every attempt and any retry backoff in between). While running: as_of - started_at. Null before the first attempt starts."
+          },
+          "as_of": {
+            "type": "string",
+            "format": "date-time",
+            "title": "As Of",
+            "description": "database time the durations were measured at"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobError"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "retry_of": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retry Of",
+            "description": "the failed job this one retries (POST /jobs/{job_id}/retry)"
+          },
+          "progress": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JobProgress"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "only on GET /jobs/{job_id} and GET /jobs"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "document_id",
+          "model_version_id",
+          "idempotency_key",
+          "status",
+          "attempts",
+          "text_policy",
+          "bench_run_id",
+          "first_page",
+          "last_page",
+          "enqueued_at",
+          "started_at",
+          "finished_at",
+          "queue_wait_s",
+          "service_s",
+          "as_of",
+          "error",
+          "retry_of"
+        ],
+        "title": "JobOut"
+      },
+      "JobProgress": {
+        "properties": {
+          "pages_total": {
+            "type": "integer",
+            "title": "Pages Total"
+          },
+          "pages_done": {
+            "type": "integer",
+            "title": "Pages Done",
+            "description": "pages in the job's range that have a machine revision (rev 0)"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "pages_total",
+          "pages_done"
+        ],
+        "title": "JobProgress"
+      },
+      "Liveness": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "Liveness"
+      },
+      "ModelVersionIn": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{0,99}$",
+            "title": "Name",
+            "description": "Exactly the name the recognition server reports on /v1/models"
+          },
+          "base_model_ref": {
+            "type": "string",
+            "title": "Base Model Ref"
+          },
+          "base_commit_sha": {
+            "type": "string",
+            "title": "Base Commit Sha"
+          },
+          "adapter_sha256": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Adapter Sha256"
+          },
+          "weights_uri": {
+            "type": "string",
+            "title": "Weights Uri"
+          },
+          "weights_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "title": "Weights Sha256"
+          },
+          "preprocess_cfg": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Preprocess Cfg"
+          },
+          "decode_cfg": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Decode Cfg"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "base_model_ref",
+          "base_commit_sha",
+          "weights_uri",
+          "weights_sha256",
+          "preprocess_cfg",
+          "decode_cfg"
+        ],
+        "title": "ModelVersionIn"
+      },
+      "ModelVersionList": {
+        "properties": {
+          "model_versions": {
+            "items": {
+              "$ref": "#/components/schemas/ModelVersionOut"
+            },
+            "type": "array",
+            "title": "Model Versions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "model_versions"
+        ],
+        "title": "ModelVersionList"
+      },
+      "ModelVersionOut": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "base_model_ref": {
+            "type": "string",
+            "title": "Base Model Ref"
+          },
+          "base_commit_sha": {
+            "type": "string",
+            "title": "Base Commit Sha"
+          },
+          "adapter_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Adapter Sha256"
+          },
+          "weights_uri": {
+            "type": "string",
+            "title": "Weights Uri"
+          },
+          "weights_sha256": {
+            "type": "string",
+            "title": "Weights Sha256"
+          },
+          "preprocess_cfg": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Preprocess Cfg"
+          },
+          "decode_cfg": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Decode Cfg"
+          },
+          "eval_report": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Eval Report"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "base_model_ref",
+          "base_commit_sha",
+          "adapter_sha256",
+          "weights_uri",
+          "weights_sha256",
+          "preprocess_cfg",
+          "decode_cfg",
+          "eval_report",
+          "created_at",
+          "is_active"
+        ],
+        "title": "ModelVersionOut"
+      },
+      "PageDetail": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "document_id": {
+            "type": "integer",
+            "title": "Document Id"
+          },
+          "page_no": {
+            "type": "integer",
+            "title": "Page No"
+          },
+          "width": {
+            "type": "integer",
+            "title": "Width"
+          },
+          "height": {
+            "type": "integer",
+            "title": "Height"
+          },
+          "external_page_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Page Id"
+          },
+          "image_sha256": {
+            "type": "string",
+            "title": "Image Sha256"
+          },
+          "prev_page_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prev Page Id"
+          },
+          "next_page_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Page Id"
+          },
+          "image_url": {
+            "type": "string",
+            "title": "Image Url"
+          },
+          "latest": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RevisionWithText"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "revisions": {
+            "items": {
+              "$ref": "#/components/schemas/RevisionSummary"
+            },
+            "type": "array",
+            "title": "Revisions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "document_id",
+          "page_no",
+          "width",
+          "height",
+          "external_page_id",
+          "image_sha256",
+          "prev_page_id",
+          "next_page_id",
+          "image_url",
+          "latest",
+          "revisions"
+        ],
+        "title": "PageDetail"
+      },
+      "PageSummary": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "page_no": {
+            "type": "integer",
+            "title": "Page No"
+          },
+          "width": {
+            "type": "integer",
+            "title": "Width"
+          },
+          "height": {
+            "type": "integer",
+            "title": "Height"
+          },
+          "image_sha256": {
+            "type": "string",
+            "title": "Image Sha256"
+          },
+          "external_page_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "External Page Id"
+          },
+          "ingest": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Ingest",
+            "description": "how the page image was obtained: method, source_format, ..."
+          },
+          "latest_rev_no": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Rev No",
+            "description": "newest revision; null until OCR has written rev 0"
+          },
+          "image_url": {
+            "type": "string",
+            "title": "Image Url",
+            "description": "API path of the page image, relative to the API root"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "page_no",
+          "width",
+          "height",
+          "image_sha256",
+          "external_page_id",
+          "ingest",
+          "latest_rev_no",
+          "image_url"
+        ],
+        "title": "PageSummary"
+      },
+      "PlaintextStats": {
+        "properties": {
+          "policy": {
+            "type": "string",
+            "title": "Policy"
+          },
+          "order": {
+            "type": "string",
+            "title": "Order"
+          },
+          "blocks_total": {
+            "type": "integer",
+            "title": "Blocks Total"
+          },
+          "blocks_kept": {
+            "type": "integer",
+            "title": "Blocks Kept"
+          },
+          "blocks_empty": {
+            "type": "integer",
+            "title": "Blocks Empty"
+          },
+          "excluded_by_label": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Excluded By Label",
+            "description": "PP-DocLayoutV3 label -> regions left out of the text"
+          },
+          "unknown_labels": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Unknown Labels"
+          },
+          "markup_chars_removed": {
+            "type": "integer",
+            "title": "Markup Chars Removed"
+          },
+          "markup_removed_by_kind": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Markup Removed By Kind"
+          },
+          "chars_out": {
+            "type": "integer",
+            "title": "Chars Out"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "policy",
+          "order",
+          "blocks_total",
+          "blocks_kept",
+          "blocks_empty",
+          "excluded_by_label",
+          "unknown_labels",
+          "markup_chars_removed",
+          "markup_removed_by_kind",
+          "chars_out"
+        ],
+        "title": "PlaintextStats",
+        "description": "What to_plaintext() kept and left out of a machine revision's text."
+      },
+      "RevisionDetail": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "page_id": {
+            "type": "integer",
+            "title": "Page Id"
+          },
+          "rev_no": {
+            "type": "integer",
+            "title": "Rev No",
+            "description": "0 is the machine output, which is never modified"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "machine",
+              "human"
+            ],
+            "title": "Source"
+          },
+          "author": {
+            "type": "string",
+            "title": "Author",
+            "description": "participant code (P03), 'editor', or the machine author"
+          },
+          "parent_rev_no": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Rev No"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "model_version_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version Id"
+          },
+          "model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version",
+            "description": "model_versions.name, machine revisions only"
+          },
+          "text_policy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Policy",
+            "description": "to_plaintext() policy, machine revisions only"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "chars": {
+            "type": "integer",
+            "title": "Chars"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "blocks": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Block"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blocks",
+            "description": "machine revisions only"
+          },
+          "plaintext_stats": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlaintextStats"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "machine revisions only"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "page_id",
+          "rev_no",
+          "source",
+          "author",
+          "parent_rev_no",
+          "job_id",
+          "model_version_id",
+          "model_version",
+          "text_policy",
+          "created_at",
+          "chars",
+          "text",
+          "blocks",
+          "plaintext_stats"
+        ],
+        "title": "RevisionDetail"
+      },
+      "RevisionIn": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 200000,
+            "title": "Text"
+          },
+          "parent_rev_no": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Parent Rev No",
+            "description": "the revision the correction was made on"
+          },
+          "author": {
+            "type": "string",
+            "pattern": "^(P[0-9]{2,3}|editor)$",
+            "title": "Author",
+            "description": "participant code such as P03, or 'editor'"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text",
+          "parent_rev_no",
+          "author"
+        ],
+        "title": "RevisionIn"
+      },
+      "RevisionSummary": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "page_id": {
+            "type": "integer",
+            "title": "Page Id"
+          },
+          "rev_no": {
+            "type": "integer",
+            "title": "Rev No",
+            "description": "0 is the machine output, which is never modified"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "machine",
+              "human"
+            ],
+            "title": "Source"
+          },
+          "author": {
+            "type": "string",
+            "title": "Author",
+            "description": "participant code (P03), 'editor', or the machine author"
+          },
+          "parent_rev_no": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Rev No"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "model_version_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version Id"
+          },
+          "model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version",
+            "description": "model_versions.name, machine revisions only"
+          },
+          "text_policy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Policy",
+            "description": "to_plaintext() policy, machine revisions only"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "chars": {
+            "type": "integer",
+            "title": "Chars"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "page_id",
+          "rev_no",
+          "source",
+          "author",
+          "parent_rev_no",
+          "job_id",
+          "model_version_id",
+          "model_version",
+          "text_policy",
+          "created_at",
+          "chars"
+        ],
+        "title": "RevisionSummary"
+      },
+      "RevisionWithText": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "page_id": {
+            "type": "integer",
+            "title": "Page Id"
+          },
+          "rev_no": {
+            "type": "integer",
+            "title": "Rev No",
+            "description": "0 is the machine output, which is never modified"
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "machine",
+              "human"
+            ],
+            "title": "Source"
+          },
+          "author": {
+            "type": "string",
+            "title": "Author",
+            "description": "participant code (P03), 'editor', or the machine author"
+          },
+          "parent_rev_no": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Rev No"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "model_version_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version Id"
+          },
+          "model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version",
+            "description": "model_versions.name, machine revisions only"
+          },
+          "text_policy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Policy",
+            "description": "to_plaintext() policy, machine revisions only"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "chars": {
+            "type": "integer",
+            "title": "Chars"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "page_id",
+          "rev_no",
+          "source",
+          "author",
+          "parent_rev_no",
+          "job_id",
+          "model_version_id",
+          "model_version",
+          "text_policy",
+          "created_at",
+          "chars",
+          "text"
+        ],
+        "title": "RevisionWithText"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

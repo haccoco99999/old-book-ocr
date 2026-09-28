@@ -1,0 +1,5 @@
+scanned 84 tracked files under src/ tests/ e2e/ config/ scripts/
+tracked lines with literal combining or invisible characters: 0
+tests/lib/composition.test.ts: 'tiếng' as NFC (U+1EBF) occurs 19x; escaped NFD 'tie\u0302\u0301ng' occurs 6x
+tests/pages/review.test.tsx: 'tiếng' as NFC (U+1EBF) occurs 4x; escaped NFD 'tie\u0302\u0301ng' occurs 0x
+e2e/review-flow.spec.ts: 'tiếng' as NFC (U+1EBF) occurs 3x; escaped NFD 'tie\u0302\u0301ng' occurs 0x

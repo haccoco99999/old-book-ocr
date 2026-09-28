@@ -1,0 +1,7 @@
+# G6 cross-ref (read-only): does the live API run with the backend's default token 'dev-token' (which the frontend dev proxy falls back to, .umirc.ts:11)?
+$ docker logs ocr-api-1 2>&1 | grep -c "default development token"
+1
+$ docker logs ocr-api-1 2>&1 | grep -m1 "default development token" | cut -c1-200
+{"ts": "2026-09-25T00:14:49.977Z", "level": "WARNING", "service": "api", "logger": "ocr_api", "msg": "API_TOKEN is the default development token; set API_TOKEN before exposing the API", "job_id": null
+$ docker port ocr-api-1
+8000/tcp -> 127.0.0.1:8000

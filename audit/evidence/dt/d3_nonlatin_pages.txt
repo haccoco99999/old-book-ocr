@@ -1,0 +1,26 @@
+dev: pages=1520 mostly-non-Latin=0 latin-pages-with-<50-letters (language check skipped)=29
+   strata keys example: ['era', 'difficulty', 'language']
+test: pages=3978 mostly-non-Latin=8 latin-pages-with-<50-letters (language check skipped)=40
+    ('016/page_4', '016', 154, 0.818, {'LATIN': 126, 'CJK': 28})
+    ('093/page_83', '093', 727, 0.825, {'LATIN': 600, 'CJK': 127})
+    ('093/page_84', '093', 744, 0.741, {'LATIN': 551, 'CJK': 193})
+    ('093/page_85', '093', 876, 0.829, {'LATIN': 726, 'CJK': 150})
+    ('093/page_86', '093', 794, 0.872, {'LATIN': 692, 'CJK': 102})
+    ('093/page_88', '093', 585, 0.815, {'LATIN': 477, 'CJK': 108})
+    ('093/page_89', '093', 879, 0.804, {'LATIN': 707, 'CJK': 172})
+    ('093/page_90', '093', 715, 0.801, {'LATIN': 573, 'CJK': 142})
+   strata keys example: ['era', 'difficulty', 'language']
+gold: pages=250 mostly-non-Latin=2 latin-pages-with-<50-letters (language check skipped)=0
+    ('093/page_83', '093', 727, 0.825, {'LATIN': 600, 'CJK': 127})
+    ('093/page_84', '093', 744, 0.741, {'LATIN': 551, 'CJK': 193})
+   strata keys example: ['era', 'difficulty', 'language']
+gold_verified: pages=250 mostly-non-Latin=2 latin-pages-with-<50-letters (language check skipped)=0
+    ('093/page_83', '093', 727, 0.825, {'LATIN': 600, 'CJK': 127})
+    ('093/page_84', '093', 744, 0.741, {'LATIN': 551, 'CJK': 193})
+   strata keys example: []
+train strata.language: {'vi': 19372, 'unscored': 315, 'non_vi': 11, 'non_latin': 82} | era: {'unknown': 2543, '≥1976': 3413, '1946–1975': 11985, '≤1945': 1839}
+dev strata.language: {'vi': 1487, 'unscored': 33} | era: {'1946–1975': 783, '≤1945': 129, 'unknown': 198, '≥1976': 410}
+test strata.language: {'vi': 3893, 'unscored': 77, 'non_latin': 8} | era: {'≤1945': 434, '1946–1975': 2255, 'unknown': 544, '≥1976': 745}
+gold strata.language: {'vi': 247, 'unscored': 1, 'non_latin': 2} | era: {'≤1945': 54, '1946–1975': 130, 'unknown': 44, '≥1976': 22}
+test row keys: ['page_id', 'book_id', 'ref', 'strata', 'split', 'unit', 'regions']
+gold_verified row keys: ['page_id', 'book_id', 'verified_by', 'verified_at', 'ref', 'regions', 'changed_regions', 'note', 'nfc', 'pseudo_ref_sha256', 'gold_sha256', 'locked_gold', 'export_sha256', 'imported_at'] True

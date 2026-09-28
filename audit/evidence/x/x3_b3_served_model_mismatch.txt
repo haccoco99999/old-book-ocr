@@ -1,0 +1,5 @@
+## B3 runtime probe: worker now serves paddleocr-vl-1.6-base; upload doc 3 (1 dev page) and submit a job for fake-ocr-v1
+doc 3
+job 4
+{"id":4,"document_id":3,"model_version_id":1,"idempotency_key":"x3-b3-mismatch","status":"failed","attempts":1,"text_policy":"body-v1","bench_run_id":null,"first_page":null,"last_page":null,"enqueued_at":"2026-09-25T04:53:43.666552+00:00","started_at":"2026-09-25T04:53:43.760277+00:00","finished_at":"2026-09-25T04:53:43.783294+00:00","queue_wait_s":0.094,"service_s":0.023,"as_of":"2026-09-25T04:53:46.721848+00:00","error":{"class":"ModelMismatch","attempt":1,"message":"recognition server serves 'paddleocr-vl-1.6-base', job 4 is for 'fake-ocr-v1'","page_no":null,"retryable":false},"retry_of":null,"progress":{"pages_total":1,"pages_done":0}}
+pages with output: [None]

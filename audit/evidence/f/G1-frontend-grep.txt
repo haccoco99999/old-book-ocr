@@ -1,0 +1,21 @@
+# G1 (frontend): tracked files under src/ only (generated src/.umi* excluded; src/services/ocr included)
+
+$ git ls-files src | xargs grep -nE "from .(diff|fast-diff|diff-match-patch|jsdiff|levenshtein|fast-levenshtein|js-levenshtein|leven|damerau|string-similarity|natural|jaro)" 
+src/pages/Review/components/HistoryDrawer.tsx:3:import { diffWordsWithSpace } from 'diff';
+exit=0
+
+$ git ls-files src | xargs grep -niE "levenshtein|edit_distance|editdistance|edit-distance|damerau|hamming|jaro"
+exit=123 (1 = no match)
+
+$ git ls-files src | xargs grep -nE "(compute|calc|get)_?(cer|wer|der|ter)\b" -i
+exit=123 (1 = no match)
+
+$ same pattern without trailing word boundary (to show what the bare prefix would hit)
+      1 src/components/ErrorBoundary.tsx:21:getDerivedStateFromError
+
+$ grep for diff-library usage (display-only check)
+src/pages/Review/components/HistoryDrawer.tsx:3:import { diffWordsWithSpace } from 'diff';
+src/pages/Review/components/HistoryDrawer.tsx:55:    return diffWordsWithSpace(machine.text, detail.text).map((part) => {
+
+$ package.json dependency on diff libs
+38:    "diff": "9.0.0",

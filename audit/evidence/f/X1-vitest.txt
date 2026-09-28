@@ -1,0 +1,380 @@
+# cwd: /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/fe (scratch copy of frontend @ d44a9d0); 2026-09-25T11:25:57+07:00
+$ npx vitest run --reporter=verbose
+▲ [WARNING] Cannot find base config file "./src/.umi/tsconfig.json" [tsconfig.json]
+
+    tsconfig.json:2:13:
+      2 │   "extends": "./src/.umi/tsconfig.json",
+        ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+ RUN  v4.1.11 /tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/fe
+
+ ✓ tests/config.test.ts > imports the review guideline as NFC text 1ms
+ ✓ tests/config.test.ts > has every Vietnamese UI string in English too 1ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > accepts "P03" as "P03" 1ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > accepts " p07 " as "P07" 0ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > accepts "P99" as "P99" 0ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > rejects "" 0ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > rejects "P3" 0ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > rejects "P003" 0ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > rejects "P0a" 0ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > rejects "XP03" 0ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > rejects "P03 Lan" 0ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > rejects "Nguyễn Văn An" 0ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > rejects "Lan" 0ms
+ ✓ tests/lib/participant.test.ts > parseParticipantCode (default pattern ^P\d{2}$) > takes a configured pattern, within the backend’s ^P[0-9]{2,3}$ 0ms
+ ✓ tests/lib/participant.test.ts > the code is kept for the tab > stores only a valid code 0ms
+ ✓ tests/lib/participant.test.ts > the code is kept for the tab > does not trust what is in storage 0ms
+ ✓ tests/acceptance.test.ts > has no @ant-design/v5-patch-for-react-19 anywhere in the tree 3ms
+ ✓ tests/acceptance.test.ts > has antd and @ant-design/icons at major version 6, one copy each 2ms
+ ✓ tests/acceptance.test.ts > declares no API type outside the generated client 1ms
+ ✓ tests/acceptance.test.ts > has no field that asks for a participant name 1ms
+ ✓ tests/acceptance.test.ts > shows no error rate, edit count or accuracy figure 0ms
+ ✓ tests/lib/composition.test.ts > composing tiếng yields tiếng > Chrome with the Windows Vietnamese keyboard: input events inside the composition, then compositionend 1ms
+ ✓ tests/lib/composition.test.ts > composing tiếng yields tiếng > Safari and Firefox with macOS Telex: one more input event after compositionend 0ms
+ ✓ tests/lib/composition.test.ts > composing tiếng yields tiếng > an IME that composes in decomposed form: untouched while composing, NFC when saved 0ms
+ ✓ tests/lib/composition.test.ts > composing tiếng yields tiếng > Unikey, which rewrites typed text with backspaces instead of composing 0ms
+ ✓ tests/lib/composition.test.ts > composing tiếng yields tiếng > Unikey in combining mode: keystrokes are not normalised, so its backspace count stays right 1ms
+ ✓ tests/lib/composition.test.ts > composing tiếng yields tiếng > composes into existing text 0ms
+ ✓ tests/lib/composition.test.ts > saving > waits for the composition to end, then saves the NFC text 0ms
+ ✓ tests/lib/composition.test.ts > saving > is ready at once outside a composition 0ms
+ ✓ tests/lib/composition.test.ts > saving > after a save, the saved text is the new baseline 0ms
+ ✓ tests/lib/composition.test.ts > paste > pastes NFD as NFC at the selection and asks for the caret after it 1ms
+ ✓ tests/lib/composition.test.ts > paste > is left to the browser during a composition 0ms
+ ✓ tests/lib/composition.test.ts > edited and dirty > edited turns true at the first change of the text and stays true for the visit 0ms
+ ✓ tests/lib/composition.test.ts > edited and dirty > decomposed typing of the saved text is not a change to save 0ms
+ ✓ tests/lib/composition.test.ts > edited and dirty > an input event that does not say whether it is composing keeps the current state 0ms
+ ✓ tests/lib/composition.test.ts > edited and dirty > load starts a new visit 0ms
+ ✓ tests/lib/format.test.ts > formatDuration(0.4) 8ms
+ ✓ tests/lib/format.test.ts > formatDuration(7.52) 0ms
+ ✓ tests/lib/format.test.ts > formatDuration(59.94) 0ms
+ ✓ tests/lib/format.test.ts > formatDuration(59.96) 0ms
+ ✓ tests/lib/format.test.ts > formatDuration(65) 0ms
+ ✓ tests/lib/format.test.ts > formatDuration(3599.4) 0ms
+ ✓ tests/lib/format.test.ts > formatDuration(3599.6) 0ms
+ ✓ tests/lib/format.test.ts > formatDuration(3725.5) 0ms
+ ✓ tests/lib/format.test.ts > formatDuration(46800) 0ms
+ ✓ tests/lib/format.test.ts > formatBytes(0) 0ms
+ ✓ tests/lib/format.test.ts > formatBytes(1536) 0ms
+ ✓ tests/lib/format.test.ts > formatBytes(12897484.8) 0ms
+ ✓ tests/lib/format.test.ts > formatBytes(524288000) 0ms
+ ✓ tests/lib/instrumentation/idle.test.ts > idle_start after the threshold without input, idle_end on the next input 4ms
+ ✓ tests/lib/instrumentation/idle.test.ts > each input moves the threshold; frequent input never starts one 1ms
+ ✓ tests/lib/instrumentation/idle.test.ts > the next idle period is timed from the input that ended the last one 1ms
+ ✓ tests/lib/instrumentation/idle.test.ts > dates idle_start at the last input + threshold even when the timer ran late (a sleeping laptop) 1ms
+ ✓ tests/lib/instrumentation/idle.test.ts > after stop(), input and time record nothing, and an open idle period gets no idle_end 0ms
+ ✓ tests/lib/download.test.ts > lich-su-nuoc-nha.pdf as txt (latest) is saved as lich-su-nuoc-nha.txt 1ms
+ ✓ tests/lib/download.test.ts > lich-su-nuoc-nha.pdf as txt (machine) is saved as lich-su-nuoc-nha.ocr.txt 0ms
+ ✓ tests/lib/download.test.ts > Việt Nam sử lược.PDF as md (latest) is saved as Việt Nam sử lược.md 0ms
+ ✓ tests/lib/download.test.ts > trang_001.tiff as json (machine) is saved as trang_001.ocr.json 0ms
+ ✓ tests/lib/download.test.ts > trang-le.png (+1 more) as txt (latest) is saved as trang-le.png (+1 more).txt 0ms
+ ✓ tests/lib/download.test.ts > a/b:c*d?.pdf as txt (latest) is saved as a_b_c_d_.txt 0ms
+ ✓ tests/lib/download.test.ts > .pdf as txt (latest) is saved as document.txt 0ms
+ ✓ tests/uuid.test.ts > makes distinct version-4 UUIDs without crypto.randomUUID 19ms
+ ✓ tests/lib/fileKind.test.ts > kindFromHead: the backend sniff rules > 0 1ms
+ ✓ tests/lib/fileKind.test.ts > kindFromHead: the backend sniff rules > 1 0ms
+ ✓ tests/lib/fileKind.test.ts > kindFromHead: the backend sniff rules > 2 0ms
+ ✓ tests/lib/fileKind.test.ts > kindFromHead: the backend sniff rules > 3 0ms
+ ✓ tests/lib/fileKind.test.ts > kindFromHead: the backend sniff rules > 4 0ms
+ ✓ tests/lib/fileKind.test.ts > kindFromHead: the backend sniff rules > 5 0ms
+ ✓ tests/lib/fileKind.test.ts > kindFromHead: the backend sniff rules > 6 0ms
+ ✓ tests/lib/fileKind.test.ts > kindFromHead: the backend sniff rules > 7 0ms
+ ✓ tests/lib/fileKind.test.ts > kindFromHead: the backend sniff rules > reads the content, not the name or the MIME type 1ms
+ ✓ tests/lib/fileKind.test.ts > planDocuments > makes each PDF a document and all images one, in natural file-name order 1ms
+ ✓ tests/lib/fileKind.test.ts > planDocuments > leaves out files still being checked or with a problem 0ms
+ ✓ tests/lib/fileKind.test.ts > planDocuments > flags a document over the upload limit, counting all its images together 0ms
+ ✓ tests/lib/text.test.ts > NFC > composes decomposed Vietnamese into the precomposed letters 2ms
+ ✓ tests/lib/text.test.ts > NFC > changes nothing else: tone placement, invisible characters and spacing are the reviewer’s 1ms
+ ✓ tests/lib/text.test.ts > VIETNAMESE_LETTERS > holds the 134 precomposed letters, each one NFC code point 7ms
+ ✓ tests/lib/text.test.ts > graphemes > counts letters, not code units 1ms
+ ✓ tests/lib/text.test.ts > graphemes > never puts the caret between a letter and its marks 0ms
+ ✓ tests/lib/text.test.ts > insertText (paste) > stores pasted NFD as NFC and puts the caret after it 0ms
+ ✓ tests/lib/text.test.ts > insertText (paste) > joins a paste that begins with a combining mark to the letter before it 0ms
+ ✓ tests/lib/text.test.ts > insertText (paste) > replaces the selection, whichever way it was made 9ms
+ ✓ tests/lib/text.test.ts > insertText (paste) > gives marks the selection left behind to the pasted letter 0ms
+ ✓ tests/lib/text.test.ts > insertText (paste) > stores line breaks as a textarea does 0ms
+ ✓ tests/lib/text.test.ts > insertText (paste) > leaves the text away from the paste exactly as it was 0ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > refuses a participant code that is not an opaque code 2ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > records a page visit: open, first_edit once, save with the new revision, leave 5ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > a new visit to a page may have its own first_edit 1ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > idle_start after 60 s without input, idle_end at the next keyboard input 2ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > idle_start after 60 s without input, idle_end at the next pointer input 1ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > idle_start after 60 s without input, idle_end at the next scroll input 1ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > idle_start after 60 s without input, idle_end at the next IME composition input 1ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > hiding the tab records leave and beacons everything; showing it opens the page again 1ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > closing the page records leave and sends it with navigator.sendBeacon 1ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > a tab restored from the back-forward cache opens the page again 2ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > leaving ends an idle period without idle_end, and stops watching 1ms
+ ✓ tests/lib/instrumentation/reviewSession.test.ts > records nothing once disposed 1ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > stamps each event with the tab session, its own id and both clocks 3ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > sends events in the order they were recorded 1ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > a failed flush keeps its events for the next one, still in order, and never throws 2ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > keeps events the server could not take now (401) 0ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > keeps events the server could not take now (403) 0ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > keeps events the server could not take now (429) 0ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > keeps events the server could not take now (500) 0ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > keeps events the server could not take now (503) 0ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > a refused batch is resent one event at a time, so only the bad event is dropped 1ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > sends at most 500 events per request, the backend limit 4ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > one flush at a time: events added while it runs go out after it, in order 0ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > beacon hands over everything queued, and keeps what the browser does not accept 3ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > a beacon racing a flush loses nothing and drops nothing newer 0ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > start() > flushes every 10 s, and beacons when the tab is hidden or the page closed 3ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > the HTTP transport > stores the events through the generated client, in order 22ms
+ ✓ tests/lib/instrumentation/eventQueue.test.ts > the HTTP transport > beacons JSON to /api/review-events with navigator.sendBeacon 1ms
+ ✓ tests/errorBoundary.test.tsx > shows a reload prompt instead of a blank page, and clears on navigation 163ms
+ ✓ tests/errorBoundary.test.tsx > does not remount a healthy page when the path changes 2ms
+ ✓ tests/mocks/contract.test.ts > handlers match the schema > every handler is a schema operation 1ms
+ ✓ tests/mocks/contract.test.ts > handlers match the schema > every schema operation is mocked or explicitly not used 0ms
+ ✓ tests/mocks/contract.test.ts > responses validate against the schema > rejects a body that does not match (the check is not vacuous) 35ms
+ ✓ tests/mocks/contract.test.ts > responses validate against the schema > documents, model versions 30ms
+ ✓ tests/mocks/contract.test.ts > responses validate against the schema > jobs: create, repeat, list, get, retry 36ms
+ ✓ tests/mocks/contract.test.ts > responses validate against the schema > pages, revisions, corrections, events 27ms
+ ✓ tests/pages/queue.test.tsx > shows queue wait and service time exactly as the API returns them 1467ms
+ ✓ tests/pages/review.test.tsx > asks for a participant code first, has no name field, and refuses a name 1537ms
+ ✓ tests/pages/export.test.tsx > downloads the newest text as txt: corrected pages as saved, pages separated by form feeds 1648ms
+stderr | tests/pages/upload.test.tsx > uploads each PDF and the page images as separate documents, then queues OCR on the active model
+An update to UploadPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to UploadProgress inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Table inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Table inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ tests/pages/upload.test.tsx > uploads each PDF and the page images as separate documents, then queues OCR on the active model 1973ms
+ ✓ tests/pages/review.test.tsx > shows what the text policy left out of the page, from plaintext_stats 425ms
+ ✓ tests/pages/review.test.tsx > lists every excluded region the stats name, a table included 428ms
+ ✓ tests/pages/queue.test.tsx > refreshes while a job is live, then slows down, and pauses while the tab is hidden 971ms
+ ✓ tests/pages/export.test.tsx > machine text under page-v1 keeps running heads and page numbers; the file is marked .ocr 1031ms
+stderr | tests/pages/upload.test.tsx > names each file it cannot upload, and waits until they are removed
+An update to UploadPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | tests/pages/upload.test.tsx > names each file it cannot upload, and waits until they are removed
+An update to Table inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Table inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ tests/pages/upload.test.tsx > names each file it cannot upload, and waits until they are removed 833ms
+ ✓ tests/pages/review.test.tsx > composing tiếng with an IME stores tiếng, untouched while the composition is open 609ms
+ ✓ tests/pages/queue.test.tsx > retries a failed job and links the two 669ms
+ ✓ tests/pages/export.test.tsx > Markdown is for reading: titles become headings, running heads are left out, no policy is sent 694ms
+ ✓ tests/pages/review.test.tsx > stores pasted decomposed text as NFC 497ms
+ ✓ tests/pages/queue.test.tsx > filters by the document named in the link from the upload screen 450ms
+stderr | tests/pages/upload.test.tsx > shows the server's reason for refusing an upload, and uploads again on retry
+An update to UploadPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to UploadProgress inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ tests/pages/upload.test.tsx > shows the server's reason for refusing an upload, and uploads again on retry 871ms
+ ✓ tests/pages/queue.test.tsx > reports a failed refresh once, above the table, without a toast per poll 427ms
+ ✓ tests/pages/review.test.tsx > saving writes a new revision; the machine revision is never overwritten and stays viewable 673ms
+ ✓ tests/pages/export.test.tsx > several documents give one file each; a document never recognised cannot be picked 940ms
+stderr | tests/pages/upload.test.tsx > when OCR could not be queued, a retry queues it without sending the file again
+An update to UploadPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to UploadProgress inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Table inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Table inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ tests/pages/upload.test.tsx > when OCR could not be queued, a retry queues it without sending the file again 865ms
+ ✓ tests/pages/export.test.tsx > shows the server's reason when an export fails 583ms
+stderr | tests/pages/upload.test.tsx > without an active model, says so and does not upload
+An update to UploadPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | tests/pages/upload.test.tsx > without an active model, says so and does not upload
+An update to Table inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Table inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ tests/pages/upload.test.tsx > without an active model, says so and does not upload 571ms
+ ✓ tests/pages/review.test.tsx > the unsaved-changes guard fires on navigation, by button, key or menu 1252ms
+stderr | tests/pages/upload.test.tsx > queues OCR from the documents table for a document that never had a job
+An update to UploadPage inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+stderr | tests/pages/upload.test.tsx > queues OCR from the documents table for a document that never had a job
+An update to Table inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+An update to Table inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ ✓ tests/pages/upload.test.tsx > queues OCR from the documents table for a document that never had a job 564ms
+ ✓ tests/pages/review.test.tsx > discarding changes leaves without saving 645ms
+ ✓ tests/pages/review.test.tsx > records open, first_edit once per page visit, save and leave, in order 834ms
+ ✓ tests/pages/review.test.tsx > saving an unchanged page confirms it: a save event and no new revision 477ms
+ ✓ tests/pages/review.test.tsx > Ctrl+Enter saves and moves on to the next page; the text has the focus 564ms
+ ✓ tests/pages/review.test.tsx > the guideline is open on the first page of a session, then one keystroke away 488ms
+ ✓ tests/pages/review.test.tsx > says so when a page has not been recognised, and records no visit 388ms
+
+ Test Files  18 passed (18)
+      Tests  150 passed (150)
+   Start at  11:26:00
+   Duration  11.40s (transform 4.99s, setup 29.38s, import 1.36s, tests 23.85s, environment 11.82s)
+
+
+real	0m14.300s
+user	0m55.365s
+sys	0m13.443s
+exit=0

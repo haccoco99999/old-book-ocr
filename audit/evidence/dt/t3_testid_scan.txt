@@ -1,0 +1,36 @@
+/tmp/claude-1000/-home-huy-master/9bfc2e54-1ed4-4494-9621-8c38a9539c20/scratchpad/t3_scan.py:2: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+  Matches (?<!\d)NNN/page_N(?!\d) — exact page ids with digit boundaries, so 093/page_8 never matches inside 093/page_83.
+test ids 3978, gold ids 250 (gold subset of test: True), dev 1520, train 19780
+test books 23; test∩dev ids 0, test∩train ids 0
+scanned 1370 files, 1006.6 MB under: runs, leaderboard, sweeps, baselines, work/logs, work/sweeps, work/lora_modules, work/queue and 14 work/<run_id>/ dirs
+excluded by design (test-access logs of evaluate_final / gold review, which are expected to name test pages):
+    work/logs/final_week_queue.log
+    work/logs/gold_recheck.txt
+    work/logs/final_stages.log
+    work/logs/final_lr2e4_test.log
+    work/logs/final_table.log
+    work/logs/final_gold_base.log
+    work/logs/final_compare_gold.log
+    work/logs/final_gold.log
+    work/logs/final_base_test.log
+    work/logs/final_compare_gold_pseudo.log
+    work/logs/final_compare_test.log
+    work/logs/final_agreement.log
+FILES CONTAINING A TEST OR GOLD page_id: 14
+   runs/20260916-075254_s7c4005_eed27da0_base/data_manifest.json: test ids 8, gold ids 2
+   runs/20260916-150324_s06eaa2_93773b96_memcheck/data_manifest.json: test ids 8, gold ids 2
+   runs/20260915-203645_s60fb42_47d08c20_smoke-sweep/data_manifest.json: test ids 8, gold ids 2
+   runs/20260917-215054_s2ea991_efcf7d12_exp_r32/data_manifest.json: test ids 8, gold ids 2
+   runs/20260922-073349_s9f712b_54b12627_exp_lines/data_manifest.json: test ids 8, gold ids 2
+   runs/20260916-150618_s06eaa2_7dea718d_base/data_manifest.json: test ids 8, gold ids 2
+   runs/20260915-200009_sf747b6_6ff763eb_smoke-eval/data_manifest.json: test ids 8, gold ids 2
+   runs/20260915-163758_s3902df_811840f3_smoke/data_manifest.json: test ids 8, gold ids 2
+   runs/20260917-154010_s2ea991_c57c0a6c_exp_lr2e4/data_manifest.json: test ids 8, gold ids 2
+   runs/20260923-121505_s9f712b_6ecef906_exp_lr2e4_seed14/data_manifest.json: test ids 8, gold ids 2
+   runs/20260917-064001_sdeeda6_b9b95d2f_exp_lm_only/data_manifest.json: test ids 8, gold ids 2
+   runs/20260922-120912_s9f712b_131c05d9_exp_mix/data_manifest.json: test ids 8, gold ids 2
+   runs/20260922-170938_s9f712b_3b397b3e_exp_lr2e4_long/data_manifest.json: test ids 8, gold ids 2
+   runs/20260915-195157_sf747b6_6ff763eb_smoke-eval/data_manifest.json: test ids 8, gold ids 2
+
+# where the test ids sit inside runs/*/data_manifest.json (exp_lr2e4 copy): Counter({'.language.non_latin_pages[]': 8})
+# work/logs/final_week_queue.log (final-week sweep queue, not a test log): test ids 0

@@ -1,0 +1,16 @@
+# B4: to_plaintext() probe on synthetic strings (backend HEAD 2035c27; pure function, no data)
+body-v1 keeps (9): ['abstract', 'algorithm', 'content', 'doc_title', 'paragraph_title', 'reference', 'reference_content', 'text', 'vertical_text']
+page-v1 keeps (16): ['abstract', 'algorithm', 'aside_text', 'content', 'doc_title', 'figure_title', 'footer', 'footnote', 'header', 'number', 'paragraph_title', 'reference', 'reference_content', 'text', 'vertical_text', 'vision_footnote']
+excluded by both (NON_TEXT, 9): ['chart', 'display_formula', 'footer_image', 'formula_number', 'header_image', 'image', 'inline_formula', 'seal', 'table']
+page-v1 minus body-v1: ['aside_text', 'figure_title', 'footer', 'footnote', 'header', 'number', 'vision_footnote']
+{"in": "Họ và tên: ________ ngày ___ tháng ___", "out": "Họ và tên: __ ngày _ tháng ___", "markup_chars_removed": 8, "by_kind": {"underline": 8}}
+{"in": "a __init__ b", "out": "a init b", "markup_chars_removed": 4, "by_kind": {"underline": 4}}
+{"in": "Chú thích (*) và (**) ở cuối trang", "out": "Chú thích (*) và (**) ở cuối trang", "markup_chars_removed": 0, "by_kind": {}}
+{"in": "tác giả**, dịch giả**.", "out": "tác giả, dịch giả.", "markup_chars_removed": 4, "by_kind": {"bold": 4}}
+{"in": "**Nước** Việt Nam", "out": "Nước Việt Nam", "markup_chars_removed": 4, "by_kind": {"bold": 4}}
+{"in": "## Chương một", "out": "Chương một", "markup_chars_removed": 3, "by_kind": {"heading": 3}}
+{"in": "# 1945", "out": "1945", "markup_chars_removed": 2, "by_kind": {"heading": 2}}
+{"in": "nh\\(\\underset{\\cdot}{i}\\)t và $$x$$", "out": "nh\\(\\underset{\\cdot}{i}\\)t và $$x$$", "markup_chars_removed": 0, "by_kind": {}}
+{"in": "x <b>đậm</b> y <table><tr><td>1</td></tr></table> z", "out": "x đậm y \n\n\n1\n\n\n z", "markup_chars_removed": 34, "by_kind": {"html": 34}}
+{"in": "a < b và c > d", "out": "a < b và c > d", "markup_chars_removed": 0, "by_kind": {}}
+{"in": "Dòng 1\n\n\nDòng 2   ", "out": "Dòng 1\n\n\nDòng 2", "markup_chars_removed": 0, "by_kind": {}}

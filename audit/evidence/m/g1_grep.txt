@@ -1,0 +1,65 @@
+## G1 grep over mlops sources (excluding .venv, work, .git, download_tmp listed separately), Fri Sep 25 04:30:51 UTC 2026
+## files scanned:
+./backfill_runs.py
+./corpus_manifest.py
+./dashboard.py
+./evaluate_test.py
+./log_eval.py
+./log_training_memory.py
+./mlops/__init__.py
+./mlops/backend.py
+./mlops/backfill.py
+./mlops/corpus.py
+./mlops/dashboard.py
+./mlops/decision.py
+./mlops/evalcli.py
+./mlops/evallog.py
+./mlops/fixed_crop.py
+./mlops/hashing.py
+./mlops/parity.py
+./mlops/paths.py
+./mlops/promotion.py
+./mlops/repro.py
+./mlops/serve.py
+./mlops/servers.py
+./mlops/splits.py
+./mlops/testeval.py
+./mlops/tracking.py
+./mlops/weightcheck.py
+./promote.py
+./register_base.py
+./repro_package.py
+./tests/_weightcheck_cases.py
+./tests/test_dashboard.py
+./tests/test_decision.py
+./tests/test_evaluate_test.py
+./tests/test_no_metric_code.py
+./tests/test_parity.py
+./tests/test_promote_refusals.py
+./tests/test_repro.py
+./tests/test_serve.py
+./tests/test_splits_corpus.py
+./tests/test_tracking.py
+./tests/test_weightcheck.py
+./verify_splits.py
+
+## banned imports (import X / from X):
+(none)
+
+## any mention of banned module names anywhere in .py (incl. strings):
+tests/test_no_metric_code.py:14:BANNED_MODULES = ("editdistance", "Levenshtein", "rapidfuzz", "jiwer", "torchmetrics.text", "nltk.metrics.distance", "difflib")
+tests/test_no_metric_code.py:15:BANNED_DEF = re.compile(r"levenshtein|edit_?distance|editdistance", re.I)
+tests/test_no_metric_code.py:48:    bad = "import difflib\nfrom rapidfuzz import fuzz\nimport Levenshtein as L\nfrom torchmetrics import text\n" \
+
+## banned def names:
+tests/test_no_metric_code.py:49:          "def compute_cer(a, b): pass\ndef get_wer(a, b): pass\ndef my_edit_distance(a, b): pass\n"
+tests/test_no_metric_code.py:49:          "def compute_cer(a, b): pass\ndef get_wer(a, b): pass\ndef my_edit_distance(a, b): pass\n"
+
+## lambda/assignment aliases that could hide metric code (e.g. SequenceMatcher, ratio(), zip-based distance loops):
+tests/test_no_metric_code.py:49:          "def compute_cer(a, b): pass\ndef get_wer(a, b): pass\ndef my_edit_distance(a, b): pass\n"
+
+## non-.py sources (sh, Makefile) mentioning metric libs:
+(none)
+## download_tmp contents:
+download_tmp
+download_tmp/raw_video

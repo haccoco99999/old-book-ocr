@@ -1,0 +1,70 @@
+# Test-set touches found outside mlops/test_access.log (metadata only; no report or hypothesis opened), Fri Sep 25 04:42:23 UTC 2026
+
+## 1. backend commit 7fde580 (Step 6 gate) message:
+7fde580 2026-09-24T12:27:40+07:00
+Gate (live): scripted P99 session on 003/page_3 -> wall 120 s, idle 60 s,
+active 60 s; the re-sent batch was ignored. The human manifest (doc 2)
+and the machine manifest (300 bench_run 2 pages, joined) were both
+accepted by viet-ocr-eval score unchanged. Pipeline check only: the
+adapted model through the backend scored CER 1.98% on those 300 pages
+(not the D4 result). 86 tests pass.
+
+## 2. backend/reports/eval (gitignored) files, mtimes (+0700):
+  
+  
+2026-09-25 06:45:54.910773845 d4
+2026-09-24 13:10:58.014786358 d4-dry
+2026-09-24 12:25:43.781346818 human_doc2.jsonl
+2026-09-24 12:25:44.149372095 machine_bench2.jsonl
+2026-09-24 12:25:44.245378689 machine_bench2_joined.jsonl
+2026-09-24 12:25:43.909355610 report_gate6_human.json
+2026-09-24 12:25:43.909355610 report_gate6_human.md
+2026-09-24 12:27:07.028659335 report_gate6_machine_bench2.json
+2026-09-24 12:27:07.028659335 report_gate6_machine_bench2.md
+2026-09-24 13:32:35.946508767 usability_doc2_events.csv
+  
+  
+  
+2026-09-24 13:10:58.010786087 compare_d4.json
+2026-09-24 13:10:58.014786358 compare_d4.md
+2026-09-24 13:08:47.208625003 manifest_adapted.jsonl
+2026-09-24 13:08:47.268626175 manifest_adapted_ref.jsonl
+2026-09-24 13:05:17.329030461 manifest_base.jsonl
+2026-09-24 13:05:17.385034497 manifest_base_ref.jsonl
+2026-09-24 13:08:49.643131488 report_d4_adapted.json
+2026-09-24 13:08:49.643131488 report_d4_adapted.md
+2026-09-24 13:05:19.686801195 report_d4_base.json
+2026-09-24 13:05:19.686801195 report_d4_base.md
+2026-09-24 13:10:57.914779578 run.pid
+2026-09-24 13:08:49.651131629 score_adapted.log
+2026-09-24 13:05:19.694801773 score_base.log
+2026-09-24 13:10:58.014786358 state.json
+
+## page-id membership of those manifests (page_id field only):
+backend/reports/eval/d4-dry/manifest_base.jsonl pages 6 in_test 6 in_gold 1 in_dev 0
+backend/reports/eval/d4-dry/manifest_adapted.jsonl pages 6 in_test 6 in_gold 1 in_dev 0
+backend/reports/eval/machine_bench2.jsonl pages 300 in_test 300 in_gold 24 in_dev 0
+backend/reports/eval/human_doc2.jsonl pages 1 in_test 1 in_gold 0 in_dev 0
+
+## 3. backend/recognizer_server/README.md:11-12
+The recognition server runs the exact path of the locked evaluation. It was checked on 12 locked
+test crops: 12/12 outputs byte-identical to `training/finals/test__base_7dea718d/regions.jsonl`.
+
+## 4. backend/bench.py:52 and :220 (bench pages come from the locked test manifest; bench does not score)
+TEST_MANIFEST = MASTER / "training/finals/test__base_7dea718d/manifest_test.jsonl"
+    ids = sorted(json.loads(line)["page_id"] for line in open(TEST_MANIFEST, encoding="utf-8"))
+backend/reports/bench_20260924T034919Z.json
+backend/reports/bench_20260924T035616Z.json
+backend/reports/bench_20260924T052050Z.json
+
+## 5. backend/tools/d4_eval.py dry-run option
+79:    if limit:                                     # dry run: the first `limit` pages of the first two books
+128:            # the run tag keeps keys unique across runs (a dry run used the same book keys) and stable across resumes
+223:    ap.add_argument("--dry-run-pages", type=int, help="only the first N pages of two books (writes to d4-dry/)")
+227:    out = args.out or BACKEND / "reports/eval" / ("d4-dry" if args.dry_run_pages else "d4")
+
+## 6. mlops/test_access.log events
+backfilled paddleocr-vl-1.6-base ['fixed-crop'] ['test', 'gold'] 2026-09-17T21:03:05Z -> 2026-09-19T20:02:29Z
+backfilled paddleocr-vl-1.6-vbr-lr2e4-s3000 ['fixed-crop'] ['test', 'gold'] 2026-09-18T11:08:06Z -> 2026-09-19T17:06:15Z
+backfilled paddleocr-vl-1.6-base ['end-to-end'] ['test'] 2026-09-24T06:11:16Z -> 2026-09-24T11:13:51Z
+backfilled paddleocr-vl-1.6-vbr-lr2e4-s3000 ['end-to-end'] ['test'] 2026-09-24T11:13:51Z -> 2026-09-24T18:43:16Z

@@ -1,0 +1,6 @@
+## temp servers health
+{"status": "ok", "instance_id": "bf3fb76daef4415dbe8d70b4070f178b", "started_at": "2026-09-25T04:41:13.486930+00:00", "load_seconds": 6.0, "pid": 209890, "model_version": {"name": "paddleocr-vl-1.6-base", "base_model_ref": "PaddlePaddle/PaddleOCR-VL-1.6", "base_commit_sha": "c5630abae1d940eafe0697512a0325494b02ab42", "adapter_sha256": null, "weights_uri": "file:///home/huy/master/models/PaddleOCR-VL-1.6/model.safetensors", "weights_sha256": "85a479d506a11e724e7285d395c551be69f41dbc16b6342d3cacfb189aed71db", "preprocess_cfg": {"engine": "training/ocrtrain/infer.Engine", "model_key": "base_7dea718d", "config_hash": "7dea718d9b6f8b4f671d11b1267d186f3fe1c24136e0b5fc95d51c593b1ea9f8", "max_pixels
+{"status": "ok", "instance_id": "db14486a97b245a4a22d203791553a7f", "started_at": "2026-09-25T04:40:56.538753+00:00", "load_seconds": 6.33, "config": {"model": "PP-DocLayoutV3", "hf_repo": "PaddlePaddle/PP-DocLayoutV3", "weights_sha256": "70bd316b0582769ec968829fd1feb1a6a58b7c941b938327e551b6b12b45c137", "graph_sha256": "2b68367c5b312a03de5a6e1642c597c8f95165a7e40cd59c6700cf4a5042f4fd", "paddlex":
+{"object": "list", "data": [{"id": "paddleocr-vl-1.6-base", "object": "model"}]}
+memory.used [MiB], memory.total [MiB], utilization.gpu [%]
+19468 MiB, 32607 MiB, 0 %

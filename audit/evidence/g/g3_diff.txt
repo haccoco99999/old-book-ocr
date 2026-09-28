@@ -1,0 +1,39 @@
+## diff training vs backend reading_order.py
+IDENTICAL
+bfd4775a3eff6a81232249c778aa43e7330eb2c1f0f870a91a57ea2a6b166e70  training/ocrdata/reading_order.py
+bfd4775a3eff6a81232249c778aa43e7330eb2c1f0f870a91a57ea2a6b166e70  backend/src/ocr_core/reading_order.py
+## header of backend copy
+"""The single definition of region reading order.
+
+Used by data preparation (to concatenate Azure anchor text and ground-truth
+regions into page strings) and by evaluation (to reassemble per-region model
+outputs into a page). Nothing else in the codebase may sort regions.
+
+If the two paths ordered regions differently, alignment would still run and
+page scoring would still produce a number; both would just be systematically
+wrong. Hence one function, imported from both places.
+
+Algorithm: recursive XY-cut over axis-aligned bounding boxes. At each level,
+find every whitespace gap that no box crosses, horizontally (rows) and
+vertically (columns); cut along whichever direction has the widest gap
+(horizontal wins ties), recurse into the pieces. When no gap exists, fall back
+to (top, left). Deterministic: ties break on the input index.
+"""
+
+from __future__ import annotations
+
+from typing import Sequence
+
+Box = tuple[float, float, float, float]  # x0, y0, x1, y1
+
+## sync tests
+backend/tests/test_plaintext.py:9:from ocr_core.reading_order import order_regions
+backend/tests/test_plaintext.py:11:VENDORED = Path(__file__).resolve().parents[1] / "src/ocr_core/reading_order.py"
+backend/tests/test_plaintext.py:12:TRAINING_COPY = Path(__file__).resolve().parents[2] / "training/ocrdata/reading_order.py"
+backend/tests/test_plaintext.py:13:# sha256 of training/ocrdata/reading_order.py at master-training-2 commit 8172abf (decision D3)
+backend/tests/test_plaintext.py:74:def test_output_order_follows_the_single_reading_order_function():
+backend/tests/test_plaintext.py:105:def test_reading_order_is_the_vendored_training_function():
+## git history backend copy
+337d646 Step 3: queue, worker and to_plaintext() against FakeRecognizer
+## training history
+8172abf Add training harness, results and viet-ocr-eval skills

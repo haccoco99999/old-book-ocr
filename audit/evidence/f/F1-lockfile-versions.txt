@@ -1,0 +1,22 @@
+lockfileVersion 3
+@ant-design/icons:
+  6.3.4  @ node_modules/@ant-design/icons
+@ant-design/pro-components:
+  3.1.14-7  @ node_modules/@ant-design/pro-components
+antd:
+  6.6.5  @ node_modules/antd
+axios:
+  1.20.0  @ node_modules/axios
+diff:
+  9.0.0  @ node_modules/diff
+react:
+  16.14.0  @ node_modules/@umijs/plugins/node_modules/react
+  18.3.1  @ node_modules/@umijs/preset-umi/node_modules/react
+  18.3.1  @ node_modules/@umijs/server/node_modules/react
+  19.2.8  @ node_modules/react
+react-dom:
+  16.14.0  @ node_modules/@umijs/plugins/node_modules/react-dom
+  18.3.1  @ node_modules/@umijs/preset-umi/node_modules/react-dom
+  18.3.1  @ node_modules/@umijs/server/node_modules/react-dom
+  19.2.8  @ node_modules/react-dom
+v5-patch in lockfile: false

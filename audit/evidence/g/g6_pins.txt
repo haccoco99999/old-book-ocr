@@ -1,0 +1,67 @@
+## training requirements (tracked?)
+training/requirements-train.txt
+38
+use-triton-in-paddle
+tensorboardX
+tensorboard
+ujson
+einops
+GPUtil
+moviepy
+decord
+pyyaml
+tokenizers
+pillow
+pip                           # paddleformers imports pip at runtime
+colorlog
+blobfile
+scikit-learn
+multiprocess
+datasets>=3.0.0
+tqdm
+sentencepiece
+huggingface_hub>=0.19.2
+protobuf>=3.20.2
+visualdl
+safetensors
+fast_dataindex>=0.1.1
+aistudio-sdk>=0.3.0
+jinja2
+regex
+tiktoken
+ml_dtypes
+omegaconf
+modelscope
+transformers>=4.55.1
+(lines above = unpinned in requirements-train.txt)
+## backend lockfile tracked
+.env.example
+pyproject.toml
+uv.lock
+## backend pyproject deps
+dependencies = [
+  "psycopg[binary]>=3.2",
+[project.optional-dependencies]
+api = [
+  "fastapi>=0.115",
+  "uvicorn>=0.32",
+  "python-multipart>=0.0.20",
+  "alembic>=1.14",           # the `migrate` service runs from the api image
+  "sqlalchemy>=2.0",
+  "pypdfium2>=5.13.0",
+]
+## recognizer/layout server envs
+README.md
+__pycache__
+jsonhttp.py
+layout_server.py
+manage.py
+recognition_server.py
+recognizer_server/README.md
+recognizer_server/jsonhttp.py
+recognizer_server/layout_server.py
+recognizer_server/manage.py
+recognizer_server/recognition_server.py
+pip freeze rc 0
+current .venv-train pip_freeze_sha256: d4a1b488c6ae29b5a35a9bbe61b1c4f16bc083f060c9bb332fe7beed0f3bdd4a
+recorded in all 14 run.json:           d4a1b488c6ae29b5a35a9bbe61b1c4f16bc083f060c9bb332fe7beed0f3bdd4a

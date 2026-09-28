@@ -1,0 +1,15 @@
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/haccoco99999/master-2-frontend.git
+[submodule "backend"]
+	path = backend
+	url = https://github.com/haccoco99999/master-2-backend.git
+[submodule "mlops"]
+	path = mlops
+	url = https://github.com/haccoco99999/master-2-mlops.git
+[submodule "eda"]
+	path = eda
+	url = https://github.com/haccoco99999/master-2-eda.git
+[submodule "training"]
+	path = training
+	url = https://github.com/haccoco99999/master-training-2.git

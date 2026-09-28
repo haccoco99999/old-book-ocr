@@ -1,0 +1,40 @@
+# B10 (plan H: worker -> recognition-server request). 2026-09-25T16:27:20+07:00
+## worker request body (src/ocr_worker/http_clients.py:54)
+    def recognize(self, image: bytes, *, prompt: str, decode: DecodeConfig) -> RecognitionResult:
+        body = {"image_b64": base64.b64encode(image).decode("ascii"), "prompt": prompt, "decode": asdict(decode)}
+        try:
+            r = self.client.post(self.base_url + "/v1/recognize", json=body)
+## DecodeConfig fields/defaults (src/ocr_worker/recognizer.py:23-34)
+@dataclass(frozen=True)
+class DecodeConfig:
+    max_new_tokens: int = 1024
+    temperature: float = 0.0
+    top_p: float = 1.0
+    repetition_penalty: float = 1.0
+    seed: int = 13
+
+    @classmethod
+    def from_json(cls, cfg: dict) -> "DecodeConfig":
+        known = {f.name for f in fields(cls)}
+        return cls(**{k: v for k, v in cfg.items() if k in known})
+## server side check (recognizer_server/recognition_server.py:49,171-176)
+DECODE_KEYS = ("max_new_tokens", "temperature", "top_p", "repetition_penalty")
+    def recognize(body: bytes, headers) -> dict:
+        req = json.loads(body)
+        want = req.get("decode") or {}
+        mismatch = {k: (want[k], decode.get(k)) for k in DECODE_KEYS if k in want and want[k] != decode.get(k)}
+        if mismatch:   # the job's model version asks for decoding this server does not do
+            raise jsonhttp.HTTPError(422, f"decode config differs from the server's decode.json: {mismatch}")
+## grep for decode/sampling in worker logging
+(no match = no log line carries decode params)
+## scratch worker log lines for job 5 (all keys)
+{"ts": "2026-09-25T09:23:15.131Z", "level": "INFO", "service": "worker", "logger": "ocr_worker.consumer", "msg": "job started", "job_id": 5, "model_version_id": 1, "attempt": 1}
+{"ts": "2026-09-25T09:23:15.368Z", "level": "INFO", "service": "worker", "logger": "ocr_worker.pipeline", "msg": "page done", "job_id": 5, "model_version_id": 1, "page_id": 12, "service_s": 0.228, "regions": 11, "warm": false, "chars": 391}
+{"ts": "2026-09-25T09:23:15.588Z", "level": "INFO", "service": "worker", "logger": "ocr_worker.pipeline", "msg": "page done", "job_id": 5, "model_version_id": 1, "page_id": 13, "service_s": 0.212, "regions": 11, "warm": false, "chars": 416}
+## live-DB-free check: model_versions.decode_cfg on scratch (the only per-job record, via job.model_version_id)
+ id |         name          |                                                                                                                                                                    decode_cfg                                                                                                                                                                     
+----+-----------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1 | fake-ocr-v1           | {"seed": 13, "temperature": 0.0, "max_new_tokens": 1024}
+  2 | paddleocr-vl-1.6-base | {"seed": 13, "unit": "paragraph region crop", "top_p": 1.0, "source": "protocol.md section 4; max_new_tokens 1024 for paragraph crops per EDA C1 (region tokens p99 341, max 1207; 28 regions above the cap are excluded from train)", "do_sample": false, "num_beams": 1, "temperature": 0.0, "max_new_tokens": 1024, "repetition_penalty": 1.0}
+(2 rows)
+

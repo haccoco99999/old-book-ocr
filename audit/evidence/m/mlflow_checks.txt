@@ -1,0 +1,27 @@
+<stdin>:3: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+## MLflow checks on a COPY of mlops/mlruns.db (sha256 8e14bca45e24a64f), opened read-only, 2026-09-25T04:34:36.411584Z
+## experiments: [(0, 'Default', 'active'), (1, 'training-runs', 'active'), (2, 'evaluations', 'active')]
+## active runs per experiment: [('evaluations', 22), ('training-runs', 9)]
+## non-active runs: [(4,)]
+## keys containing '=': [('metric', 0), ('param', 0), ('tag', 0), ('latest_metric', 0)]
+## distinct metric keys total: [(170,)]
+## tags whose value is not_recorded: [('git_sha', 9), ('grad_norm', 9), ('peak_vram_nvidia_smi', 9), ('validation_loss', 9)]
+## params whose value is not_recorded: []
+## metric keys with lr/learning_rate: [('train.learning_rate', 2701, 9)]
+## tag keys with lr/learning_rate: [('learning_rate', 'recorded', 9)]
+## param keys with lr_reconstructed: []
+## tags mentioning reconstruct: []
+## training runs (experiment != evaluations):
+  base | exp training-runs | incidents None | grad_norm not_recorded | role not_declared | lr metric keys ['train.learning_rate'] | not_recorded tags ['git_sha', 'grad_norm', 'peak_vram_nvidia_smi', 'validation_loss'] | dev.cer_micro points 0 | gpu_hours_active [(0.017666388888888888,)]
+  base | exp training-runs | incidents None | grad_norm not_recorded | role not_declared | lr metric keys ['train.learning_rate'] | not_recorded tags ['git_sha', 'grad_norm', 'peak_vram_nvidia_smi', 'validation_loss'] | dev.cer_micro points 12 | gpu_hours_active [(11.130277777777778,)]
+  exp_lm_only | exp training-runs | incidents None | grad_norm not_recorded | role not_declared | lr metric keys ['train.learning_rate'] | not_recorded tags ['git_sha', 'grad_norm', 'peak_vram_nvidia_smi', 'validation_loss'] | dev.cer_micro points 12 | gpu_hours_active [(8.981388888888889,)]
+  exp_lr2e4 | exp training-runs | incidents None | grad_norm not_recorded | role final | lr metric keys ['train.learning_rate'] | not_recorded tags ['git_sha', 'grad_norm', 'peak_vram_nvidia_smi', 'validation_loss'] | dev.cer_micro points 6 | gpu_hours_active [(6.159722222222222,)]
+  exp_r32 | exp training-runs | incidents None | grad_norm not_recorded | role not_declared | lr metric keys ['train.learning_rate'] | not_recorded tags ['git_sha', 'grad_norm', 'peak_vram_nvidia_smi', 'validation_loss'] | dev.cer_micro points 6 | gpu_hours_active [(6.200277777777778,)]
+  exp_lines | exp training-runs | incidents None | grad_norm not_recorded | role not_declared | lr metric keys ['train.learning_rate'] | not_recorded tags ['git_sha', 'grad_norm', 'peak_vram_nvidia_smi', 'validation_loss'] | dev.cer_micro points 6 | gpu_hours_active [(4.568611111111111,)]
+  exp_mix | exp training-runs | incidents None | grad_norm not_recorded | role not_declared | lr metric keys ['train.learning_rate'] | not_recorded tags ['git_sha', 'grad_norm', 'peak_vram_nvidia_smi', 'validation_loss'] | dev.cer_micro points 6 | gpu_hours_active [(4.987222222222222,)]
+  exp_lr2e4_long | exp training-runs | incidents power-loss-2026-09-23 | grad_norm not_recorded | role not_declared | lr metric keys ['train.learning_rate'] | not_recorded tags ['git_sha', 'grad_norm', 'peak_vram_nvidia_smi', 'validation_loss'] | dev.cer_micro points 12 | gpu_hours_active [(12.674444444444443,)]
+  exp_lr2e4_seed14 | exp training-runs | incidents None | grad_norm not_recorded | role seed_replicate | lr metric keys ['train.learning_rate'] | not_recorded tags ['git_sha', 'grad_norm', 'peak_vram_nvidia_smi', 'validation_loss'] | dev.cer_micro points 6 | gpu_hours_active [(5.964444444444444,)]
+## evaluation runs: count by tags mode/label
+[]
+[('D4', 3), ('locked finals, protocol 1.0', 7), ('post-hoc sensitivity: pages over 2x the reference dropped', 2), ('protocol 1.1 re-score of the locked outputs', 4), ('rehearsal 20260925T014035Z-db59f9', 6)]
+## MLflow model registry tables in use: [(0,)]

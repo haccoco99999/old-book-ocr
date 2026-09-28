@@ -1,0 +1,1 @@
+STOPPED by auditor at 2026-09-25 11:55:02 +0700 after ~12 min: full-dev (1,520 pages) re-score takes ~70 min CPU; not needed to establish T5 (dev150 compare done). No report was produced.
