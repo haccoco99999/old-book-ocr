@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+# Start, stop and inspect the whole OCR platform on this machine with one command.
+#
+#   ./stack.sh up [--no-soup]   containers -> GPU servers -> frontend dev server
+#   ./stack.sh down             frontend -> containers (the worker finishes its page; data volumes kept) -> GPU servers
+#   ./stack.sh status
+#
+# Containers: backend/docker-compose.yml (project "ocr", settings in backend/.env). `up -d`, never `start`:
+#   a container created before a secret rotation keeps the old secret (lesson of 30/09).
+# GPU servers: backend/recognizer_server/manage.py on the host (decision D1), PID files in backend/data/run.
+#   GPU_SERVERS below must match RECOGNIZER_URL / RECOGNIZER_ROUTES / LAYOUT_URL in backend/.env.
+# Frontend: `npm run dev` on :8080 in its own process group; group id and log in .run/.
+#   Stopped by that group id, never by a pkill -f pattern (it would match the shell running it).
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+BACKEND="$ROOT/backend"
+FRONTEND="$ROOT/frontend"
+RUN="$ROOT/.run"
+MANAGE=(python3 "$BACKEND/recognizer_server/manage.py")
+FRONTEND_PORT=8080
+
+# port|manage.py arguments
+GPU_SERVERS=(
+  "8091|start-layout --port 8091"
+  "8090|start-recognizer --model adapted --name paddleocr-vl-1.6-vbr-lr2e4-s3000 --port 8090"
+  "8092|start-recognizer --model adapted --name paddleocr-vl-1.6-vbr-lr2e4-s3000 --port 8092"
+  "8097|start-recognizer --model adapter:$ROOT/models/adapters/soup-r1r2 --name paddleocr-vl-1.6-vbr-soup-r1r2 --port 8097"
+)
+SOUP_PORT=8097
+
+compose() { docker compose --project-directory "$BACKEND" -f "$BACKEND/docker-compose.yml" "$@"; }
+
+gpu_ready() {   # is a server on this port up and healthy?
+  curl -sf -o /dev/null --max-time 3 "http://127.0.0.1:$1/health"
+}
+
+frontend_pgid() {   # the dev server's process group, from our file or from whoever listens on :8080
+  local pgid pid
+  if [[ -f "$RUN/frontend.pgid" ]]; then
+    pgid=$(<"$RUN/frontend.pgid")
+    if kill -0 -- "-$pgid" 2>/dev/null; then echo "$pgid"; return; fi
+    rm -f "$RUN/frontend.pgid"
+  fi
+  pid=$(ss -ltnpH "sport = :$FRONTEND_PORT" 2>/dev/null | grep -oP 'pid=\K[0-9]+' | head -1 || true)
+  [[ -n "$pid" && "$(readlink "/proc/$pid/cwd" 2>/dev/null)" == "$FRONTEND" ]] || return 0
+  ps -o pgid= -p "$pid" | tr -d ' '
+}
+
+up() {
+  local soup=1
+  [[ "${1:-}" == "--no-soup" ]] && soup=0
+  docker info >/dev/null 2>&1 || { echo "Docker is not running: start Docker Desktop first." >&2; exit 1; }
+  mkdir -p "$RUN"
+
+  echo "== containers"
+  compose up -d --wait --wait-timeout 180
+
+  echo "== GPU servers"
+  local entry port args pids=() ports=() failed=0
+  for entry in "${GPU_SERVERS[@]}"; do
+    port=${entry%%|*}; args=${entry#*|}
+    if [[ $port == "$SOUP_PORT" && $soup == 0 ]]; then echo ":$port skipped (--no-soup)"; continue; fi
+    if gpu_ready "$port"; then echo ":$port already running"; continue; fi
+    # shellcheck disable=SC2086  # args is a word list on purpose
+    "${MANAGE[@]}" $args &
+    pids+=($!); ports+=("$port")
+  done
+  for i in "${!pids[@]}"; do
+    wait "${pids[$i]}" || { echo ":${ports[$i]} FAILED, see backend/data/logs/" >&2; failed=1; }
+  done
+
+  echo "== frontend"
+  if [[ -n "$(frontend_pgid)" ]]; then
+    echo ":$FRONTEND_PORT already running"
+  else
+    (cd "$FRONTEND" && setsid bash -c "echo \$\$ > '$RUN/frontend.pgid'; exec npm run dev" \
+      >"$RUN/frontend.log" 2>&1 </dev/null &)
+    local i
+    for i in $(seq 90); do
+      curl -s -o /dev/null --max-time 2 "http://127.0.0.1:$FRONTEND_PORT/" && break
+      sleep 1
+    done
+    if curl -s -o /dev/null --max-time 2 "http://127.0.0.1:$FRONTEND_PORT/"; then
+      echo "frontend ready on :$FRONTEND_PORT"
+    else
+      echo "frontend not answering on :$FRONTEND_PORT after 90 s, see .run/frontend.log" >&2; failed=1
+    fi
+  fi
+  echo
+  status
+  return $failed
+}
+
+down() {
+  echo "== frontend"
+  local pgid i
+  pgid=$(frontend_pgid)
+  if [[ -n "$pgid" ]]; then
+    kill -TERM -- "-$pgid" 2>/dev/null || true
+    for i in $(seq 20); do kill -0 -- "-$pgid" 2>/dev/null || break; sleep 0.5; done
+    kill -KILL -- "-$pgid" 2>/dev/null || true
+    echo "stopped (process group $pgid)"
+  else
+    echo "not running"
+  fi
+  rm -f "$RUN/frontend.pgid"
+
+  echo "== containers"
+  # `down` without -v: containers go, named volumes (Postgres, ValKey, Prometheus, Grafana) and data/storage stay.
+  # Not `stop`: Docker Desktop loses the single-file bind mount (prometheus.yml) of a stopped container.
+  if docker info >/dev/null 2>&1; then compose down; else echo "Docker is not running"; fi
+
+  echo "== GPU servers"
+  "${MANAGE[@]}" stop
+}
+
+status() {
+  echo "== containers"
+  if docker info >/dev/null 2>&1; then
+    compose ps -a --format 'table {{.Service}}\t{{.Status}}\t{{.Ports}}'
+  else
+    echo "Docker is not running"
+  fi
+  echo "== GPU servers"
+  "${MANAGE[@]}" status
+  echo "== frontend"
+  local pgid
+  pgid=$(frontend_pgid)
+  if [[ -n "$pgid" ]]; then echo ":$FRONTEND_PORT running (process group $pgid)"; else echo "not running"; fi
+  echo "== GPU memory"
+  nvidia-smi --query-gpu=memory.used,memory.total,utilization.gpu --format=csv,noheader 2>/dev/null || echo "nvidia-smi unavailable"
+}
+
+case "${1:-}" in
+  up) shift; up "$@" ;;
+  down) down ;;
+  status) status ;;
+  *) sed -n '2,6p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+esac
