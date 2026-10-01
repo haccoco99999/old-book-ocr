@@ -373,12 +373,38 @@ def bootstrap_ci(pages: list[PageCounts], metric="cer_micro", n_boot=1000, seed=
     return (lo, hi)
 
 
+def book_of(page_id: str) -> str:
+    """The book a page belongs to, from a `<book>/<page>` page id (VieBookRead's form)."""
+    if "/" not in page_id:
+        raise ValueError(f"page id {page_id!r} has no '<book>/' prefix, so it cannot be clustered by book")
+    return page_id.split("/", 1)[0]
+
+
+def _groups(pairs, cluster: str):
+    """Index groups for the bootstrap: None resamples pages; "book" resamples whole books."""
+    if cluster == "page":
+        return None
+    if cluster != "book":
+        raise ValueError(f"unknown cluster unit {cluster!r}")
+    by_book: dict = {}
+    for i, (b, _) in enumerate(pairs):
+        by_book.setdefault(book_of(b.page_id), []).append(i)
+    return list(by_book.values())
+
+
+def _draw(rng, n, groups):
+    if groups is None:
+        return [rng.randrange(n) for _ in range(n)]
+    return [i for _ in range(len(groups)) for i in groups[rng.randrange(len(groups))]]
+
+
 def paired_delta(
     base: list[PageCounts],
     adapted: list[PageCounts],
     metric="cer_micro",
     n_boot=1000,
     seed=13,
+    cluster="page",
 ):
     """Paired bootstrap on the SAME pages.
 
@@ -388,11 +414,16 @@ def paired_delta(
     left to eyeball for overlap. Pairing also removes page difficulty as a
     source of variance, which makes the test considerably more sensitive on a
     small gold set.
+
+    cluster="book" resamples whole books instead of pages. Pages of one book
+    share typeface, paper and scan, so they are not independent; the book
+    interval is the honest one when the claim is about unseen books.
     """
     by_id = {p.page_id: p for p in adapted}
     pairs = [(b, by_id[b.page_id]) for b in base if b.page_id in by_id]
     if not pairs:
         raise ValueError("no page_id overlap between the two runs")
+    groups = _groups(pairs, cluster)
 
     b_all = aggregate([b for b, _ in pairs])[metric]
     a_all = aggregate([a for _, a in pairs])[metric]
@@ -403,7 +434,7 @@ def paired_delta(
     n = len(pairs)
     rels, wins = [], 0
     for _ in range(n_boot):
-        idx = [rng.randrange(n) for _ in range(n)]
+        idx = _draw(rng, n, groups)
         bb = aggregate([pairs[i][0] for i in idx])[metric]
         aa = aggregate([pairs[i][1] for i in idx])[metric]
         r = (aa - bb) / bb if bb else float("nan")
@@ -413,6 +444,8 @@ def paired_delta(
     rels.sort()
     return {
         "metric": metric,
+        "cluster": cluster,
+        "n_clusters": n if groups is None else len(groups),
         "n_paired_pages": n,
         "base": b_all,
         "adapted": a_all,
@@ -467,7 +500,7 @@ def _shares(base_counts: dict, adapted_counts: dict) -> dict:
     return {"total_reduction": total, "reduction": red, "share": share}
 
 
-def reduction_shares(base, adapted, n_boot=1000, seed=13):
+def reduction_shares(base, adapted, n_boot=1000, seed=13, cluster="page"):
     """Decompose the absolute reduction in character edits by error category.
 
     This is the measurement for the proposal's second target: that the largest
@@ -483,6 +516,7 @@ def reduction_shares(base, adapted, n_boot=1000, seed=13):
     if not pairs:
         raise ValueError("no page_id overlap between the two runs")
 
+    groups = _groups(pairs, cluster)
     point = _shares(_category_counts([b for b, _ in pairs]),
                     _category_counts([a for _, a in pairs]))
 
@@ -491,7 +525,7 @@ def reduction_shares(base, adapted, n_boot=1000, seed=13):
     n = len(pairs)
     draws, largest = [], 0
     for _ in range(n_boot):
-        idx = [rng.randrange(n) for _ in range(n)]
+        idx = _draw(rng, n, groups)
         r = _shares(_category_counts([pairs[i][0] for i in idx]),
                     _category_counts([pairs[i][1] for i in idx]))
         d = r["share"]["diacritic"]
@@ -505,6 +539,7 @@ def reduction_shares(base, adapted, n_boot=1000, seed=13):
           if draws else (float("nan"), float("nan")))
     point.update({
         "n_paired_pages": n,
+        "cluster": cluster,
         "diacritic_share_ci95": ci,
         "p_diacritic_largest": largest / n_boot,
         "n_valid_resamples": len(draws),

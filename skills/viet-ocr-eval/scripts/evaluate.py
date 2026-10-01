@@ -91,7 +91,7 @@ def cmd_score(args):
     report = {
         "run_name": args.run_name,
         "manifest": os.path.abspath(args.manifest),
-        "protocol_version": "1.2",
+        "protocol_version": "1.3",
         "normalization": norm,
         "cap_runaway": not args.no_cap_runaway,
         "overall": aggregate(pages),
@@ -267,12 +267,14 @@ def cmd_compare(args):
             "Re-score both with the same settings."
         )
 
-    res = {m: paired_delta(pb, pa, m, args.bootstrap, args.seed)
+    res = {m: paired_delta(pb, pa, m, args.bootstrap, args.seed, args.cluster)
            for m in ("cer_micro", "der", "ter", "wer_micro", "wser")}
 
     print(f"# Paired comparison — {rb['run_name']} vs {ra['run_name']}")
+    unit = ("" if args.cluster == "page" else
+            f" · resampling whole books ({res['cer_micro']['n_clusters']} books)")
     print(f"\nn = {res['cer_micro']['n_paired_pages']} paired pages · "
-          f"{args.bootstrap} bootstrap resamples\n")
+          f"{args.bootstrap} bootstrap resamples{unit}\n")
     print("| metric | base % | adapted % | rel. change | 95% CI on rel. change |")
     print("|---|---|---|---|---|")
     for m, r in res.items():
@@ -297,7 +299,7 @@ def cmd_compare(args):
               f"[{100 * lo:+.1f}%, {100 * hi:+.1f}%].")
 
     # --- where the reduction came from (proposal target 2) -----------------
-    sh = reduction_shares(pb, pa, args.bootstrap, args.seed)
+    sh = reduction_shares(pb, pa, args.bootstrap, args.seed, args.cluster)
     label = {
         "tone_sub": "tone mark", "letter_sub": "letter diacritic",
         "diacritic": "**tone + letter diacritic**", "base_sub": "base letter",
@@ -501,6 +503,24 @@ def cmd_selftest(args):
     check("share ws-only fix", round(r["share"]["ws_errors"], 6), 1.0)
     check("share ws-only diacritic", round(r["share"]["diacritic"], 6), 0.0)
 
+    # book clusters: one book means every resample is the whole set, so the interval collapses to the point;
+    # two books that disagree give a wider interval than resampling their pages
+    from metrics import paired_delta
+    base = [sp("má mà mả", "ma ma ma", f"b1/p{i}") for i in range(10)]
+    adap = [sp("má mà mả", "má ma ma", f"b1/p{i}") for i in range(10)]
+    r = paired_delta(base, adap, n_boot=50, cluster="book")
+    check("one book: degenerate interval", (r["n_clusters"], r["relative_delta_ci95"][0] == r["relative_delta_ci95"][1]), (1, True))
+    base += [sp("má mà mả", "ma ma ma", f"b2/p{i}") for i in range(10)]
+    adap += [sp("má mà mả", "ma ma ma", f"b2/p{i}") for i in range(10)]
+    wb = paired_delta(base, adap, n_boot=200, cluster="book")["relative_delta_ci95"]
+    wp = paired_delta(base, adap, n_boot=200, cluster="page")["relative_delta_ci95"]
+    check("book interval wider than page interval", wb[1] - wb[0] > wp[1] - wp[0], True)
+    try:
+        paired_delta([sp("a", "a", "nobook")], [sp("a", "a", "nobook")], n_boot=5, cluster="book")
+        check("book cluster refuses ids without a book", False, True)
+    except ValueError:
+        pass
+
     # language screening: French passes a Latin-script check but not this one
     from normalize import vi_marker_density
     fr = ("Le gouvernement général de l'Indochine a décidé que les écoles "
@@ -546,6 +566,8 @@ def main():
     c.add_argument("adapted")
     c.add_argument("--bootstrap", type=int, default=1000)
     c.add_argument("--seed", type=int, default=13)
+    c.add_argument("--cluster", choices=("page", "book"), default="page",
+                   help="bootstrap unit: page (default) or book (page ids must be '<book>/<page>')")
     c.add_argument("--out")
     c.set_defaults(func=cmd_compare)
 

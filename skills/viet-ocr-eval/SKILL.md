@@ -107,6 +107,13 @@ diacritics". If insertions, whitespace or runaway pages account for more of the
 reduction than diacritics, it says so — usually a sign the adapted model learned
 a labelling or formatting convention rather than reading better.
 
+Since protocol 1.3, `compare --cluster book` resamples whole books instead of
+pages (page ids of the form `<book>/<page>`). Pages of one book share typeface,
+paper and scan session, so the page bootstrap understates the uncertainty of a
+claim about books the model has not seen. Report the book interval next to the
+page interval; the default (`--cluster page`) and every score are unchanged
+from 1.2, so 1.2 and 1.3 reports pair.
+
 Protocol 1.2 changes `verify` (it also flags Latin-script pages that are probably
 not Vietnamese), `selftest`, the gold procedure, and the baseline repeatability
 check (batch order instead of seeds). Scoring is unchanged from 1.1, so 1.1 and
