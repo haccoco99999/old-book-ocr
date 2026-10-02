@@ -22,9 +22,13 @@ cd /home/huy/master
 
 1. Container (`backend/docker-compose.yml`): postgres, valkey, migrate, api, worker, prometheus, grafana. Chờ đến khi healthy.
 2. GPU server trên host (`backend/recognizer_server/manage.py`): layout + 3 recognizer, bật song song.
-3. Frontend dev server (`npm run dev` trong `frontend/`).
+3. Supervisor (`manage.py supervise`): tự khởi động lại GPU server chết, treo hoặc lỗi GPU (CUDA 999). Log ở
+   `backend/data/logs/supervisor.log`.
+4. Frontend dev server (`npm run dev` trong `frontend/`).
 
-`down` tắt theo thứ tự ngược lại: frontend → container (worker làm nốt trang đang xử lý) → GPU server.
+`down` tắt theo thứ tự: supervisor → frontend → **backup snapshot** (`backend/tools/backup.py`, chỉ chép ảnh mới; bỏ qua
+bằng `--no-backup`) → container (worker làm nốt trang đang xử lý) → GPU server. `status` hiển thị thêm các cảnh báo đang
+kích hoạt của Prometheus. Không có cảnh báo nào được gửi đi đâu (chưa có Alertmanager).
 Dữ liệu (Postgres, ValKey, Prometheus, Grafana, ảnh trang trong `backend/data/storage`) **được giữ nguyên**.
 
 Muốn giải phóng thêm RAM: sau `./stack.sh down`, thoát hẳn Docker Desktop.

@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 # Start, stop and inspect the whole OCR platform on this machine with one command.
 #
-#   ./stack.sh up [--no-soup]   containers -> GPU servers -> frontend dev server
-#   ./stack.sh down             frontend -> containers (the worker finishes its page; data volumes kept) -> GPU servers
-#   ./stack.sh status
+#   ./stack.sh up [--no-soup]   containers -> GPU servers -> supervisor -> frontend dev server
+#   ./stack.sh down [--no-backup]  supervisor -> frontend -> backup snapshot -> containers -> GPU servers
+#   ./stack.sh status           every part, plus the alerts Prometheus has firing
 #
 # Containers: backend/docker-compose.yml (project "ocr", settings in backend/.env). `up -d`, never `start`:
 #   a container created before a secret rotation keeps the old secret (lesson of 30/09).
 # GPU servers: backend/recognizer_server/manage.py on the host (decision D1), PID files in backend/data/run.
 #   GPU_SERVERS below must match RECOGNIZER_URL / RECOGNIZER_ROUTES / LAYOUT_URL in backend/.env.
+# Supervisor: `manage.py supervise` restarts a GPU server that dies, hangs or loses its GPU (CUDA error 999);
+#   pid in backend/data/run/supervisor.json, log in backend/data/logs/supervisor.log, metrics on :8099.
+# Backup: `down` takes a snapshot first (backend/tools/backup.py; only new page images are copied).
 # Frontend: `npm run dev` on :8080 in its own process group; group id and log in .run/.
 #   Stopped by that group id, never by a pkill -f pattern (it would match the shell running it).
 set -euo pipefail
@@ -30,6 +33,13 @@ GPU_SERVERS=(
 SOUP_PORT=8097
 
 compose() { docker compose --project-directory "$BACKEND" -f "$BACKEND/docker-compose.yml" "$@"; }
+
+supervisor_pid() {   # the running supervisor's pid, if any
+  local f="$BACKEND/data/run/supervisor.json" pid
+  [[ -f "$f" ]] || return 0
+  pid=$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["pid"])' "$f" 2>/dev/null || true)
+  if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then echo "$pid"; fi
+}
 
 gpu_ready() {   # is a server on this port up and healthy?
   curl -sf -o /dev/null --max-time 3 "http://127.0.0.1:$1/health"
@@ -70,12 +80,22 @@ up() {
     wait "${pids[$i]}" || { echo ":${ports[$i]} FAILED, see backend/data/logs/" >&2; failed=1; }
   done
 
+  echo "== supervisor"
+  if [[ -n "$(supervisor_pid)" ]]; then
+    echo "already running (pid $(supervisor_pid))"
+  else
+    (setsid "${MANAGE[@]}" supervise >>"$BACKEND/data/logs/supervisor.out" 2>&1 </dev/null &) >/dev/null 2>&1 </dev/null
+    sleep 1
+    if [[ -n "$(supervisor_pid)" ]]; then echo "running (pid $(supervisor_pid))"; else echo "supervisor did not start" >&2; failed=1; fi
+  fi
+
   echo "== frontend"
   if [[ -n "$(frontend_pgid)" ]]; then
     echo ":$FRONTEND_PORT already running"
   else
+    # the subshell's own fds go to /dev/null too: otherwise it keeps a pipe from `./stack.sh up | tail` open
     (cd "$FRONTEND" && setsid bash -c "echo \$\$ > '$RUN/frontend.pgid'; exec npm run dev" \
-      >"$RUN/frontend.log" 2>&1 </dev/null &)
+      >"$RUN/frontend.log" 2>&1 </dev/null &) >/dev/null 2>&1 </dev/null
     local i
     for i in $(seq 90); do
       curl -s -o /dev/null --max-time 2 "http://127.0.0.1:$FRONTEND_PORT/" && break
@@ -93,6 +113,19 @@ up() {
 }
 
 down() {
+  local backup=1
+  [[ "${1:-}" == "--no-backup" ]] && backup=0
+  echo "== supervisor"   # first, so it does not restart the servers being stopped
+  local spid
+  spid=$(supervisor_pid)
+  if [[ -n "$spid" ]]; then
+    kill -TERM "$spid"
+    for i in $(seq 20); do kill -0 "$spid" 2>/dev/null || break; sleep 0.5; done
+    echo "stopped (pid $spid)"
+  else
+    echo "not running"
+  fi
+
   echo "== frontend"
   local pgid i
   pgid=$(frontend_pgid)
@@ -105,6 +138,13 @@ down() {
     echo "not running"
   fi
   rm -f "$RUN/frontend.pgid"
+
+  echo "== backup"
+  if [[ $backup == 1 ]] && docker info >/dev/null 2>&1 && compose ps --status running --services 2>/dev/null | grep -qx postgres; then
+    python3 "$BACKEND/tools/backup.py" create || echo "backup FAILED: the stack is stopped anyway; run tools/backup.py create later" >&2
+  else
+    echo "skipped"
+  fi
 
   echo "== containers"
   # `down` without -v: containers go, named volumes (Postgres, ValKey, Prometheus, Grafana) and data/storage stay.
@@ -128,13 +168,22 @@ status() {
   local pgid
   pgid=$(frontend_pgid)
   if [[ -n "$pgid" ]]; then echo ":$FRONTEND_PORT running (process group $pgid)"; else echo "not running"; fi
+  echo "== supervisor"
+  if [[ -n "$(supervisor_pid)" ]]; then echo "running (pid $(supervisor_pid)), log backend/data/logs/supervisor.log"; else echo "not running"; fi
+  echo "== alerts firing"
+  curl -sf --max-time 3 http://127.0.0.1:9090/api/v1/alerts 2>/dev/null | python3 -c '
+import json, sys
+alerts = [a for a in json.load(sys.stdin)["data"]["alerts"] if a["state"] == "firing"]
+for a in alerts:
+    print(a["labels"]["alertname"], "-", a["annotations"].get("summary", ""))
+print("none" if not alerts else "")' || echo "Prometheus not reachable"
   echo "== GPU memory"
   nvidia-smi --query-gpu=memory.used,memory.total,utilization.gpu --format=csv,noheader 2>/dev/null || echo "nvidia-smi unavailable"
 }
 
 case "${1:-}" in
   up) shift; up "$@" ;;
-  down) down ;;
+  down) shift; down "$@" ;;
   status) status ;;
   *) sed -n '2,6p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac
