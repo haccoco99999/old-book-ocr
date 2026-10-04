@@ -37,7 +37,7 @@ Muốn giải phóng thêm RAM: sau `./stack.sh down`, thoát hẳn Docker Deskt
 
 | Dịch vụ | Địa chỉ | Ghi chú |
 |---|---|---|
-| Giao diện web (frontend) | http://127.0.0.1:8080 | gọi API qua `/api` (proxy sang :8000) |
+| Giao diện web (frontend) | http://localhost:8080 | gọi API qua `/api` (proxy sang :8000). Từ Windows dùng **localhost**: `127.0.0.1:8080` không được WSL chuyển tiếp |
 | API (FastAPI) | http://127.0.0.1:8000 | `/docs` = OpenAPI; token trong `backend/.env` (`API_TOKEN`) |
 | Grafana | http://127.0.0.1:3000 | user `admin`, mật khẩu trong `backend/.env`; dashboard MLOps trong thư mục MLOps |
 | Prometheus | http://127.0.0.1:9090 | |
