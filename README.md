@@ -58,11 +58,18 @@ Danh sách GPU server trong `stack.sh` phải khớp với `RECOGNIZER_URL`, `RE
 | `frontend/` | Giao diện React (Umi/antd): upload, soát lỗi, export | master-2-frontend |
 | `training/` | Train LoRA, infer, các run và kết quả khoá (`finals/`) | master-training-2 |
 | `mlops/` | Registry, promote/activate, MLflow, gói tái lập, dashboard Grafana | master-2-mlops |
-| `eda/` | Phân tích corpus VieBookRead và các quyết định dữ liệu | master-2-eda |
+| `eda/` | Phân tích corpus VieBookRead và các quyết định dữ liệu. **Không checkout trên máy này từ 06/10/2026** (xem dưới bảng) | master-2-eda |
 | `skills/` | Skill `viet-ocr-eval` (giao thức đo CER/DER/TER, bản 1.2 và 1.1) | (repo này) |
 | `docs/specs/` | Đề bài / prompt gốc của từng phần, `decision.md` | (repo này) |
 | `audit/` | Báo cáo audit 25/09 và bằng chứng | (repo này) |
 | `stack.sh` | Bật / tắt toàn bộ | (repo này) |
+
+**`eda/` đang để trống (06/10/2026, để giải phóng 5,2 GB).** Toàn bộ nội dung đã có trên GitHub (`master-2-eda`,
+commit `61fdbf7c`, đúng commit repo này ghi nhận).
+- Chỉ `training/prepare_data.py` cần nó: bước dựng lại bộ dữ liệu huấn luyện từ corpus gốc đọc JSON của Azure, thống kê
+  corpus và tokenizer từ `eda/reports/`. Thiếu các file này thì script dừng ngay và in lệnh khôi phục.
+- Bộ dữ liệu đã dựng (`training/data/`), huấn luyện, đánh giá, vòng phản hồi, backend và frontend không cần `eda/`.
+- Khôi phục (tải lại khoảng 4,7 GB): `git submodule update --init eda`
 
 Chỉ có trên máy, không vào git:
 
