@@ -12,7 +12,8 @@
 # Supervisor: `manage.py supervise` restarts a GPU server that dies, hangs or loses its GPU (CUDA error 999);
 #   pid in backend/data/run/supervisor.json, log in backend/data/logs/supervisor.log, metrics on :8099.
 # Backup: `down` takes a snapshot first (backend/tools/backup.py; only new page images are copied).
-# Frontend: `npm run dev` on :8080 in its own process group; group id and log in .run/.
+# Frontend: `npm run dev` on :8080 (or the PORT of frontend/.env.local) in its own process group; group id and
+#   log in .run/.
 #   Stopped by that group id, never by a pkill -f pattern (it would match the shell running it).
 set -euo pipefail
 
@@ -21,7 +22,10 @@ BACKEND="$ROOT/backend"
 FRONTEND="$ROOT/frontend"
 RUN="$ROOT/.run"
 MANAGE=(python3 "$BACKEND/recognizer_server/manage.py")
-FRONTEND_PORT=8080
+# 8080, unless frontend/.env.local moves the dev server (PORT=...): otherwise `up` would wait for the wrong port and
+# report a failure, and `down` could miss a server it has no pgid file for.
+FRONTEND_PORT=$(grep -oP '^PORT=\K[0-9]+' "$FRONTEND/.env.local" 2>/dev/null | tail -1 || true)
+FRONTEND_PORT=${FRONTEND_PORT:-8080}
 
 # port|manage.py arguments
 GPU_SERVERS=(
@@ -45,7 +49,7 @@ gpu_ready() {   # is a server on this port up and healthy?
   curl -sf -o /dev/null --max-time 3 "http://127.0.0.1:$1/health"
 }
 
-frontend_pgid() {   # the dev server's process group, from our file or from whoever listens on :8080
+frontend_pgid() {   # the dev server's process group, from our file or from whoever listens on its port
   local pgid pid
   if [[ -f "$RUN/frontend.pgid" ]]; then
     pgid=$(<"$RUN/frontend.pgid")
@@ -138,6 +142,13 @@ down() {
     echo "not running"
   fi
   rm -f "$RUN/frontend.pgid"
+
+  echo "== correction monitor"   # score new corrections into correction_stats while Postgres is still up
+  if docker info >/dev/null 2>&1 && compose ps --status running --services 2>/dev/null | grep -qx postgres; then
+    (cd "$BACKEND" && uv run --quiet python tools/correction_monitor.py) || echo "correction monitor FAILED" >&2
+  else
+    echo "skipped"
+  fi
 
   echo "== backup"
   if [[ $backup == 1 ]] && docker info >/dev/null 2>&1 && compose ps --status running --services 2>/dev/null | grep -qx postgres; then
