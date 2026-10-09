@@ -125,7 +125,12 @@ down() {
   if [[ -n "$spid" ]]; then
     kill -TERM "$spid"
     for i in $(seq 20); do kill -0 "$spid" 2>/dev/null || break; sleep 0.5; done
-    echo "stopped (pid $spid)"
+    if kill -0 "$spid" 2>/dev/null; then   # busy restarting a server: left alive it would start the servers stopped below again
+      kill -KILL "$spid" 2>/dev/null || true
+      echo "killed (pid $spid did not stop within 10 s)"
+    else
+      echo "stopped (pid $spid)"
+    fi
   else
     echo "not running"
   fi
