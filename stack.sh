@@ -187,12 +187,17 @@ status() {
   echo "== supervisor"
   if [[ -n "$(supervisor_pid)" ]]; then echo "running (pid $(supervisor_pid)), log backend/data/logs/supervisor.log"; else echo "not running"; fi
   echo "== alerts firing"
-  curl -sf --max-time 3 http://127.0.0.1:9090/api/v1/alerts 2>/dev/null | python3 -c '
+  local alerts   # asked first: with Prometheus down the parser would get no input and print a traceback
+  if alerts=$(curl -sf --max-time 3 http://127.0.0.1:9090/api/v1/alerts 2>/dev/null); then
+    python3 -c '
 import json, sys
 alerts = [a for a in json.load(sys.stdin)["data"]["alerts"] if a["state"] == "firing"]
 for a in alerts:
     print(a["labels"]["alertname"], "-", a["annotations"].get("summary", ""))
-print("none" if not alerts else "")' || echo "Prometheus not reachable"
+print("none" if not alerts else "")' <<<"$alerts" || echo "Prometheus gave no alert list"
+  else
+    echo "Prometheus not reachable"
+  fi
   echo "== GPU memory"
   nvidia-smi --query-gpu=memory.used,memory.total,utilization.gpu --format=csv,noheader 2>/dev/null || echo "nvidia-smi unavailable"
 }
