@@ -1,0 +1,99 @@
+{
+  "type": "deployment",
+  "lang": "vi",
+  "eyebrow": "old-book-ocr",
+  "title": "Tổng quan hệ thống",
+  "subtitle": "Frontend gọi API; API ghi job vào Postgres; worker lấy job qua ValKey và gọi GPU server trên host",
+  "caption": "Postgres là nguồn sự thật; ValKey chỉ chở các lượt giao job. GPU server chạy ngoài Docker vì cần GPU và môi trường Paddle đóng băng.",
+  "groups": [{"id":"docker","label":"Docker Compose"},{"id":"gpu","label":"Host WSL · GPU","style":"dashed"}],
+  "nodes": [
+    {"id":"fe","label":"Frontend","sub":"React · Umi :8080","kind":"input","row":1,"col":0},
+    {
+      "id": "api",
+      "label": "API",
+      "sub": "FastAPI :8000",
+      "tag": "API",
+      "focal": true,
+      "group": "docker",
+      "row": 1,
+      "col": 1
+    },
+    {
+      "id": "pg",
+      "label": "Postgres",
+      "sub": "jobs · pages · revisions",
+      "kind": "store",
+      "group": "docker",
+      "row": 0,
+      "col": 2
+    },
+    {"id":"vk","label":"ValKey","sub":"stream ocr:jobs","kind":"store","group":"docker","row":1,"col":2},
+    {
+      "id": "stor",
+      "label": "Ảnh trang",
+      "sub": "data/storage bind-mount",
+      "kind": "store",
+      "group": "docker",
+      "row": 2,
+      "col": 2
+    },
+    {"id":"wk","label":"Worker","sub":"ocr_worker :8001","focal":true,"group":"docker","row":1,"col":3},
+    {
+      "id": "mon",
+      "label": "Giám sát",
+      "sub": "Prometheus · Grafana",
+      "kind": "muted",
+      "group": "docker",
+      "row": 2,
+      "col": 3
+    },
+    {"id":"lay","label":"Layout server","sub":"PP-DocLayoutV3 :8091","group":"gpu","row":0,"col":4},
+    {
+      "id": "rec",
+      "label": "Recognizer ×2",
+      "sub": "PaddleOCR-VL + LoRA :8090/:8092",
+      "group": "gpu",
+      "row": 1,
+      "col": 4
+    }
+  ],
+  "edges": [
+    ["fe","api","/api + Bearer","primary"],
+    ["api","pg","job + outbox","primary"],
+    ["api","stor","lưu ảnh"],
+    ["api","vk","model servable","muted"],
+    {"from":"wk","to":"vk","label":"relay · consume","kind":"primary","both":true},
+    ["wk","pg","rev 0","primary"],
+    ["wk","stor","đọc ảnh"],
+    ["wk","lay","layout","link"],
+    ["wk","rec","crop vùng","link"],
+    ["mon","wk","scrape","muted"]
+  ],
+  "evidence": [
+    {
+      "id": "api",
+      "file": "backend/src/ocr_api/main.py",
+      "line": 104,
+      "note": "các router: documents, jobs, review, exports…"
+    },
+    {
+      "id": "vk",
+      "file": "backend/src/ocr_worker/queue.py",
+      "line": 1,
+      "note": "Postgres là nguồn sự thật; ValKey chở delivery"
+    },
+    {
+      "id": "wk",
+      "file": "backend/src/ocr_worker/__main__.py",
+      "line": 73,
+      "note": "Relay + Consumer + ServableReporter"
+    },
+    {
+      "id": "fe",
+      "file": "frontend/.umirc.ts",
+      "line": 111,
+      "note": "proxy /api thêm Bearer token cho client loopback"
+    },
+    {"id":"rec","file":"stack.sh","line":32,"note":"danh sách GPU server và cổng"}
+  ]
+}

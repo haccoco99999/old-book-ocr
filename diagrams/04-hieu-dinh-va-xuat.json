@@ -1,0 +1,27 @@
+{"type":"sequence","lang":"vi","eyebrow":"old-book-ocr · review","title":"Hiệu đính và xuất file","subtitle":"Mỗi bản sửa là một revision mới; database chặn ghi đè khi hai người cùng sửa","numbered":true,
+"participants":[
+ {"id":"u","label":"Người hiệu đính","kind":"external"},
+ {"id":"fe","label":"Màn Review","sub":"CodeMirror","focal":true},
+ {"id":"api","label":"API","sub":"FastAPI"},
+ {"id":"pg","label":"Postgres","sub":"page_revisions","kind":"store"}],
+"messages":[
+ ["fe","api","GET /capabilities"],
+ ["api","fe","review_only: ẩn Upload/OCR","reply"],
+ ["u","fe","mở trang /review/:pageId"],
+ ["fe","api","GET /pages/{id}"],
+ ["api","pg","rev mới nhất + lịch sử"],
+ ["api","fe","ảnh + text + vùng nghi ngờ","reply"],
+ ["u","fe","sửa văn bản"],
+ ["fe","api","POST revisions, parent_rev_no = n","primary"],
+ ["api","pg","INSERT rev n+1 (UNIQUE)","primary"],
+ ["api","fe","201 mới · 409 xung đột · 200 không đổi","reply"],
+ ["fe","api","POST /review-events","async"],
+ ["u","fe","Xuất tài liệu"],
+ ["fe","api","GET /documents/{id}/export"],
+ ["api","fe","txt · md · json · pdf","reply"]],
+"notes":[
+ {"at":8,"over":["api","pg"],"text":"rev 0 bất biến; bản sửa = rev mới"},
+ {"at":10,"over":["fe","api"],"text":"Sự kiện usability chỉ gắn mã P03, không có tên"}],
+"evidence":[
+ {"id":"api","file":"backend/src/ocr_api/review.py","line":151,"note":"POST /pages/{id}/revisions"},
+ {"id":"fe","file":"frontend/src/lib/capabilities.ts","line":2,"note":"GET /capabilities quyết định màn hình hiển thị"}]}

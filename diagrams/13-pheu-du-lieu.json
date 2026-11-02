@@ -1,0 +1,50 @@
+{
+  "type": "sankey",
+  "lang": "vi",
+  "eyebrow": "data_manifest.json · đơn vị: vùng",
+  "title": "231.541 vùng đi về đâu",
+  "subtitle": "Chia theo sách trước, rồi chỉ lọc tập train; dev và test giữ nguyên toàn bộ",
+  "caption": "Mỗi vùng bị loại được tính theo lý do đầu tiên trong rejections.jsonl (một vùng có thể có nhiều lý do: tổng theo mọi lý do là 7.047). Dev 150 trang (1.323 vùng) dùng cho cả chọn checkpoint lẫn chọn run. Gold gồm 250 trang test, 2.229 vùng.",
+  "unit": "vùng",
+  "nodes": [
+    {"id":"all","label":"Vùng final (231.541)","col":0},
+    {"id":"train","label":"Train · 89 sách","col":1},
+    {"id":"dev","label":"Dev · 11 sách","col":1},
+    {"id":"test","label":"Test · 23 sách","col":1},
+    {"id":"kept","label":"Train giữ lại","focal":true,"col":2},
+    {"id":"rej","label":"Train bị loại","col":2},
+    {"id":"dev150","label":"Dev 150 trang","col":2},
+    {"id":"devrest","label":"Dev còn lại","col":2},
+    {"id":"gold","label":"Gold 250 trang","col":2},
+    {"id":"testrest","label":"Test còn lại","col":2},
+    {"id":"cost","label":"cost > 0,15","col":3},
+    {"id":"noaz","label":"không có đoạn Azure","col":3},
+    {"id":"nvr","label":"vùng không phải tiếng Việt","col":3},
+    {"id":"nvp","label":"trang không phải tiếng Việt","col":3},
+    {"id":"other","label":"độ dài / > 1.024 token","col":3}
+  ],
+  "links": [
+    ["all","train",180075,true],
+    ["all","dev",14044],
+    ["all","test",37422],
+    ["train","kept",173215,true],
+    ["train","rej",6860],
+    ["dev","dev150",1323],
+    ["dev","devrest",12721],
+    ["test","gold",2229],
+    ["test","testrest",35193],
+    ["rej","cost",5224],
+    ["rej","noaz",1081],
+    ["rej","nvr",293],
+    ["rej","nvp",187],
+    ["rej","other",75]
+  ],
+  "evidence": [
+    {"id":"rej","file":"training/data/books-all/rejections.jsonl","note":"6.860 dòng, trường reasons"},
+    {
+      "id": "all",
+      "file": "training/data/books-all/data_manifest.json",
+      "note": "corpus.final_regions, splits.*.n_regions, train_filter"
+    }
+  ]
+}

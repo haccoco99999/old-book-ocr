@@ -1,0 +1,23 @@
+{"type":"flowchart","lang":"vi","eyebrow":"old-book-ocr · worker","title":"Xử lý một trang","subtitle":"pipeline.process_page: layout → crop → nhận dạng → to_plaintext → rev 0",
+"nodes":[
+ {"id":"s","label":"Ảnh trang","sub":"data/storage","shape":"io","row":0,"col":1},
+ {"id":"dup","label":"Đã có rev 0?","shape":"decision","row":1,"col":1},
+ {"id":"skip","label":"Bỏ qua trang","sub":"job chạy lại tiếp tục","kind":"muted","row":1,"col":2},
+ {"id":"lay","label":"Phát hiện layout","sub":"PP-DocLayoutV3","row":2,"col":1},
+ {"id":"crop","label":"Cắt vùng có chữ","sub":"+8px · JPEG q95 · bỏ hình","row":3,"col":1},
+ {"id":"rec","label":"Nhận dạng vùng","sub":"PaddleOCR-VL · LoRA · ×3","focal":true,"row":4,"col":1},
+ {"id":"chk","label":"Đúng model?","shape":"decision","row":5,"col":1},
+ {"id":"fail","label":"Lỗi vĩnh viễn","sub":"ModelMismatch → ocr:dead","kind":"security","row":5,"col":2},
+ {"id":"save","label":"Lưu rev 0","sub":"to_plaintext · 1 transaction","shape":"terminal","row":6,"col":1}],
+"edges":[
+ ["s","dup"],
+ ["dup","skip","có"],
+ ["dup","lay","chưa","primary"],
+ ["lay","crop","regions","primary"],
+ ["crop","rec","prompt OCR/Table/Formula","primary"],
+ ["rec","chk","","primary"],
+ ["chk","fail","không"],
+ ["chk","save","đúng","primary"]],
+"evidence":[
+ {"id":"rec","file":"backend/src/ocr_worker/pipeline.py","line":276,"note":"recognize_blocks, kiểm model trên mọi vùng"},
+ {"id":"save","file":"backend/src/ocr_worker/pipeline.py","line":303,"note":"INSERT page_revisions ON CONFLICT DO NOTHING"}]}

@@ -1,0 +1,26 @@
+{"type":"state","lang":"vi","eyebrow":"old-book-ocr · ocr_jobs.status","title":"Trạng thái của một OCR job","subtitle":"5 giá trị status trong Postgres; ValKey chỉ chở lượt giao, Postgres quyết định trạng thái",
+"caption":"Lỗi hạ tầng (Postgres/ValKey sập) không đổi status: message không được ack nên được giao lại. Retry thủ công tạo một job mới có retry_of trỏ về job cũ.",
+"nodes":[
+ {"id":"s","shape":"start","row":0,"col":0},
+ {"id":"queued","label":"queued","sub":"chờ trong outbox","row":0,"col":1},
+ {"id":"running","label":"running","sub":"attempts + 1","row":0,"col":2},
+ {"id":"succeeded","label":"succeeded","sub":"mọi trang có rev 0","focal":true,"row":0,"col":3},
+ {"id":"e","shape":"end","row":0,"col":4},
+ {"id":"retry_wait","label":"retry_wait","sub":"outbox mới, available_at trễ","kind":"muted","row":1,"col":2},
+ {"id":"failed","label":"failed","sub":"error + ocr:dead","kind":"security","row":1,"col":3}],
+"edges":[
+ ["s","queued","POST /jobs","primary"],
+ ["queued","running","worker nhận [outbox mới nhất]","primary"],
+ ["running","succeeded","đủ rev 0","primary"],
+ ["succeeded","e"],
+ ["running","queued","SIGTERM: trả lại"],
+ ["running","retry_wait","lỗi tạm [lần < 5]"],
+ ["retry_wait","running","hết backoff"],
+ ["running","failed","lỗi vĩnh viễn / lần 5"],
+ ["failed","e"],
+ {"from":"failed","to":"queued","label":"POST retry → job mới","kind":"async"}],
+"evidence":[
+ {"id":"running","file":"backend/src/ocr_worker/consumer.py","line":144},
+ {"id":"retry_wait","file":"backend/src/ocr_worker/consumer.py","line":207,"note":"backoff 5s·2^(n-1) ±20%"},
+ {"id":"queued","file":"backend/src/ocr_worker/consumer.py","line":187,"note":"shutdown không tính là một lần thử"},
+ {"id":"failed","file":"backend/src/ocr_worker/consumer.py","line":214}]}

@@ -1,0 +1,24 @@
+{"type":"architecture","lang":"vi","eyebrow":"old-book-ocr · training + mlops","title":"Vòng đời model","subtitle":"Từ corpus đến model đang phục vụ: mỗi bước kiểm hash, parity, và kích hoạt luôn là thao tác tay",
+"nodes":[
+ {"id":"data","label":"VieBookRead","sub":"corpus · split khoá","kind":"input","row":0,"col":0},
+ {"id":"fb","label":"Bản hiệu đính","sub":"tắt khi REVIEW_ONLY","kind":"optional","row":1,"col":0},
+ {"id":"train","label":"Train LoRA","sub":"training/train.py","row":0,"col":1},
+ {"id":"promote","label":"promote.py","sub":"kiểm hash · parity gate","kind":"security","row":0,"col":2},
+ {"id":"eval","label":"Đánh giá test","sub":"viet-ocr-eval CER/DER","row":1,"col":2},
+ {"id":"reg","label":"model_versions","sub":"registry · Postgres","kind":"store","row":0,"col":3},
+ {"id":"mlflow","label":"MLflow","sub":"runs · eval :5000","kind":"store","row":1,"col":3},
+ {"id":"serve","label":"Recognizer","sub":"LoRA lúc chạy :8090","focal":true,"row":0,"col":4},
+ {"id":"act","label":"activate.py","sub":"thao tác tay","row":1,"col":4}],
+"edges":[
+ ["data","train","train/dev","primary"],
+ ["fb","train","prepare_feedback","async"],
+ ["train","promote","adapter","primary"],
+ ["train","eval","run cuối"],
+ ["eval","mlflow","log_eval"],
+ ["promote","reg","inactive","primary"],
+ ["reg","serve","serve.sh re-hash","primary"],
+ ["act","reg","is_active"]],
+"evidence":[
+ {"id":"promote","file":"mlops/README.md","line":34,"note":"promote.py: kiểm tra + parity 20 trang dev"},
+ {"id":"serve","file":"backend/recognizer_server/README.md","line":10,"note":"base + LoRA áp lúc chạy, không merge"},
+ {"id":"fb","file":"backend/src/ocr_api/feedback.py","line":1,"note":"/exports/training-candidates"}]}

@@ -1,0 +1,21 @@
+{"type":"db-schema","lang":"vi","eyebrow":"old-book-ocr · Postgres","title":"Schema: hiệu đính và nghiên cứu","subtitle":"Đánh dấu trang, sự kiện usability (RQ3), thống kê lỗi bản sửa và nhật ký audit",
+"caption":"audit_log không có khoá ngoại: entity_type + entity_id trỏ tới document, ocr_job, model_version hoặc bench_run, và không chứa nội dung.",
+"nodes":[
+ {"id":"page_marks","label":"page_marks","fields":[["page_id","bigint","FK"],["note","text ≤ 500"],["author","text"]],"row":0,"col":0},
+ {"id":"correction_stats","label":"correction_stats","fields":[["id","bigint","PK"],["page_id","bigint","FK"],["human_rev_no","int"],["model_version_id","bigint","FK"],["char_edits","int"],["tone_sub","int"],["letter_sub","int"]],"row":1,"col":0},
+ {"id":"model_versions","label":"model_versions","kind":"muted","fields":[["id","bigint","PK"],["name","text","UQ"]],"row":2,"col":0},
+ {"id":"pages","label":"pages","kind":"muted","fields":[["id","bigint","PK"],["document_id","bigint","FK"]],"row":1,"col":1},
+ {"id":"review_events","label":"review_events","focal":true,"fields":[["id","bigint","PK"],["page_id","bigint","FK"],["revision_id","bigint","FK"],["participant_code","P03…"],["session_id","uuid"],["event","open|save|idle…"],["client_ts","timestamptz"]],"row":0,"col":2},
+ {"id":"page_revisions","label":"page_revisions","fields":[["id","bigint","PK"],["page_id","bigint","FK"],["rev_no","int"],["author","P03|editor"],["text_format","plain|markdown"],["base_policy","text"]],"row":1,"col":2},
+ {"id":"audit_log","label":"audit_log","fields":[["id","bigint","PK"],["entity_type","text"],["entity_id","bigint"],["action","create|delete|export…"],["actor","text"]],"row":2,"col":2}],
+"edges":[
+ ["page_marks.page_id","pages.id","","many-one"],
+ ["correction_stats.page_id","pages.id","","many-one"],
+ ["correction_stats.model_version_id","model_versions.id","","many-one"],
+ ["review_events.page_id","pages.id","","many-one"],
+ ["review_events.revision_id","page_revisions.id","","many-one"],
+ ["page_revisions.page_id","pages.id","","many-one"]],
+"evidence":[
+ {"id":"review_events","file":"backend/migrations/versions/0007_review_events.py","line":17},
+ {"id":"correction_stats","file":"backend/migrations/versions/0015_correction_stats.py","line":21},
+ {"id":"audit_log","file":"backend/migrations/versions/0008_audit_log.py","line":18}]}

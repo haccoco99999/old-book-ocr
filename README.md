@@ -33,6 +33,15 @@ Dữ liệu (Postgres, ValKey, Prometheus, Grafana, ảnh trang trong `backend/d
 
 Muốn giải phóng thêm RAM: sau `./stack.sh down`, thoát hẳn Docker Desktop.
 
+## Phạm vi: chỉ hiệu đính và xuất file
+
+Hệ thống đang chạy ở chế độ **chỉ hiệu đính** (`REVIEW_ONLY=true` trong `backend/.env`): đọc 693 tài liệu đã nhận
+dạng, hiệu đính, xuất file. Không nạp tài liệu mới, không chạy OCR, và bản hiệu đính **không** quay lại huấn luyện.
+
+Một cờ duy nhất, API công bố qua `GET /capabilities`, frontend ẩn màn Upload, Hàng đợi, nút OCR và công tắc huấn
+luyện theo câu trả lời đó — không giữ cờ riêng. Chi tiết và cách mở lại: `backend/README.md`, mục "Review-only
+deployments".
+
 ## Địa chỉ khi đang chạy
 
 | Dịch vụ | Địa chỉ | Ghi chú |

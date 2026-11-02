@@ -1,0 +1,64 @@
+{
+  "type": "architecture",
+  "lang": "vi",
+  "eyebrow": "old-book-ocr · frontend",
+  "title": "Cấu trúc frontend",
+  "subtitle": "Umi Max + antd 6: các màn hình gọi client sinh từ OpenAPI; proxy dev gắn token nên trình duyệt không giữ token",
+  "groups": [{"id":"screens","label":"Màn hình (src/pages)"}],
+  "nodes": [
+    {"id":"shell","label":"App shell","sub":"ProLayout · capabilities","row":1,"col":0},
+    {
+      "id": "up",
+      "label": "Upload · Queue",
+      "sub": "ẩn khi review-only",
+      "kind": "muted",
+      "group": "screens",
+      "row": 0,
+      "col": 1
+    },
+    {
+      "id": "rv",
+      "label": "Review",
+      "sub": "editor · ảnh · events",
+      "focal": true,
+      "group": "screens",
+      "row": 1,
+      "col": 1
+    },
+    {"id":"ex","label":"Export","sub":"txt · md · json · pdf","group":"screens","row":2,"col":1},
+    {"id":"svc","label":"services/ocr","sub":"sinh từ openapi.json","row":1,"col":2},
+    {"id":"mock","label":"MSW mocks","sub":"npm run dev:mock","kind":"optional","row":2,"col":2},
+    {"id":"proxy","label":"Umi proxy","sub":"/api → :8000 + Bearer","kind":"security","row":1,"col":3},
+    {"id":"api","label":"Backend API","sub":"FastAPI","kind":"external","row":1,"col":4}
+  ],
+  "edges": [
+    ["shell","rv","menu"],
+    ["up","svc"],
+    ["rv","svc","","primary"],
+    ["ex","svc"],
+    ["svc","mock","dev:mock","async"],
+    ["svc","proxy","/api/*","primary"],
+    ["proxy","api","HTTP","primary"],
+    ["shell","up","menu","muted"]
+  ],
+  "evidence": [
+    {
+      "id": "shell",
+      "file": "frontend/.umirc.ts",
+      "line": 117,
+      "note": "routes: /upload /queue /review /export"
+    },
+    {
+      "id": "svc",
+      "file": "frontend/.umirc.ts",
+      "line": 130,
+      "note": "openAPI: sinh client từ snapshot đã commit"
+    },
+    {
+      "id": "proxy",
+      "file": "frontend/.umirc.ts",
+      "line": 111,
+      "note": "bỏ header của client, gắn Bearer cho loopback"
+    }
+  ]
+}

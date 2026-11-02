@@ -1,0 +1,3 @@
+{"type":"bar","lang":"vi","eyebrow":"old-book-ocr · đánh giá","title":"CER theo loại vùng","subtitle":"Model active exp_lr2e4 trên 150 trang dev: các vùng ngoài thân bài sai gấp 2–5 lần","orientation":"horizontal","unit":"%","axis":"CER (micro, %)","sort":"desc","focal":"Thân bài (n=1096)",
+"data":[["Thân bài (n=1096)",1.27],["Số trang (n=130)",2.72],["Chú thích cuối trang (n=27)",4.54],["Đầu trang (n=42)",5.30],["Chữ nhỏ / chú thích ảnh (n=22)",6.45]],
+"caption":"Nguồn: backend/reports/eval/soup/s3/rep_regions_current_mq.md · viet-ocr-eval 1.2, bỏ dấu chú thích và thống nhất ngoặc kép · n = số vùng. Bỏ 6 vùng no_azure_paragraph (lỗi nhãn). DER: chú thích cuối trang 13,1%, chữ nhỏ 24,1%, thân bài 2,2%."}

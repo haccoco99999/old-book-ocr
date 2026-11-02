@@ -1,0 +1,86 @@
+{
+  "type": "data-flow",
+  "lang": "vi",
+  "eyebrow": "old-book-ocr · dữ liệu → model",
+  "title": "Từ VieBookRead tới model cuối",
+  "subtitle": "EDA đặt ngưỡng trên toàn corpus và các mẫu có seed; prepare_data ghép và cắt toàn corpus; chỉ tập train bị lọc; model được chọn trên dev",
+  "caption": "Dev, test và gold giữ mọi vùng của mọi trang có nhãn (data_manifest: unfiltered_proof). verify báo 0 trùng lặp, nhưng không bắt được sách 097 (test) cùng bộ với 095/096 (train). Hình 12–15 đi vào chi tiết từng bước.",
+  "nodes": [
+    {
+      "id": "raw",
+      "label": "VieBookRead",
+      "sub": "123 sách · 25.585 trang · ảnh, final, Azure",
+      "kind": "input",
+      "row": 0,
+      "col": 0
+    },
+    {"id":"eda","label":"EDA","sub":"15/09 · 10 quyết định A1–D1","kind":"optional","row":1,"col":1},
+    {"id":"prep","label":"Ghép & cắt crop","sub":"prepare_data bước 1–5","focal":true,"row":0,"col":2},
+    {
+      "id": "split",
+      "label": "Chia theo sách",
+      "sub": "89 / 11 / 23 sách · phân tầng thời kỳ",
+      "row": 0,
+      "col": 3
+    },
+    {"id":"filt","label":"Lọc train","sub":"173.215 vùng giữ (−3,8%)","row":0,"col":4},
+    {
+      "id": "devtest",
+      "label": "Dev và test",
+      "sub": "không lọc · 14.044 / 37.422 vùng",
+      "kind": "security",
+      "row": 1,
+      "col": 4
+    },
+    {
+      "id": "gold",
+      "label": "Gold 250 trang",
+      "sub": "tác giả soát tay 15–16/09",
+      "kind": "store",
+      "row": 2,
+      "col": 4
+    },
+    {"id":"train","label":"Huấn luyện LoRA","sub":"8 run · chọn trên dev 150 trang","row":0,"col":5},
+    {"id":"final","label":"Model cuối","sub":"exp_lr2e4 · step 3000","focal":true,"row":0,"col":6}
+  ],
+  "edges": [
+    ["eda","prep","ngưỡng, quy tắc","async"],
+    ["raw","prep","3 nguồn / trang","primary"],
+    ["prep","split","231.541 vùng","primary"],
+    ["split","filt","train 180.075","primary"],
+    ["split","devtest","dev + test"],
+    ["devtest","gold","250 trang test"],
+    ["filt","train","crop + nhãn","primary"],
+    ["devtest","train","dev 150 trang","async"],
+    ["train","final","adapter","primary"],
+    ["raw","eda","toàn bộ + mẫu"]
+  ],
+  "evidence": [
+    {"id":"eda","file":"eda/reports/eda_summary.md","line":1,"note":"bảng quyết định A1–D1"},
+    {"id":"prep","file":"training/prepare_data.py","line":4,"note":"các bước 1–10"},
+    {
+      "id": "split",
+      "file": "training/configs/data.yaml",
+      "line": 66,
+      "note": "unit book, test 0.15, dev 0.05, stratify era, seed 13"
+    },
+    {
+      "id": "filt",
+      "file": "training/configs/data.yaml",
+      "line": 43,
+      "note": "cost ≤ 0.15, length ratio [0.5, 2], ≤ 1024 token"
+    },
+    {
+      "id": "gold",
+      "file": "docs/specs/decision.md",
+      "line": 146,
+      "note": "một người soát, không có người thứ hai"
+    },
+    {
+      "id": "final",
+      "file": "docs/specs/decision.md",
+      "line": 42,
+      "note": "chọn trên dev trước lần truy cập test đầu tiên"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "type": "data-flow",
+  "lang": "vi",
+  "eyebrow": "prepare_data.py · bước 1–5",
+  "title": "Từ một trang scan tới các cặp crop + nhãn",
+  "subtitle": "Vùng của final chính là đoạn của Azure (99,24% lệch ≤ 10 px), nên crop đoạn văn chỉ cần ghép vị trí; căn chỉnh văn bản chỉ dùng cho crop theo dòng",
+  "caption": "8.127 đoạn Azure (3,4%) không có vùng final nào trong 10 px: không có nhãn và không vào tập nào. 1.780 vùng final không có đoạn Azure. 54 vùng chữ xoay 90° được ghi text_quarter_turns. Crop cắt theo polygon (warp) vì trang nghiêng 2–3° và có chữ xoay (EDA A1).",
+  "nodes": [
+    {"id":"img","label":"Ảnh trang","sub":"page_input · 25 GB","kind":"input","row":0,"col":0},
+    {
+      "id": "fin",
+      "label": "Văn bản final",
+      "sub": "nhãn giả từ ebook, theo vùng",
+      "kind": "input",
+      "row": 1,
+      "col": 0
+    },
+    {"id":"az","label":"Azure json_raw","sub":"dòng · đoạn · polygon","kind":"input","row":2,"col":0},
+    {"id":"ord","label":"Thứ tự đọc","sub":"xycut-v1","row":2,"col":1},
+    {
+      "id": "pair",
+      "label": "Ghép vùng",
+      "sub": "vùng final ↔ đoạn Azure ≤ 10 px",
+      "focal": true,
+      "row": 1,
+      "col": 2
+    },
+    {
+      "id": "align",
+      "label": "Căn chỉnh dòng",
+      "sub": "semi-global · chỉ cho line crop",
+      "kind": "optional",
+      "row": 3,
+      "col": 1
+    },
+    {"id":"crop","label":"Cắt crop","sub":"warp polygon + 8 px · JPEG 95","row":0,"col":3},
+    {"id":"typ","label":"Loại vùng","sub":"thân · tiêu đề chạy · số trang · chú thích","row":2,"col":3},
+    {
+      "id": "row",
+      "label": "Hàng dữ liệu",
+      "sub": "crop · text · loại vùng · strata",
+      "kind": "store",
+      "focal": true,
+      "row": 1,
+      "col": 4
+    }
+  ],
+  "edges": [
+    ["fin","pair","text từng vùng","primary"],
+    ["az","ord","dòng, đoạn"],
+    ["ord","pair","đoạn có thứ tự","primary"],
+    ["ord","align","anchor"],
+    ["fin","align","text cả trang"],
+    ["pair","crop","polygon","primary"],
+    ["img","crop","pixel","primary"],
+    ["pair","typ","vị trí, cỡ chữ"],
+    ["crop","row","ảnh crop","primary"],
+    ["typ","row","region_type"],
+    ["align","row","span dòng","async"]
+  ],
+  "evidence": [
+    {
+      "id": "pair",
+      "file": "eda/reports/eda_summary.md",
+      "line": 35,
+      "note": "A1: 229.784 / 231.541 vùng final trùng đoạn Azure trong 10 px"
+    },
+    {
+      "id": "align",
+      "file": "eda/reports/eda_summary.md",
+      "line": 56,
+      "note": "A2: căn chỉnh dòng, clean rate 98,2%"
+    },
+    {"id":"crop","file":"training/configs/data.yaml","line":32,"note":"margin_px 8, jpeg_quality 95"},
+    {
+      "id": "typ",
+      "file": "training/configs/data.yaml",
+      "line": 36,
+      "note": "quy tắc nhận tiêu đề chạy, chân trang, chữ nhỏ"
+    },
+    {"id":"ord","file":"training/prepare_data.py","line":6,"note":"bước 1–5"}
+  ]
+}

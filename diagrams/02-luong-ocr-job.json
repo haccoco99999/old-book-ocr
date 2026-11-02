@@ -1,0 +1,32 @@
+{"type":"sequence","lang":"vi","eyebrow":"old-book-ocr · backend","title":"Vòng đời một OCR job","subtitle":"Transactional outbox: API chỉ ghi Postgres; worker tự đẩy job sang ValKey rồi xử lý từng trang","numbered":true,
+"participants":[
+ {"id":"fe","label":"Frontend","sub":"Upload · Queue","kind":"external"},
+ {"id":"api","label":"API","sub":"FastAPI"},
+ {"id":"pg","label":"Postgres","kind":"store"},
+ {"id":"vk","label":"ValKey","sub":"ocr:jobs","kind":"store"},
+ {"id":"wk","label":"Worker","sub":"Relay + Consumer","focal":true},
+ {"id":"gpu","label":"GPU servers","sub":":8091 · :8090/:8092","kind":"external"}],
+"messages":[
+ ["fe","api","POST /documents (PDF/ảnh)"],
+ ["api","pg","pages + ingest (tất cả hoặc không)"],
+ ["fe","api","POST /jobs + Idempotency-Key","primary"],
+ ["api","pg","ocr_jobs + job_outbox (1 tx)","primary"],
+ ["api","fe","201 job","reply"],
+ ["wk","pg","Relay: outbox SKIP LOCKED"],
+ ["wk","vk","XADD job_id","async"],
+ ["vk","wk","XREADGROUP → job","primary"],
+ ["wk","wk","kiểm model + preprocess"],
+ ["wk","gpu","layout trang","primary"],
+ ["gpu","wk","regions","reply"],
+ ["wk","gpu","nhận dạng từng vùng","primary"],
+ ["gpu","wk","text + confidence","reply"],
+ ["wk","pg","rev 0 + page_timings (1 tx)","primary"],
+ ["wk","vk","XACK","async"],
+ ["fe","api","GET /jobs/{id} (tiến độ)"]],
+"fragments":[{"kind":"loop","label":"mỗi trang chưa có rev 0","from":9,"to":13}],
+"notes":[
+ {"at":9,"over":["wk"],"text":"Sai model → lỗi vĩnh viễn → ocr:dead"},
+ {"at":14,"over":["wk","vk"],"text":"Lease gia hạn; worker chết → XAUTOCLAIM"}],
+"evidence":[
+ {"id":"api","file":"backend/src/ocr_api/jobs.py","line":208,"note":"INSERT INTO job_outbox cùng transaction"},
+ {"id":"wk","file":"backend/src/ocr_worker/consumer.py","line":124,"note":"lease heartbeat, ack, dead_letter"}]}

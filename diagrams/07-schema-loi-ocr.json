@@ -1,0 +1,134 @@
+{
+  "type": "db-schema",
+  "lang": "vi",
+  "eyebrow": "old-book-ocr · Postgres",
+  "title": "Schema: lõi OCR",
+  "subtitle": "Tài liệu → trang → revision; job ghi rev 0 và thời gian từng trang",
+  "caption": "Rút gọn cột. ocr_jobs tham chiếu documents bằng khoá ghép (id, model_version_id): một tài liệu chỉ gắn với một model. rev 0 = máy (source=machine), rev ≥ 1 = người sửa.",
+  "nodes": [
+    {
+      "id": "model_versions",
+      "label": "model_versions",
+      "fields": [
+        ["id","bigint","PK"],
+        ["name","text","UQ"],
+        ["adapter_sha256","text"],
+        ["weights_sha256","text"],
+        ["preprocess_cfg","jsonb"],
+        ["decode_cfg","jsonb"],
+        ["is_active","bool"]
+      ],
+      "row": 0,
+      "col": 0
+    },
+    {
+      "id": "documents",
+      "label": "documents",
+      "fields": [
+        ["id","bigint","PK"],
+        ["filename","text"],
+        ["content_hash","text"],
+        ["status","extracting|ready|failed"],
+        ["model_version_id","bigint","FK"],
+        ["allow_training","bool"]
+      ],
+      "row": 0,
+      "col": 1
+    },
+    {
+      "id": "pages",
+      "label": "pages",
+      "fields": [
+        ["id","bigint","PK"],
+        ["document_id","bigint","FK"],
+        ["page_no","int"],
+        ["image_uri","text"],
+        ["image_sha256","text"],
+        ["ingest","jsonb"]
+      ],
+      "row": 1,
+      "col": 0
+    },
+    {
+      "id": "page_revisions",
+      "label": "page_revisions",
+      "focal": true,
+      "fields": [
+        ["id","bigint","PK"],
+        ["page_id","bigint","FK"],
+        ["rev_no","int · UQ(page_id)"],
+        ["source","machine|human"],
+        ["job_id","bigint","FK"],
+        ["parent_rev_no","int"],
+        ["text","text"],
+        ["blocks","jsonb"]
+      ],
+      "row": 1,
+      "col": 1
+    },
+    {
+      "id": "page_timings",
+      "label": "page_timings",
+      "fields": [
+        ["page_id","bigint","FK"],
+        ["job_id","bigint","FK"],
+        ["layout_ms","float"],
+        ["recognition_ms","float"],
+        ["persist_ms","float"],
+        ["warm","bool"]
+      ],
+      "row": 2,
+      "col": 1
+    },
+    {
+      "id": "ocr_jobs",
+      "label": "ocr_jobs",
+      "focal": true,
+      "fields": [
+        ["id","bigint","PK"],
+        ["document_id","bigint","FK"],
+        ["model_version_id","bigint","FK"],
+        ["idempotency_key","text","UQ"],
+        ["status","text"],
+        ["attempts","int"],
+        ["text_policy","text"],
+        ["retry_of","bigint","FK"]
+      ],
+      "row": 1,
+      "col": 2
+    },
+    {
+      "id": "job_outbox",
+      "label": "job_outbox",
+      "fields": [
+        ["id","bigint","PK"],
+        ["job_id","bigint","FK"],
+        ["available_at","timestamptz"],
+        ["published_at","timestamptz"]
+      ],
+      "row": 1,
+      "col": 3
+    }
+  ],
+  "edges": [
+    ["documents.model_version_id","model_versions.id","","many-one"],
+    ["pages.document_id","documents.id","","many-one"],
+    ["ocr_jobs.document_id","documents.id","","many-one"],
+    ["ocr_jobs.model_version_id","documents.model_version_id","","many-one"],
+    ["job_outbox.job_id","ocr_jobs.id","","many-one"],
+    ["page_revisions.page_id","pages.id","","many-one"],
+    ["page_revisions.job_id","ocr_jobs.id","","many-one"],
+    ["page_timings.page_id","pages.id","","many-one"],
+    ["page_timings.job_id","ocr_jobs.id","","many-one"]
+  ],
+  "evidence": [
+    {"id":"ocr_jobs","file":"backend/migrations/versions/0004_ocr_jobs_outbox.py","line":21},
+    {
+      "id": "page_revisions",
+      "file": "backend/migrations/versions/0005_page_revisions.py",
+      "line": 17,
+      "note": "machine_iff_rev0, human_revision_shape"
+    },
+    {"id":"documents","file":"backend/migrations/versions/0002_documents_pages.py","line":17}
+  ]
+}

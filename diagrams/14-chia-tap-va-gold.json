@@ -1,0 +1,59 @@
+{
+  "type": "architecture",
+  "lang": "vi",
+  "eyebrow": "ocrdata/split.py · data.yaml split, gold",
+  "title": "Chia tập theo sách và tập gold",
+  "subtitle": "Một cuốn sách nằm trọn trong một tập; chia phân tầng theo thời kỳ xuất bản, seed 13",
+  "caption": "Độ khó = tertile độ tin cậy Azure (EDA C3), không phải chỉ số ảnh. verify chỉ so trùng trang/sách: sách 097 (test, 557 trang) là tập 3 của bộ có tập 1–2 (095, 096) trong train. Nhãn giả so với gold: CER 0,22%.",
+  "nodes": [
+    {"id":"books","label":"123 sách","sub":"25.278 trang có nhãn","kind":"input","row":1,"col":0},
+    {"id":"nogt","label":"307 trang","sub":"không có nhãn · loại","kind":"muted","row":2,"col":0},
+    {
+      "id": "split",
+      "label": "Chia theo sách",
+      "sub": "≤1945 · 1946–75 · ≥1976 · không rõ",
+      "focal": true,
+      "row": 1,
+      "col": 1
+    },
+    {"id":"train","label":"Train","sub":"89 sách · 19.780 trang","row":0,"col":2},
+    {"id":"dev","label":"Dev","sub":"11 sách · 1.520 trang","row":1,"col":2},
+    {"id":"test","label":"Test (khoá)","sub":"23 sách · 3.978 trang","kind":"security","row":2,"col":2},
+    {"id":"dev150","label":"Dev 150 trang","sub":"1.323 vùng · chọn checkpoint, run","row":1,"col":3},
+    {
+      "id": "gold",
+      "label": "Gold 250 trang",
+      "sub": "đều theo sách × độ khó Azure",
+      "focal": true,
+      "row": 2,
+      "col": 3
+    },
+    {"id":"verify","label":"verify","sub":"0 trang/sách trùng","kind":"security","row":0,"col":3}
+  ],
+  "edges": [
+    ["books","split","theo sách","primary"],
+    ["books","nogt","bỏ","muted"],
+    ["split","train","80%","primary"],
+    ["split","dev","5%"],
+    ["split","test","15%","primary"],
+    ["dev","dev150","mẫu seed 13"],
+    ["test","gold","tác giả soát tay","primary"],
+    ["train","verify","so với dev, test"]
+  ],
+  "evidence": [
+    {"id":"split","file":"training/ocrdata/split.py","line":44,"note":"stratified_book_split"},
+    {
+      "id": "gold",
+      "file": "training/ocrdata/split.py",
+      "line": 62,
+      "note": "sample_gold: quota đều mỗi sách, xoay vòng theo tertile"
+    },
+    {"id":"test","file":"eda/reports/eda_summary.md","line":107,"note":"B1: vì sao 15% test"},
+    {
+      "id": "verify",
+      "file": "training/work/analysis/sensitivity_097/SUMMARY.md",
+      "line": 1,
+      "note": "rò rỉ theo bộ sách, phát hiện 22/10"
+    }
+  ]
+}
